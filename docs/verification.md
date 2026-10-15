@@ -1,4 +1,4 @@
-# Verification — 2026-10-15
+# Verification — 2026-10-16
 
 ## Exact dependency
 
@@ -10,8 +10,8 @@ recorded in upstream.json. The submodule's tracked files were unchanged.
 
 - Dependency installation and lockfile generation: PASS.
 - Pinned upstream verification, strict TypeScript and production UI build: PASS.
-- Server/domain/HTTP/MCP/stdio/desktop-storage tests: **18 passed**, no skips.
-- Desktop Chromium protocol harness: **14 passed**, no retries or skips.
+- Server/domain/HTTP/MCP/stdio/desktop-storage/authoring tests: **21 passed**, no skips.
+- Desktop Chromium protocol harness: **17 passed**, no retries or skips.
 - Browser tests fail on page errors and console errors; the final run had none.
 - Representative Document and Graph screenshots were inspected, including Japanese
   text with locally available Noto fonts. All nine mount cases retain screenshots
@@ -99,3 +99,34 @@ npm run test:claude-package
 `EDITOR_TEST_NODE=/absolute/path/to/node` selects a separate installed-runtime
 binary for the package smoke test. The MCPB uses only portable JavaScript/HTML;
 developer esbuild/Playwright binaries are not runtime dependencies in the archive.
+
+## Rich native authoring — 0.1.2
+
+The user reported that the 0.1.1 extension opened the Editor in Claude Desktop,
+but the generated result contained only title/body text. The Slide creation API
+was indeed restricted to that shorthand; successful mounts did not establish
+useful authoring. This revision adds a typed full-native Slide creation input,
+native Slide snapshot proposals, nine per-domain model guides, and explicit MCP
+authoring instructions. It does not call an AI provider itself.
+
+- `npm run check`: PASS, **21 server tests and 17 browser cases**.
+- Actual MCP guide/create calls retain each of the nine rich/native example
+  contents exactly, including chart views and explicit React UI limitations.
+- The real Slide Surface displays independent styled text/shapes, actual chart
+  bars and table cells, and embedded image data. A native text edit saves/reloads
+  without dropping the table/chart structure. Native chart/background proposals
+  preview and apply only through explicit review.
+- The real Document Surface displays styled text, table cells, an image and a
+  rendered Mermaid image with nonzero intrinsic dimensions; native block types
+  survive saving. Both rich views were visually inspected with Japanese fonts.
+- Existing revision conflicts and locked Slide group/descendant protections are
+  exercised for native candidates; proposal creation leaves saved content intact.
+- Representative visual checks were repeated with local Noto Sans JP test fonts.
+  These fonts are test-environment assets, not new extension dependencies.
+- The offline package check now creates all nine domains from their guides rather
+  than only mounting default empty artifacts. The package exposes 18 tools.
+
+These checks use deterministic authored examples and the local MCP Apps harness.
+They verify the available API and actual rendering, not the quality of a live
+Claude model's response. The user report confirms 0.1.1 host UI display, but this
+agent has not signed in to Claude Desktop or certified live 0.1.2 generation.

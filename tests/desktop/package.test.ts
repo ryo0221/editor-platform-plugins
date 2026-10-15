@@ -89,12 +89,14 @@ test('installed MCPB works offline, across relocation and restart, with no check
   };
   try {
     await connect();
-    assert.equal((await client!.listTools()).tools.length, 17);
+    assert.equal((await client!.listTools()).tools.length, 18);
     const capabilities = await invoke('list_editors', {});
     assert.equal(capabilities.editors.length, 9);
     const saved: { id: string; kind: string }[] = [];
     for (const { kind } of capabilities.editors) {
-      const result = await invoke('create_artifact', { kind, title: `Desktop 日本語 ${kind}` });
+      const guide = await invoke('get_editor_guide', { kind });
+      const result = await invoke('create_artifact', { kind, title: `Desktop 日本語 ${kind}`, content: guide.exampleContent });
+      assert.deepEqual((result.artifact ?? result.deck).content, guide.exampleContent);
       saved.push({ id: (result.artifact ?? result.deck).id, kind });
     }
     const document = saved.find((item) => item.kind === 'document')!;

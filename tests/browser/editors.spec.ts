@@ -108,3 +108,71 @@ test('Graph: native node command saves and reloads with its Profile', async ({ p
   await frame.getByRole('button', { name: '保存先から再読込', exact: true }).click();
   expect(errors).toEqual([]);
 });
+
+test('Slide: rich native creation renders actual chart, table, image and styled objects, then manual edits persist', async ({ page }) => {
+  const { frame, errors } = await start(page);
+  const guide = (await invoke(page, 'get_editor_guide', { kind: 'slide' })).structuredContent;
+  const result = await invoke(page, 'create_deck', { title: '図表とレイアウト', content: guide.exampleContent }, true);
+  expect(result.isError).not.toBe(true);
+  const surface = frame.getByRole('region', { name: 'Slide Editor', exact: true });
+  const chart = surface.locator('[data-canvas-target="investment_chart"]');
+  const table = surface.locator('[data-canvas-target="priority_table"]');
+  await expect(chart).toBeVisible();
+  expect(await chart.locator('rect').count()).toBeGreaterThanOrEqual(3);
+  await expect(table).toContainText('投資比率');
+  expect(await table.locator('rect').count()).toBeGreaterThanOrEqual(6);
+  await expect(surface.locator('[data-canvas-target="strategy_image"] image')).toHaveAttribute('href', /^data:image\/svg\+xml;base64,/);
+  await expect(surface.locator('[data-canvas-target="title_band"] rect').first()).toHaveAttribute('fill', '#172c47');
+  await expect(surface.locator('[data-canvas-target="strategy_title"] text').first()).toHaveAttribute('font-size', '30');
+  await surface.locator('[data-canvas-target="priority_heading"]').dblclick();
+  await frame.getByLabel('Edit canvas text', { exact: true }).fill('重点投資 65%');
+  await frame.getByRole('button', { name: '保存', exact: true }).click();
+  await expect(frame.locator('.save-state')).toContainText('v2');
+  const saved = (await invoke(page, 'read_deck', { deckId: result.structuredContent.deck.id })).structuredContent.deck;
+  expect(saved.content.slides[0].objects.find((o: any) => o.id === 'priority_heading').text).toBe('重点投資 65%');
+  expect(saved.content.slides[0].objects.find((o: any) => o.id === 'priority_table').table.rows).toEqual(guide.exampleContent.slides[0].objects.find((o: any) => o.id === 'priority_table').table.rows);
+  await frame.getByRole('button', { name: '保存先から再読込', exact: true }).click();
+  await expect(surface.locator('[data-canvas-target="priority_heading"]')).toContainText('重点投資 65%');
+  expect(errors).toEqual([]);
+  await page.screenshot({ path: 'test-results/rich-slide.png', fullPage: true });
+});
+
+test('Slide: native chart and layout proposal renders a preview and applies only after review', async ({ page }) => {
+  const { frame, errors } = await start(page);
+  const content = (await invoke(page, 'get_editor_guide', { kind: 'slide' })).structuredContent.exampleContent;
+  const created = await invoke(page, 'create_artifact', { kind: 'slide', title: 'Native review', content }, true);
+  const deck = created.structuredContent.deck;
+  const candidate = structuredClone(content);
+  candidate.slides[0].background = '#f4f7f5';
+  candidate.slides[0].objects.find((o: any) => o.id === 'investment_chart').chart.values = [20, 65, 15];
+  const proposed = await invoke(page, 'propose_artifact_changes', { artifactId: deck.id, baseRevision: 1, summary: '配分と背景を変更', content: candidate }, true);
+  expect(proposed.isError).not.toBe(true);
+  expect((await invoke(page, 'read_deck', { deckId: deck.id })).structuredContent.deck.content).toEqual(content);
+  await frame.getByRole('button', { name: '変更案を表示', exact: true }).click();
+  await expect(frame.getByRole('region', { name: '変更案プレビュー' }).locator('[data-canvas-target="investment_chart"]')).toBeVisible();
+  await frame.getByRole('button', { name: '適用', exact: true }).click();
+  await expect(frame.locator('.save-state')).toContainText('v2');
+  expect((await invoke(page, 'read_deck', { deckId: deck.id })).structuredContent.deck.content).toEqual(candidate);
+  expect(errors).toEqual([]);
+});
+
+test('Document: native authoring renders formatted text, a real table, image and Mermaid diagram', async ({ page }) => {
+  const { frame, errors } = await start(page, 'document');
+  const content = (await invoke(page, 'get_editor_guide', { kind: 'document' })).structuredContent.exampleContent;
+  const created = await invoke(page, 'create_artifact', { kind: 'document', title: '構造を持つ文書', content }, true);
+  expect(created.isError).not.toBe(true);
+  const body = frame.getByLabel('Document body', { exact: true });
+  await expect(body.locator('table')).toBeVisible();
+  await expect(body.locator('table')).toContainText('収益と継続率');
+  await expect(body.locator('strong').filter({ hasText: '判断基準を揃え' })).toBeVisible();
+  await expect(body.locator('img[alt="成長の例"]')).toBeVisible();
+  const diagram = body.getByRole('img', { name: 'Mermaid diagram', exact: true });
+  await expect(diagram).toBeVisible();
+  await expect.poll(() => diagram.evaluate((img) => (img as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await frame.getByRole('button', { name: '保存', exact: true }).click();
+  await expect(frame.locator('.save-state')).toContainText('v2');
+  const artifact = (await invoke(page, 'read_artifact', { artifactId: created.structuredContent.artifact.id })).structuredContent.artifact;
+  expect(artifact.content.blocks.map((b: any) => b.type)).toEqual(content.blocks.map((b: any) => b.type));
+  expect(errors).toEqual([]);
+  await page.screenshot({ path: 'test-results/rich-document.png', fullPage: true });
+});

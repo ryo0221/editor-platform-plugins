@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import { canonicalJson } from '@editor-platform/artifact-core';
 import { mkdir, readFile, rename, writeFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { EditorSession, transaction, type EditorCommand } from '@editor-platform/editor-core';
@@ -92,17 +93,22 @@ export class DeckStore {
     } finally { await rm(temp, { force: true }); }
     return copy(record);
   }
-  create(title: string, pages?: { title: string; text: string }[]) {
+  create(title: string, pages?: { title: string; text: string }[], nativeContent?: unknown) {
     return this.serialized(async () => {
-      const content = createDeck();
-      content.slides = (pages ?? [{ title, text: 'チャットと手操作で、一緒に仕上げる。' }]).map((p, i) => {
-        const slide = slideWithLayout(i, 'title-body');
-        slide.title = p.title;
-        const text = slide.objects.filter((o) => o.type === 'text');
-        text[0].text = p.title;
-        if (text[1]) text[1].text = p.text;
-        return slide;
-      });
+      if (pages !== undefined && nativeContent !== undefined) fail('INVALID', 'Supply either content or legacy slides, not both.');
+      let content: SlideContent;
+      if (nativeContent !== undefined) { validateContent(nativeContent); content = copy(nativeContent); }
+      else {
+        content = createDeck();
+        content.slides = (pages ?? [{ title, text: 'チャットと手操作で、一緒に仕上げる。' }]).map((p, i) => {
+          const slide = slideWithLayout(i, 'title-body');
+          slide.title = p.title;
+          const text = slide.objects.filter((o) => o.type === 'text');
+          text[0].text = p.title;
+          if (text[1]) text[1].text = p.text;
+          return slide;
+        });
+      }
       validateContent(content);
       return this.write({ id: `deck_${randomUUID()}`, title, revision: 1, content, selection: [], proposals: [], updatedAt: new Date().toISOString() });
     });
@@ -128,6 +134,29 @@ export class DeckStore {
       for (const edit of edits) next = commandFor(next, edit).apply(next);
       validateContent(next);
       record.proposals.push({ id: `proposal_${randomUUID()}`, baseRevision: revision, summary, edits, preview: next });
+      return this.write(record);
+    });
+  }
+  proposeNative(id: string, revision: number, summary: string, input: unknown) {
+    return this.serialized(async () => {
+      const record = await this.read(id); this.requireRevision(record, revision);
+      if (record.proposals.length >= 10) fail('LIMIT', 'Review or reject existing proposals first.');
+      validateContent(input);
+      // A whole-native candidate must not bypass locks respected by typed edits.
+      for (const slide of record.content.slides) {
+        const locked = new Set(slide.objects.filter((o) => o.locked).map((o) => o.id));
+        let count = -1;
+        while (locked.size !== count) {
+          count = locked.size;
+          for (const object of slide.objects) if (object.groupId && locked.has(object.groupId)) locked.add(object.id);
+        }
+        const next = input.slides.find((s) => s.id === slide.id);
+        for (const object of slide.objects.filter((o) => locked.has(o.id))) {
+          const candidate = next?.objects.find((o) => o.id === object.id);
+          if (!candidate || canonicalJson(candidate) !== canonicalJson(object)) fail('LOCKED', 'Unlock this object in the editor before proposing changes.');
+        }
+      }
+      record.proposals.push({ id: `proposal_${randomUUID()}`, baseRevision: revision, summary, edits: [], preview: copy(input) });
       return this.write(record);
     });
   }

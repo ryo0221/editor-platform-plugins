@@ -10,6 +10,8 @@ ChatGPT/Claude production-host acceptance is claimed. See [verification](docs/ve
 ## What works
 
 - Create and open Slide, Document, Design, Whiteboard, Data, Graph, Review, File and React UI native artifacts.
+- Author native visual/structured content through `get_editor_guide` and the
+  `content` input, including Slide shapes, charts, tables, images and rich text.
 - Mount their upstream editing/viewing controls with local Undo/Redo and explicit saving.
 - Propose typed Slide edits or a domain-validated native candidate for other Editors; preview and explicitly apply/reject.
 - Reject stale proposals and competing saves using saved-revision preconditions.
@@ -64,7 +66,7 @@ commit, update the submodule and pin together, and rerun the checks.
 
 ## ChatGPT / Claude
 
-See [connection and deployment](docs/connections.md). The repository includes
+See [native authoring](docs/authoring.md) and [connection and deployment](docs/connections.md). The repository includes
 `.claude-plugin/plugin.json` plus `.mcp.json` for Claude local stdio, and a Codex
 compatibility manifest plus `.mcp.codex.json`. Prepare the checkout, dependencies
 and UI build before using local package configurations.
