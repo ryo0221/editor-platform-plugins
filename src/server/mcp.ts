@@ -11,7 +11,7 @@ import { join } from 'node:path';
 export function createEditorServer(store: DeckStore, htmlPath = new URL('../../dist/editor.html', import.meta.url)) {
   const artifacts = sharedArtifacts.get(store) ?? new ArtifactStore(join(store.directory, 'artifacts'));
   sharedArtifacts.set(store, artifacts);
-  const server = new McpServer({ name: 'editor-platform-plugins', version: '0.1.0' });
+  const server = new McpServer({ name: 'editor-platform-plugins', version: '0.1.1' });
   registerAppResource(server, 'slide-editor', resourceUri, {}, async () => ({
     contents: [{ uri: resourceUri, mimeType: RESOURCE_MIME_TYPE,
       text: await readFile(htmlPath, 'utf8'),

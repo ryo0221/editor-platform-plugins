@@ -1,11 +1,16 @@
 {
   "name": "editor-platform-plugins",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "license": "AGPL-3.0-only",
-  "engines": { "node": ">=22.18.0" },
-  "workspaces": ["vendor/editor-platform", "vendor/editor-platform/packages/*"],
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "workspaces": [
+    "vendor/editor-platform",
+    "vendor/editor-platform/packages/*"
+  ],
   "scripts": {
     "verify:upstream": "node scripts/verify-upstream.mjs",
     "typecheck": "tsc --noEmit",
@@ -15,25 +20,32 @@
     "start:stdio": "node --import tsx src/server/main.ts --stdio",
     "test": "node --import tsx --test tests/*.test.ts",
     "test:e2e": "playwright test",
-    "check": "npm run build && npm run build:test-host && npm test && npm run test:e2e"
+    "check": "npm run build && npm run build:test-host && npm test && npm run test:e2e",
+    "package:claude": "node scripts/package-claude.mjs",
+    "test:claude-package": "node --import tsx --test tests/desktop/package.test.ts"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.32.1",
     "@modelcontextprotocol/ext-apps": "2.0.3",
+    "@modelcontextprotocol/sdk": "1.32.1",
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "zod": "4.2.0"
   },
   "devDependencies": {
+    "@anthropic-ai/mcpb": "2.1.2",
     "@playwright/test": "1.63.0",
     "@types/node": "22.18.6",
     "@types/react": "19.1.16",
     "@types/react-dom": "19.1.9",
     "@vitejs/plugin-react": "4.7.0",
+    "esbuild": "0.25.12",
+    "fflate": "0.8.3",
     "tsx": "4.20.6",
     "typescript": "5.9.2",
     "vite": "6.4.1",
     "vite-plugin-singlefile": "2.3.3"
   },
-  "overrides": { "katex": "0.18.2" }
+  "overrides": {
+    "katex": "0.18.2"
+  }
 }

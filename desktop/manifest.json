@@ -1,0 +1,28 @@
+{
+  "manifest_version": "0.3",
+  "name": "editor-platform",
+  "display_name": "Editor Platform",
+  "version": "0.1.1",
+  "description": "Create, edit and review documents, slides, designs and other native Editor Platform artifacts in Claude Desktop.",
+  "long_description": "Nine public Editor domains: Slide, Document, Design, Whiteboard, Data, Graph, Review, File and React UI. Includes the editing interface, local saving, reviewed AI proposals and native exports. No API key, npm install or public server is required. Claude Desktop provides the Node.js runtime. Artifacts remain in a separate local data directory across extension updates. React UI executable preview, Office exports, Animation, Video and GIS are not included. This is an unsigned integration preview; actual Claude Desktop installation and UI acceptance still need to be checked.",
+  "author": { "name": "Open Editor Platform maintainers" },
+  "repository": { "type": "git", "url": "https://github.com/ryo0221/editor-platform-plugins" },
+  "homepage": "https://github.com/ryo0221/editor-platform-plugins",
+  "documentation": "https://github.com/ryo0221/editor-platform-plugins/blob/main/docs/claude-desktop.md",
+  "support": "https://github.com/ryo0221/editor-platform-plugins/issues",
+  "license": "AGPL-3.0-only",
+  "keywords": ["editor", "document", "slides", "design", "whiteboard", "mcp-apps"],
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.mjs",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server/index.mjs"]
+    }
+  },
+  "tools_generated": true,
+  "compatibility": {
+    "platforms": ["win32", "darwin"],
+    "runtimes": { "node": ">=20.19.0" }
+  }
+}

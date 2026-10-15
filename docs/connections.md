@@ -30,6 +30,14 @@ preview never changes canonical content. Only the explicit View action applies i
 
 ## Local clients
 
+Claude Desktop users can install the prebuilt `.mcpb` through Settings without
+Git/npm or a separate Node.js installation. See [the installation guide](claude-desktop.md).
+The extension uses Desktop's built-in runtime and keeps data outside its install
+directory. This is a Desktop extension, distinct from the Claude Code plugin
+manifest below. Actual signed-in Desktop installation/UI acceptance is pending.
+
+For source-based clients:
+
 Prepare submodules, dependencies and the UI build first. Launch the stdio server:
 
 ```sh

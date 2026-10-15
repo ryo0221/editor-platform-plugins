@@ -1,8 +1,10 @@
 {
   "name": "editor-platform",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create, edit and review native artifacts across the published Editor Platform domains through MCP Apps.",
-  "author": { "name": "Open Editor Platform maintainers" },
+  "author": {
+    "name": "Open Editor Platform maintainers"
+  },
   "repository": "https://github.com/ryo0221/editor-platform-plugins",
   "license": "AGPL-3.0-only"
 }

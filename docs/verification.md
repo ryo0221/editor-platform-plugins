@@ -10,7 +10,7 @@ recorded in upstream.json. The submodule's tracked files were unchanged.
 
 - Dependency installation and lockfile generation: PASS.
 - Pinned upstream verification, strict TypeScript and production UI build: PASS.
-- Server/domain/HTTP/MCP/stdio tests: **17 passed**, no skips.
+- Server/domain/HTTP/MCP/stdio/desktop-storage tests: **18 passed**, no skips.
 - Desktop Chromium protocol harness: **14 passed**, no retries or skips.
 - Browser tests fail on page errors and console errors; the final run had none.
 - Representative Document and Graph screenshots were inspected, including Japanese
@@ -63,3 +63,39 @@ npm run check
 Provide `PLAYWRIGHT_CHROMIUM_EXECUTABLE` for a preinstalled browser if Playwright's
 managed browser is unavailable. `EDITOR_BROWSER_SINGLE_PROCESS=1` is only needed
 on environments that impose the same restricted-process constraint.
+
+## Claude Desktop MCPB — 0.1.1
+
+- `npm run check`: PASS (strict types/build, 18 server tests, 14 browser cases).
+- Current browser rerun: Chromium 153.0.8010.0, single-process cloud configuration;
+  no application/page console errors, retries or skips. Playwright's managed
+  browser download was unavailable; an npm-distributed Chromium binary was used.
+- Official `@anthropic-ai/mcpb` 2.1.2 manifest validation and packing: PASS.
+- `npm run test:claude-package`: **2 passed**, running the installed server with
+  Node **20.19.0**, the declared minimum runtime (the build host uses Node 24.19).
+- Archive checks cover complete corresponding public source, retained lockfiles /
+  declarations / tsconfig, license texts, safe paths and SHA-256 integrity.
+- Runtime files alone were extracted outside the repository, into a path containing
+  spaces and Japanese text. No source checkout, external node_modules, npm, tsx,
+  Git, model API key or network dependency download was available to that server.
+- Actual stdio initialize/discovery, all nine domain create/read/export calls,
+  changed Document proposal preview/reject/apply, manual saving, stale conflicts,
+  UI resource bytes and repeated restarts: PASS.
+- Moving the installation to a different directory retained all nine artifacts,
+  pending proposals and later saved content through the stable application-data
+  directory. The packaged HTML is the same Vite output tested by the browser harness.
+- Windows/macOS default storage paths are covered by unit checks. Native Windows
+  and macOS execution, Claude's installer/runtime selection, its sandbox and MCP
+  Apps UI/download behavior still require real-host acceptance. No signed-in
+  Claude Desktop installation or directory approval is claimed.
+
+Maintainers reproduce the package separately from the main checks:
+
+```sh
+npm run package:claude
+npm run test:claude-package
+```
+
+`EDITOR_TEST_NODE=/absolute/path/to/node` selects a separate installed-runtime
+binary for the package smoke test. The MCPB uses only portable JavaScript/HTML;
+developer esbuild/Playwright binaries are not runtime dependencies in the archive.

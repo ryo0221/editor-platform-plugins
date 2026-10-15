@@ -4,6 +4,14 @@ This is a single-owner integration preview. Files in its data directory are not
 separated by user or organization. Run one process per workspace; atomic writes
 and revision serialization do not coordinate multiple server processes.
 
+The Claude Desktop MCPB runs directly over stdio without an HTTP listener. Its
+default data directory is the user's OS application-data directory under
+`EditorPlatform/ClaudeDesktop`, outside the extension installation. It uses the
+Desktop-provided Node runtime; it does not run npm/Git, fetch dependencies, spawn
+other programs or invoke a model API at startup. This is application behavior,
+not an OS-level filesystem sandbox. The unsigned bundle includes corresponding
+public source and license notices; it has not undergone directory review.
+
 The HTTP endpoint binds loopback by default. A non-loopback binding requires an
 access token. Host/Origin checks reject unconfigured hosts and cross-origin browser
 requests. UI communication uses the MCP Apps bridge, not credentialed cross-origin

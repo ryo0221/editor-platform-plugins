@@ -33,6 +33,15 @@ adapters require an approved public-source export and are not claimed complete.
 
 ## Set up
 
+For **Claude Desktop**, install the prebuilt `.mcpb` extension from its Settings
+screen: see [the installation guide](docs/claude-desktop.md). It includes the UI,
+server and runtime dependencies, and uses Desktop's built-in Node.js. No Git,
+npm, external Node.js installation, API key or public endpoint is needed by users.
+The unsigned package is an integration preview; actual Desktop acceptance and
+directory listing are not claimed. It is not a ChatGPT installer.
+
+The following setup is for **source development / HTTP deployments**.
+
 Node >=22.18 and Git are required. No model API key is required: the chat host calls
 tools; this server does not invoke any AI provider.
 
@@ -65,7 +74,7 @@ The shared UI is self-contained HTML served through an MCP resource; it does not
 fetch a separately hosted editor or load external scripts/styles.
 
 The current HTTP guard accepts a configured bearer token. OAuth discovery, account
-login, per-user isolation and marketplace packaging are **not implemented**.
+login, per-user isolation and marketplace publication are **not implemented**.
 Do not assume a static-token config can be installed into every web-chat host.
 Complete a compatible OAuth gateway/integration and actual-host testing before
 offering a public shared service. See the exact deployment boundary in the guide.
