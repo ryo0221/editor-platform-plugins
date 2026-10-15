@@ -1,0 +1,10 @@
+node_modules/
+dist/
+dist-test/
+data/
+test-results/
+playwright-report/
+*.log
+.env
+*.bundle
+work/

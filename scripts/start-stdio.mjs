@@ -1,0 +1,10 @@
+import { spawn } from 'node:child_process';
+import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
+const root = fileURLToPath(new URL('../', import.meta.url));
+const require = createRequire(new URL('../package.json', import.meta.url));
+const loader = require.resolve('tsx');
+const child = spawn(process.execPath, ['--import', loader, fileURLToPath(new URL('../src/server/main.ts', import.meta.url)), '--stdio'], { cwd: root, stdio: 'inherit', env: process.env });
+for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => child.kill(signal));
+child.on('error', () => { console.error('Unable to start the Editor MCP server. Run npm ci and npm run build.'); process.exitCode = 1; });
+child.on('exit', (code) => { process.exitCode = code ?? 1; });

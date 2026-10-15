@@ -1,0 +1,9 @@
+{
+  "name": "editor-platform",
+  "version": "0.1.0",
+  "description": "Create, edit and review published Editor Platform artifact domains through MCP tools and an optional MCP Apps UI.",
+  "author": { "name": "Open Editor Platform maintainers" },
+  "repository": "https://github.com/ryo0221/editor-platform-plugins",
+  "license": "AGPL-3.0-only",
+  "mcpServers": "./.mcp.codex.json"
+}
