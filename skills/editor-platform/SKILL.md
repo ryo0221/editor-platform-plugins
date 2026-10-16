@@ -22,7 +22,11 @@ still apply.
    direct native editing, Undo/Redo, explicit Save and proposal preview/review.
    For remote/headless Claude Code sessions, explain that local graphical browser
    opening is required; do not claim the CLI displays an embedded Editor.
-5. After the user saves, call `read_artifact`/`read_deck` to read the latest saved
+5. If the user saves a selection in the Code browser, it is not automatically
+   delivered to this conversation. When they ask to use the selection, explicitly
+   read the artifact and its saved selection IDs; never assume a context event
+   arrived from the separate browser connection.
+   After the user saves, call `read_artifact`/`read_deck` to read the latest saved
    content and revision. Unsaved browser drafts are unavailable to the AI.
 6. Read the domain guide and propose changes against that exact `baseRevision`.
    Preserve native IDs and unrelated manual edits. On conflict, read again and

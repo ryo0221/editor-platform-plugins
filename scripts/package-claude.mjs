@@ -1,4 +1,5 @@
 import { build } from 'esbuild';
+import { installNodeDistribution, verifyNodeDistribution, nodeDistribution } from './claude-code-node.mjs';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { createRequire, isBuiltin } from 'node:module';
@@ -31,6 +32,10 @@ async function copyFile(source, destination) {
 }
 
 // Only the maintainer runs npm. Installation and startup never use npm or Git.
+if (code) {
+  if (process.platform !== nodeDistribution.platform || process.arch !== nodeDistribution.arch) throw Error('Only Linux x64 candidate packaging is currently implemented.');
+  await verifyNodeDistribution(process.env.EDITOR_NODE_ARCHIVE);
+}
 if (!process.env.npm_execpath) throw Error('Run this packager using npm run package:claude.');
 run(process.execPath, [process.env.npm_execpath, 'run', 'build']);
 await rm(stage, { recursive: true, force: true });
@@ -142,17 +147,14 @@ await writeFile(join(stage, 'build-info.json'), JSON.stringify({
   uiSha256: digest(await readFile(join(stage, 'ui', 'editor.html'))),
   runtimeSha256: digest(await readFile(join(runtimeDirectory, 'index.mjs'))),
   sourceFiles: sourceFiles.length,
-  runtime: code ? `Bundled Node ${process.version} ${process.platform}/${process.arch}` : 'Claude Desktop built-in Node.js >=20.19.0',
+  runtime: code ? `Official Node ${nodeDistribution.version} ${nodeDistribution.platform}/${nodeDistribution.arch}` : 'Claude Desktop built-in Node.js >=20.19.0',
   verification: code ? 'Release candidate only; signed-in Claude Code acceptance is separate.' : 'Portable package/stdio checks; signed-in Claude Desktop acceptance is separate.',
 }, null, 2) + '\n');
 
 if (code) {
-  if (process.platform !== 'linux' || process.arch !== 'x64') throw Error('Only Linux x64 candidate packaging is currently implemented. Other operating systems are NOT supported releases.');
-  if (!process.env.EDITOR_NODE_LICENSE) throw Error('Set EDITOR_NODE_LICENSE to the matching Node distribution LICENSE (including bundled third-party notices).');
   run(process.execPath, [process.env.npm_execpath, 'run', 'build:browser']);
   await copyFile(join(root, 'dist-browser', 'browser.html'), join(stage, 'ui', 'browser.html'));
-  await copyFile(process.execPath, join(stage, 'runtime', 'node'));
-  await copyFile(process.env.EDITOR_NODE_LICENSE, join(stage, 'runtime', 'LICENSE'));
+  await installNodeDistribution(process.env.EDITOR_NODE_ARCHIVE, join(stage, 'runtime'));
   await copyFile(join(root, '.claude-plugin', 'plugin.json'), join(stage, '.claude-plugin', 'plugin.json'));
   await cp(join(root, 'skills'), join(stage, 'skills'), { recursive: true });
   await writeFile(join(stage, '.mcp.json'), JSON.stringify({ mcpServers: { 'editor-platform': {
@@ -166,6 +168,7 @@ if (code) {
   ].join('\n'));
   const infoPath = join(stage, 'build-info.json');
   const info = JSON.parse(await readFile(infoPath, 'utf8'));
+  info.nodeDistribution = nodeDistribution;
   info.nodeSha256 = digest(await readFile(join(stage, 'runtime', 'node')));
   info.nodeLicenseSha256 = digest(await readFile(join(stage, 'runtime', 'LICENSE')));
   info.browserSha256 = digest(await readFile(join(stage, 'ui', 'browser.html')));

@@ -14,11 +14,12 @@ async function connect() {
   }));
   const frame = document.querySelector<HTMLIFrameElement>('#editor')!;
   const bridge = new AppBridge(null, { name: 'Open Editor local browser', version: '0.1.3' },
-    { serverTools: {}, updateModelContext: {} },
+    { serverTools: {} },
     { hostContext: { theme: 'light', displayMode: 'inline', availableDisplayModes: ['inline'], containerDimensions: { width: innerWidth, maxHeight: innerHeight } } });
   bridge.oncalltool = async (params) => CallToolResultSchema.parse(await client.callTool(params));
-  // Selection is retained by the explicit selection tool; no AI provider is called.
-  bridge.onupdatemodelcontext = async () => ({});
+  // The separate stdio model channel cannot receive browser context updates.
+  // Do not advertise updateModelContext; the Editor offers saved selection +
+  // an explicit follow-up prompt/read instead of claiming automatic sharing.
   bridge.oninitialized = async () => {
     await bridge.sendToolInput({ arguments: {} });
     document.querySelector('#status')!.textContent = 'Claude Codeに接続中のローカルEditor。保存済みの成果物から開いてください。変更案の確認はEditorの再読込ボタンで行えます。';

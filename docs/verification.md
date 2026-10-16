@@ -211,7 +211,7 @@ Reproduce the candidate separately from the existing Desktop MCPB:
 
 ```sh
 PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run check
-EDITOR_NODE_LICENSE=/absolute/path/to/matching-node-LICENSE npm run package:claude-code
+EDITOR_NODE_ARCHIVE=/absolute/path/to/node-v24.19.0-linux-x64.tar.gz npm run package:claude-code
 npm run test:claude-code-package
 ```
 
@@ -220,3 +220,40 @@ the matching runtime license, build metadata, Node/UI/browser hashes and archive
 SHA-256. Generated `release/` artifacts and private test workspaces stay out of Git.
 See [the Code guide](claude-code.md) for persistent install/update/uninstall,
 backup, data disclosure, unsupported environments and the remaining release gates.
+
+## PR #2 review fixes — 2026-10-16
+
+The initial Code candidate copied the builder's Node executable. That did not
+establish portability: distro Node can require libnode or other build-host-only
+libraries. The candidate now requires the official Node 24.19.0 Linux x64 archive
+with a repository-pinned SHA-256 from Node's official SHASUMS256.txt. The packager
+verifies the archive before building and again before extracting only its binary
+and LICENSE. It rejects the builder's executable, repacked archives, missing input
+and checksum mismatches. No caller-provided checksum or license substitutes for
+this trust anchor. Build metadata includes the distribution version, source URL,
+archive hash and extracted binary/license hashes.
+
+The official archive's SHA-256 was checked against the pin. Inspection of that
+binary's dynamic dependencies found only the baseline glibc, libstdc++, libgcc,
+libm, libdl, libpthread and ELF loader, with no libnode dependency. Its maximum
+required GLIBC symbol version is 2.28. This is provenance/baseline verification;
+execution on another Linux distribution and real-host acceptance remain NOT RUN.
+
+The Code browser no longer advertises updateModelContext, since its separate
+stdio model connection cannot receive that update. The actual Editor detects host
+capabilities and offers 「選択箇所を保存（チャットで読込）」 with an explicit prompt to
+ask the chat to reread the saved selection. It does not report automatic sharing.
+Hosts that actually support updateModelContext keep their existing sharing flow.
+The skill and user guide describe the required read_artifact/read_deck follow-up.
+
+Validation: `npm run check` PASS (27 unit/protocol tests, 21 Chromium cases).
+The added runtime regression rejects unpinned input before extraction. Browser
+coverage saves a real Slide selection through the Code bridge, checks the honest
+status/instructions and confirms stdio rereading returns the selected ID. The
+compatible-host case still delivers the selection to its host model-context
+handler. Package checks separately verify the rebuilt archive's pinned runtime
+provenance/hashes and retain the standalone relocation/restart workflow.
+
+Rebuilt Code archive: PASS (1 isolated package test). Existing Desktop MCPB:
+PASS (2 isolated package tests). Together with the 27 unit/protocol and 21 browser
+cases, all 51 tests passed. Real signed-in host acceptance remains NOT RUN.

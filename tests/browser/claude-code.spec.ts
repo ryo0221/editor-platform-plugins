@@ -59,6 +59,19 @@ test('Code local browser: real manual edits, saved reread, reject/apply and expo
     await frame.getByRole('button', { name: '成果物の一覧', exact: true }).click();
     await frame.getByRole('button', { name: '開く', exact: true }).click();
     await expect(frame.locator('[contenteditable="true"]').first()).toContainText('レビュー後の文章');
+    const slideGuide = await call('get_editor_guide', { kind: 'slide' });
+    const { deck } = await call('create_deck', { title: 'Code selection fixture', content: slideGuide.exampleContent });
+    await frame.getByRole('button', { name: '成果物の一覧', exact: true }).click();
+    await frame.locator('.proposal').filter({ hasText: 'Code selection fixture' }).getByRole('button', { name: '開く', exact: true }).click();
+    await frame.locator('[data-canvas-target="strategy_title"]').click();
+    const selectionButton = frame.getByRole('button', { name: '選択箇所を保存（チャットで読込）', exact: true });
+    await expect(selectionButton).toBeEnabled();
+    await expect(frame.getByRole('button', { name: '選択箇所を会話に共有', exact: true })).toHaveCount(0);
+    await selectionButton.click();
+    await expect(frame.getByRole('status')).toContainText('チャットで「選択箇所を読み込んで」と依頼してください');
+    await expect(frame.getByRole('status')).toContainText('会話には自動送信されません');
+    const selectedDeck = (await call('read_deck', { deckId: deck.id })).deck;
+    expect(selectedDeck.selection).toContain('strategy_title');
     expect(errors).toEqual([]);
     await page.screenshot({ path: 'test-results/claude-code-browser.png', fullPage: true });
   } finally { await client.close(); await rm(directory, { recursive: true, force: true }); }

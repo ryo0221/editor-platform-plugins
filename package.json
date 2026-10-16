@@ -18,7 +18,7 @@
     "build:test-host": "vite build --config vite.host.config.ts",
     "start": "node --import tsx src/server/main.ts",
     "start:stdio": "node --import tsx src/server/main.ts --stdio",
-    "test": "node --import tsx --test tests/*.test.ts",
+    "test": "node --import tsx --test tests/*.test.ts tests/*.test.mjs",
     "test:e2e": "playwright test",
     "check": "npm run build && npm run build:browser && npm run build:test-host && npm test && npm run test:e2e",
     "package:claude": "node scripts/package-claude.mjs",

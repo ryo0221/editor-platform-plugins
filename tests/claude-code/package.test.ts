@@ -25,6 +25,11 @@ test('Code archive: standalone runtime/UI, human-only channel, relocation and re
   try {
     for (let restart = 0; restart < 2; restart++) {
       const plugin = join(install, 'plugins/editor-platform');
+      const info = JSON.parse(await readFile(join(plugin, 'build-info.json'), 'utf8'));
+      const pin = JSON.parse(await readFile('scripts/claude-code-node.json', 'utf8'));
+      assert.deepEqual(info.nodeDistribution, pin);
+      assert.equal(createHash('sha256').update(await readFile(join(plugin, 'runtime/node'))).digest('hex'), info.nodeSha256);
+      assert.equal(createHash('sha256').update(await readFile(join(plugin, 'runtime/LICENSE'))).digest('hex'), info.nodeLicenseSha256);
       const client = new Client({ name: 'installed-code-model', version: '1' });
       const browser = new Client({ name: 'installed-browser', version: '1' });
       await client.connect(new StdioClientTransport({ command: join(plugin, 'runtime/node'), args: [join(plugin, 'server/code.mjs')],

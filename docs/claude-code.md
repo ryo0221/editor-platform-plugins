@@ -7,11 +7,15 @@ button until the release gates below pass.
 
 ## Candidate environment
 
-The current packager produces Linux x64 only, with the build machine's Node binary
-and its matching LICENSE/third-party notices included. Runtime use requires no
+The current packager produces Linux x64 only, using the official Node 24.19.0
+distribution pinned in scripts/claude-code-node.json. It verifies the archive's
+SHA-256 before extraction and includes that distribution's binary and LICENSE.
+The builder's Node executable and arbitrary runtime/license overrides are rejected.
+Runtime use requires no
 Git, npm, source build, external Node installation, API key or server command.
 Linux requires a graphical desktop, browser, `xdg-open`, and a system compatible
-with the bundled Node binary (official Node 24 Linux x64 baseline: glibc 2.28+).
+with the bundled Node binary (official Node 24 Linux x64 baseline: glibc 2.28+
+and libstdc++ 6.0.25+).
 macOS, Windows, WSL, remote SSH, cloud/headless sessions and IDE integrations are
 NOT accepted. A server-side browser opened in a remote session is not the user's
 local browser. Native graphics/browser compatibility remains a release gate.
@@ -60,6 +64,12 @@ this single-user machine boundary. This is not a multi-user service.
 The Code stdio server omits UI-only save/apply/reject/selection tools altogether;
 only the separately authenticated browser connection has them. The AI must never
 simulate explicit human approval via browser automation, shell or HTTP.
+
+Selection sharing in this browser is **saved for explicit rereading**, not pushed
+into the separate Claude Code conversation. Use 「選択箇所を保存（チャットで読込）」,
+then ask Claude Code 「選択箇所を読み込んで」. Claude must call read_artifact/read_deck
+to retrieve the saved selection IDs and current revision before acting on them.
+No automatic context delivery or model notification is claimed.
 
 ## Data, updates, removal and backup
 
@@ -139,14 +149,20 @@ separate repository; no LP download link is enabled by this change.
 Maintainers build from public sources with initialized submodules and npm ci:
 
 ```sh
-EDITOR_NODE_LICENSE=/absolute/path/to/matching-node-LICENSE npm run package:claude-code
+EDITOR_NODE_ARCHIVE=/absolute/path/to/node-v24.19.0-linux-x64.tar.gz npm run package:claude-code
 ```
 
 This runs public-source verification, builds the real UI/browser bridge, bundles
-server dependencies, includes the current Linux x64 Node binary and license,
+server dependencies, verifies and includes the pinned official Linux x64 Node
+binary and its license,
 public corresponding source and third-party notices, and emits a local marketplace
 archive plus SHA-256 under `release/`. Review the runtime provenance before release.
-Do not infer OS acceptance from successful packaging.
+Obtain the archive from the URL in scripts/claude-code-node.json. Its checksum
+is pinned from the official SHASUMS256.txt over HTTPS. A runtime upgrade requires
+reviewing the version, official archive checksum, baseline and tests together; do
+not accept an environment-supplied checksum. Build metadata retains the version,
+source URL, archive hash and extracted binary/license hashes. Do not infer OS
+acceptance from successful packaging.
 
 Official references checked 2026-10-16:
 
