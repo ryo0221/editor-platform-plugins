@@ -80,3 +80,32 @@ in each real host. This source preview does not claim those checks have passed.
 - [MCP Apps overview](https://apps.extensions.modelcontextprotocol.io/api/documents/overview.html)
 - [Claude remote connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp)
 - [Claude plugin manifest](https://code.claude.com/docs/en/plugins-reference)
+
+## 0.1.3 authoring and lifecycle contracts
+
+`propose_slide_changes` accepts exactly one of `edits` (the documented `kind`
+discriminator) or `content` (the complete updated native deck). The Slide guide
+returns the actual JSON schemas and examples for every typed edit. Full native
+chart/table/image/layout edits can also use `propose_artifact_changes`; neither
+route applies a pending proposal automatically.
+
+`create_artifact` accepts a Graph-only `profile` input matching the native
+`content.profile` identity/version. The Host retains it as `artifact.profile`,
+validates creation and all candidate/save/apply boundaries using public upstream
+Graph APIs, and uses it in the Surface. Existing records without it use the default
+relation Profile. Profiles are immutable in this Host; schema migration/editing is
+not exposed. `graph-source.json` and the local Graph JSON download contain
+`{graph, profile}` so a custom definition is not lost on export. The first native
+export file remains the GraphDocument for native interoperability.
+
+`list_artifacts` returns paginated metadata for active/deleted/all artifacts.
+`delete_artifact` moves the specified ID to recoverable trash at its exact revision;
+`restore_artifact` restores it. Both advance the revision, preserving content,
+Profile and proposals while invalidating old proposal bases. Archived records
+remain readable/exportable, but editing and proposal decisions are rejected.
+There is no permanent-delete tool. The UI exposes the same list/trash/restore flow.
+Do not delete an artifact merely because the model considers it unused.
+
+`list_editors` and every domain guide explicitly declare cross-artifact embedding
+and automatic source-update propagation unavailable. No reference/sync fields or
+background copying process are invented to simulate upstream #264.

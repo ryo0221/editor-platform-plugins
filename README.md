@@ -16,6 +16,7 @@ ChatGPT/Claude production-host acceptance is claimed. See [verification](docs/ve
 - Propose typed Slide edits or a domain-validated native candidate for other Editors; preview and explicitly apply/reject.
 - Reject stale proposals and competing saves using saved-revision preconditions.
 - Share saved selected IDs; export native JSON plus Slide/Design/Whiteboard SVG, Document Markdown and Data CSV.
+- Discover saved artifacts across conversations; move unwanted artifacts to recoverable trash and restore them with revision checks.
 - Retain decks and pending proposals across a server restart using atomic local files.
 - Use Streamable HTTP or stdio; local test harness uses the official MCP Apps AppBridge.
 
@@ -28,7 +29,10 @@ proposals, not a shared text operation/merge contract. Domain models remain sepa
 React UI supports native structure/properties and retention; executable component
 preview requires a separately hosted, pinned React runtime and is not implemented
 by this preview. File and Review retain their upstream viewing/comparison semantics;
-they are not arbitrary binary document editors. Graph uses the public relation Profile.
+they are not arbitrary binary document editors. Graph uses the public relation Profile by default, or a declarative custom Profile supplied at creation and retained immutably with that artifact. Profile schema migration is not supported by this Host.
+
+Slide charts are static snapshots. Cross-artifact embedding and automatic source-update
+propagation are not supported; upstream work is tracked in [#264](https://github.com/ryo0221/editor-platform/issues/264).
 
 Animation, Video and GIS are not in the pinned public upstream. Their plugin
 adapters require an approved public-source export and are not claimed complete.

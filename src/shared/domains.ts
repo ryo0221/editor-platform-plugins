@@ -4,7 +4,7 @@ import { createDesign, isDesign, exportDesignSvg, type DesignContent } from '@ed
 import { createWhiteboard, isWhiteboard, exportWhiteboardSvg, type WhiteboardContent } from '@editor-platform/whiteboard/model';
 import { createData, isStructuredData, exportCsv, type StructuredData } from '@editor-platform/structured-data/model';
 import { createReview, isReview, createFile, isFile } from '@editor-platform/review-surfaces/model';
-import { createRelationGraph, relationProfile, assertGraph } from '@editor-platform/structured-graph/model';
+import { createRelationGraph, relationProfile, assertGraph, type GraphProfile } from '@editor-platform/structured-graph/model';
 import { isReactUiDocument, sealReactEnvironment, type ReactUiDocument } from '@editor-platform/react-ui-core';
 
 export const artifactKinds = ['slide', 'document', 'design', 'whiteboard', 'data', 'graph', 'review', 'file', 'react-ui'] as const;
@@ -38,6 +38,7 @@ export interface NativeProposal { id: string; baseRevision: number; summary: str
 export interface ArtifactRecord {
   id: string; kind: ExtraKind; title: string; revision: number; content: unknown;
   selection: string[]; proposals: NativeProposal[]; updatedAt: string;
+  profile?: GraphProfile; deletedAt?: string;
 }
 export function nativeIds(content: unknown): Set<string> {
   const result = new Set<string>();

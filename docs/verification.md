@@ -10,8 +10,8 @@ recorded in upstream.json. The submodule's tracked files were unchanged.
 
 - Dependency installation and lockfile generation: PASS.
 - Pinned upstream verification, strict TypeScript and production UI build: PASS.
-- Server/domain/HTTP/MCP/stdio/desktop-storage/authoring tests: **21 passed**, no skips.
-- Desktop Chromium protocol harness: **17 passed**, no retries or skips.
+- Server/domain/HTTP/MCP/stdio/desktop-storage/authoring tests: **24 passed**, no skips.
+- Desktop Chromium protocol harness: **20 passed**, no retries or skips.
 - Browser tests fail on page errors and console errors; the final run had none.
 - Representative Document and Graph screenshots were inspected, including Japanese
   text with locally available Noto fonts. All nine mount cases retain screenshots
@@ -130,3 +130,30 @@ These checks use deterministic authored examples and the local MCP Apps harness.
 They verify the available API and actual rendering, not the quality of a live
 Claude model's response. The user report confirms 0.1.1 host UI display, but this
 agent has not signed in to Claude Desktop or certified live 0.1.2 generation.
+
+## Extension workflow fixes — 0.1.3
+
+- All six typed Slide edit examples are executed through MCP. Complete-content
+  Slide proposals handle chart/table changes, preserve canonical content until
+  review, and reject missing/ambiguous inputs and stale revisions. Actual discovery
+  includes the native-content input and the guide returns both JSON schemas.
+- A custom four-node-type, three-edge-type Graph Profile is created, retained,
+  edited, proposed/reviewed, saved, restarted and exported with its native graph.
+  Missing/invalid/mismatched Profiles, incompatible edges, Profile substitution
+  and read-only field changes are rejected. Legacy default-Profile records remain
+  readable/saveable without migration. Profile schema migration is not implemented.
+- All nine domains exercise paginated metadata discovery and delete/restore with
+  saved-revision checks. Content/Profile/proposals survive; archived writes fail,
+  old proposals remain stale after restoration and fresh Store instances read the
+  retained bytes. No permanent-delete operation is present.
+- Browser cases exercise the full-content Slide proposal route, a custom Graph's
+  real node property input/Host flush/save/reload and graph+Profile download, plus
+  Slide and Document discovery/trash/reopen/restore through the actual UI.
+- The packaged offline Node 20.19 runtime also exercises rich Slide proposals,
+  custom Graph retention/export and trash persistence/restoration after relocation
+  and restart. Existing 0.1.1/0.1.2 protocol/persistence checks are retained.
+- Cross-artifact embedding/source-update propagation are explicitly unavailable in
+  tool-visible capabilities/instructions. No upstream #264 implementation is claimed.
+- These are deterministic protocol, Surface and package checks. Live signed-in
+  Claude generation, Windows/macOS installation acceptance and mobile are not
+  re-tested. No upstream files, performance collection or Actions were changed.

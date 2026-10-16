@@ -145,7 +145,7 @@ test('Slide: native chart and layout proposal renders a preview and applies only
   const candidate = structuredClone(content);
   candidate.slides[0].background = '#f4f7f5';
   candidate.slides[0].objects.find((o: any) => o.id === 'investment_chart').chart.values = [20, 65, 15];
-  const proposed = await invoke(page, 'propose_artifact_changes', { artifactId: deck.id, baseRevision: 1, summary: '配分と背景を変更', content: candidate }, true);
+  const proposed = await invoke(page, 'propose_slide_changes', { deckId: deck.id, baseRevision: 1, summary: '配分と背景を変更', content: candidate }, true);
   expect(proposed.isError).not.toBe(true);
   expect((await invoke(page, 'read_deck', { deckId: deck.id })).structuredContent.deck.content).toEqual(content);
   await frame.getByRole('button', { name: '変更案を表示', exact: true }).click();
@@ -175,4 +175,59 @@ test('Document: native authoring renders formatted text, a real table, image and
   expect(artifact.content.blocks.map((b: any) => b.type)).toEqual(content.blocks.map((b: any) => b.type));
   expect(errors).toEqual([]);
   await page.screenshot({ path: 'test-results/rich-document.png', fullPage: true });
+});
+
+test('Graph: custom types render, native property edits save with the owned Profile and export it', async ({ page }) => {
+  const { frame, errors } = await start(page, 'graph');
+  const guide = (await invoke(page, 'get_editor_guide', { kind: 'graph' })).structuredContent;
+  const result = await invoke(page, 'create_artifact', guide.customCreateExample.arguments, true);
+  expect(result.isError).not.toBe(true);
+  const artifact = result.structuredContent.artifact;
+  const graph = frame.getByRole('region', { name: 'Graph Editor', exact: true });
+  await expect(graph.getByLabel('Node type')).toContainText('platform');
+  await expect(graph.locator('[data-edge-id="source_hub"]')).toContainText('取り込み');
+  await expect(graph.locator('[data-edge-id="hub_operator"]')).toContainText('例外のみ');
+  await expect(graph.getByRole('button', { name: 'Select node 入力元', exact: true })).toBeVisible();
+  await graph.getByRole('button', { name: 'Select node 入力元', exact: true }).click();
+  await graph.getByRole('form', { name: 'Graph attributes' }).getByLabel('name', { exact: true }).fill('更新した入力元');
+  // Host save must flush the native input before making the surface read-only.
+  await frame.getByRole('button', { name: '保存', exact: true }).click();
+  await expect(frame.locator('.save-state')).toContainText('v2');
+  await frame.getByRole('button', { name: '保存先から再読込', exact: true }).click();
+  await expect(graph.getByRole('button', { name: 'Select node 更新した入力元', exact: true })).toBeVisible();
+  const saved = (await invoke(page, 'read_artifact', { artifactId: artifact.id })).structuredContent.artifact;
+  expect(saved.profile).toEqual(guide.customGraph.profile);
+  expect(saved.content.nodes[0].attributes.name).toBe('更新した入力元');
+  const download = page.waitForEvent('download');
+  await frame.getByRole('button', { name: 'ローカルJSON', exact: true }).click();
+  const path = await (await download).path();
+  const { readFile } = await import('node:fs/promises');
+  expect(JSON.parse(await readFile(path!, 'utf8'))).toEqual({ graph: saved.content, profile: saved.profile });
+  expect(errors).toEqual([]);
+  await page.screenshot({ path: 'test-results/custom-graph.png', fullPage: true });
+});
+
+for (const kind of ['slide', 'document']) test(`${kind}: discover, trash and restore the same saved artifact through real UI`, async ({ page }) => {
+  const { frame, errors } = await start(page, kind);
+  const title = `Trash UI ${kind} ${Date.now()}`;
+  const created = await invoke(page, 'create_artifact', { kind, title }, true);
+  const record = created.structuredContent.deck ?? created.structuredContent.artifact;
+  await frame.getByRole('button', { name: 'ゴミ箱へ移動', exact: true }).click();
+  await expect(frame.locator('.save-state')).toContainText('ゴミ箱');
+  await expect(frame.getByRole('button', { name: '保存', exact: true })).toHaveCount(0);
+  await frame.getByRole('button', { name: '成果物の一覧', exact: true }).click();
+  const inventory = frame.getByRole('complementary', { name: '保存済みの成果物' });
+  await inventory.getByLabel('一覧の対象').selectOption('deleted');
+  await expect(inventory.getByText(title, { exact: false })).toBeVisible();
+  // Switch to another artifact and reopen this exact ID from trash.
+  await frame.getByRole('button', { name: '成果物を作成', exact: true }).click();
+  await inventory.locator('.proposal').filter({ hasText: title }).getByRole('button', { name: '開く', exact: true }).click();
+  await expect(frame.locator('header h1')).toHaveText(title);
+  await frame.getByRole('button', { name: '成果物を復元', exact: true }).click();
+  await expect(frame.locator('.save-state')).toContainText('v3');
+  await expect(frame.getByRole('region', { name: `${domainLabels[kind as keyof typeof domainLabels]} Editor`, exact: true })).toBeVisible();
+  const saved = (await invoke(page, 'read_artifact', { artifactId: record.id })).structuredContent;
+  expect((saved.deck ?? saved.artifact).content).toEqual(record.content);
+  expect((saved.deck ?? saved.artifact).deletedAt).toBeUndefined();
+  expect(errors).toEqual([]);
 });

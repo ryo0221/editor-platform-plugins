@@ -21,12 +21,6 @@ export const editSchema = z.discriminatedUnion('kind', [
 ]);
 export type Edit = z.infer<typeof editSchema>;
 export const deckIdSchema = z.object({ deckId: id }).strict();
-export const proposalArgs = z.object({
-  deckId: id,
-  baseRevision: z.number().int().min(1),
-  summary: z.string().min(1).max(500),
-  edits: z.array(editSchema).min(1).max(100),
-}).strict();
 const textStyle = z.object({
   fontFamily: z.string().optional(), fontSize: z.number().min(1).max(384).optional(),
   bold: z.boolean().optional(), italic: z.boolean().optional(), underline: z.boolean().optional(),
@@ -59,6 +53,11 @@ export const nativeSlideContentSchema = z.object({
     }).passthrough()).max(500),
   }).passthrough()).min(1).max(50),
 }).passthrough().describe('Complete editable native slide deck. Shapes, chart snapshots, tables, embedded images, typography, rich runs and absolute pixel layout are supported. Call get_editor_guide(kind="slide") for a valid designed example.');
+export const proposalArgs = z.object({
+  deckId: id, baseRevision: z.number().int().min(1), summary: z.string().min(1).max(500),
+  edits: z.array(editSchema).min(1).max(100).optional().describe('Small typed edits; discriminator is kind, not op. Example: [{kind:"set_text",slideId:"saved_slide_id",objectId:"saved_object_id",text:"Updated"}]. See get_editor_guide(kind="slide") for every edit schema. Supply edits OR content.'),
+  content: nativeSlideContentSchema.optional().describe('Complete updated native deck read from read_deck. Use this for chart/table/image/layout changes. Preserve IDs and unrelated content. Supply content OR edits.'),
+}).strict().refine((args) => (args.edits !== undefined) !== (args.content !== undefined), 'Supply exactly one of edits or content. Call get_editor_guide(kind="slide") for executable examples.');
 export const createArgs = z.object({
   title: z.string().trim().min(1).max(200),
   slides: z.array(z.object({ title: z.string().max(200), text: z.string().max(20000).default('') }).strict()).min(1).max(20).optional()
@@ -83,5 +82,6 @@ export interface DeckRecord {
   selection: string[];
   proposals: Proposal[];
   updatedAt: string;
+  deletedAt?: string;
 }
 export interface DeckReply { deck: DeckRecord }

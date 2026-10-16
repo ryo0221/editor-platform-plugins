@@ -13,7 +13,7 @@ test('packaged stdio launcher resolves dependencies outside the repository cwd',
   const client = new Client({ name: 'stdio-test', version: '1' });
   try {
     await client.connect(transport);
-    assert.equal((await client.listTools()).tools.length, 18);
+    assert.equal((await client.listTools()).tools.length, 21);
     const result = await client.callTool({ name: 'create_artifact', arguments: { kind: 'whiteboard', title: 'Stdio' } });
     assert.ok(!result.isError);
   } finally { await client.close(); await rm(directory, { recursive: true, force: true }); }

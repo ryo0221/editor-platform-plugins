@@ -56,3 +56,31 @@ These are deterministic content/protocol/rendering checks. They do not certify
 the quality of Claude's choices or verify every possible prompt. After updating
 the extension, restart Desktop and use a new conversation so the current tool
 schemas and model instructions are loaded.
+
+## Editing and cleanup — 0.1.3
+
+The Slide guide now returns `slideEditJsonSchema`, `slideEditExamples`,
+`proposalExample` and `nativeProposalExample`. Read the saved deck and use its
+current revision/IDs. `propose_slide_changes` accepts exactly one of `edits` or
+`content`; complete content handles charts, tables, images and layout. Typed edits
+use `kind`, not JSON Patch `op`. A rejected operation is not a reason to ask the
+user to manually transcribe changes: read the guide and use the native-candidate
+route. Proposals still require explicit human preview/application.
+
+For Graph, use the guide's `customCreateExample` for a complete matching
+`create_artifact.profile` plus native GraphDocument. Adapt the node/edge definitions
+and values to the user's request. The returned Profile is immutable for that
+artifact in this Host; Profile migrations are not provided. Saves/proposals retain
+the same definition and enforce upstream identity, read-only and unmapped-value
+protections. Use `graph-source.json` for a portable graph/Profile envelope.
+
+Use `list_artifacts` to find IDs across conversations. Only explicit user-requested
+cleanup calls `delete_artifact` with the current revision. This is recoverable trash;
+`restore_artifact` preserves the same ID and content. Old proposal revisions stay
+stale after delete/restore. There is no permanent deletion.
+
+Cross-artifact embedding and automatic source-update propagation are unavailable
+in this pinned integration. A Slide chart snapshot does not follow changes to a
+Data artifact; a native Graph cannot be embedded as a linked Slide source. Both
+server instructions and tool-visible capabilities state this boundary. Track the
+Platform capability in upstream #264 rather than inventing unsupported fields.

@@ -114,6 +114,7 @@ export class DeckStore {
     });
   }
   private requireRevision(record: DeckRecord, revision: number) {
+    if (record.deletedAt) fail('DELETED', 'Restore this artifact before editing.');
     if (record.revision !== revision) fail('CONFLICT', 'The deck has changed. Read the latest deck before retrying.');
   }
   save(id: string, revision: number, content: unknown) {
@@ -163,6 +164,7 @@ export class DeckStore {
   decide(id: string, proposalId: string, accept: boolean) {
     return this.serialized(async () => {
       const record = await this.read(id), proposal = record.proposals.find((p) => p.id === proposalId);
+      if (record.deletedAt) fail('DELETED', 'Restore this artifact before editing.');
       if (!proposal) fail('NOT_FOUND', 'Proposal not found.');
       if (accept) {
         this.requireRevision(record, proposal.baseRevision);
@@ -186,6 +188,16 @@ export class DeckStore {
       const all = new Set(record.content.slides.flatMap((s) => [s.id, ...s.objects.map((o) => o.id)]));
       if (ids.some((key) => !all.has(key))) fail('NOT_FOUND', 'Selection contains an unknown element.');
       record.selection = [...new Set(ids)]; return this.write(record);
+    });
+  }
+  setDeleted(id: string, revision: number, deleted: boolean) {
+    return this.serialized(async () => {
+      const record = await this.read(id);
+      if (record.revision !== revision) fail('CONFLICT', 'The deck has changed. Read the latest deck before retrying.');
+      if (!!record.deletedAt === deleted) return copy(record);
+      if (deleted) record.deletedAt = new Date().toISOString(); else delete record.deletedAt;
+      record.revision++; record.updatedAt = new Date().toISOString();
+      return this.write(record);
     });
   }
   async export(id: string) {

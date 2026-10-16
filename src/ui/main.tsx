@@ -4,14 +4,16 @@ import { flushSync } from 'react-dom';
 import { App } from '@modelcontextprotocol/ext-apps';
 import { EditorInputs, EditorSession, type EditorCommand } from '@editor-platform/editor-core';
 import { EditorInputsContext, EditorHistoryContext, EditorExportGuardContext, EditorOfficeCapabilitiesContext } from '@editor-platform/editor-ui';
+import { relationProfile, type GraphProfile } from '@editor-platform/structured-graph/model';
+import type { ArtifactSummary } from '../server/inventory';
 import type { DeckRecord } from '../shared/contracts';
 import { NativeSurface } from './surfaces';
 import { artifactKinds, domainLabels, type ArtifactKind, type NativeProposal } from '../shared/domains';
 import './styles.css';
 
-const bridge = new App({ name: 'Open Editor', version: '0.1.2' }, {});
+const bridge = new App({ name: 'Open Editor', version: '0.1.3' }, {});
 type Reply = { isError?: boolean; structuredContent?: Record<string, unknown> };
-type ViewRecord = Omit<DeckRecord, 'content' | 'proposals'> & { kind?: ArtifactKind; content: unknown; proposals: NativeProposal[] };
+type ViewRecord = Omit<DeckRecord, 'content' | 'proposals'> & { kind?: ArtifactKind; profile?: GraphProfile; content: unknown; proposals: NativeProposal[] };
 let onResult: (result: Reply) => void = () => undefined;
 bridge.ontoolresult = (result) => onResult(result as Reply);
 const connection = window.parent === window ? Promise.reject(new Error('ChatGPT、Claude、またはローカル検証Hostから開いてください。')) : bridge.connect();
@@ -28,6 +30,10 @@ function Editor() {
   const [record, setRecord] = useState<ViewRecord>();
   const recordRef = useRef<ViewRecord | undefined>(undefined);
   const session = useRef<EditorSession<unknown> | undefined>(undefined);
+  const [items, setItems] = useState<ArtifactSummary[]>([]);
+  const [inventoryOpen, setInventoryOpen] = useState(false);
+  const [listState, setListState] = useState<'active' | 'deleted'>('active');
+  const [nextCursor, setNextCursor] = useState<string>();
   const [newKind, setNewKind] = useState<ArtifactKind>('slide');
   const inputs = useRef(new EditorInputs()).current;
   const pending = useSyncExternalStore(inputs.subscribe, inputs.getSnapshot);
@@ -78,15 +84,16 @@ function Editor() {
   }
   function flush() { flushSync(() => inputs.flush()); }
   function execute(cmd: EditorCommand<unknown>) {
-    if (busyRef.current || previewId || !session.current) return false;
+    if (busyRef.current || recordRef.current?.deletedAt || previewId || !session.current) return false;
     session.current.execute(cmd); changed(true); render((n) => n + 1); return true;
   }
   function history(direction: 'undo' | 'redo') {
-    if (busyRef.current || previewId || !session.current) return;
+    if (busyRef.current || recordRef.current?.deletedAt || previewId || !session.current) return;
     let handled = false; flushSync(() => { handled = inputs.history(direction); });
     if (!handled) { session.current[direction](); changed(true); render((n) => n + 1); }
   }
   async function save() {
+    if (recordRef.current?.deletedAt) { setMessage('ゴミ箱から復元してから編集してください。'); return; }
     // Flush before acquiring busy/readOnly, or the native input commits would be refused.
     try { flush(); } catch (error) { setMessage((error as Error).message); return; }
     await action(async () => {
@@ -136,20 +143,36 @@ function Editor() {
       setPreviewId(undefined); setMessage(accept ? '変更案を適用しました。' : '変更案を却下しました。');
     });
   }
+  async function refreshInventory(state = listState, cursor?: string) {
+    const result = await call('list_artifacts', { state, limit: 50, ...(cursor ? { cursor } : {}) });
+    const output = result.structuredContent as { artifacts: ArtifactSummary[]; nextCursor?: string };
+    setItems((previous) => cursor ? [...previous, ...output.artifacts] : output.artifacts);
+    setNextCursor(output.nextCursor); setInventoryOpen(true);
+  }
+  async function trash(deleted: boolean) {
+    if (dirtyRef.current || pendingRef.current.dirty || pendingRef.current.composing) { setMessage('編集中の内容を保存してから操作してください。'); return; }
+    await action(async () => {
+      const current = recordRef.current; if (!current) return;
+      await call(deleted ? 'delete_artifact' : 'restore_artifact', { artifactId: current.id, baseRevision: current.revision }, true);
+      setMessage(deleted ? 'ゴミ箱へ移動しました。復元できます。' : '復元しました。');
+      if (inventoryOpen) await refreshInventory();
+    });
+  }
   return <main>
     <header><div><span className="eyebrow">OPEN EDITOR</span><h1>{record?.title ?? '会話から、編集できる成果物へ。'}</h1></div>
-      <span className="save-state">{record ? `${domainLabels[record.kind ?? 'slide']} · v${record.revision} · ${dirty || pending.dirty ? '未保存' : '保存済み'}` : 'EDITORS'}</span></header>
+      <span className="save-state">{record ? `${domainLabels[record.kind ?? 'slide']} · v${record.revision} · ${record.deletedAt ? 'ゴミ箱' : dirty || pending.dirty ? '未保存' : '保存済み'}` : 'EDITORS'}</span></header>
     <nav aria-label="成果物の操作">
       <select aria-label="Editorの種類" disabled={busy} value={newKind} onChange={(e) => setNewKind(e.target.value as ArtifactKind)}>{artifactKinds.map((kind) => <option key={kind} value={kind}>{domainLabels[kind]}</option>)}</select>
       <button disabled={busy || pending.dirty > 0 || pending.composing > 0 || dirty} onClick={() => void action(async () => {
         await call('create_artifact', { kind: newKind, title: `新しい${domainLabels[newKind]}` }); setMessage('成果物を編集できます。');
       })}>成果物を作成</button>
-      {record && <>
+      <button disabled={busy || dirty || pending.dirty > 0 || pending.composing > 0} onClick={() => void action(() => refreshInventory())}>成果物の一覧</button>
+      {record && !record.deletedAt && <>
         <button disabled={busy || !!proposal} onClick={() => void save()}>保存</button>
         <button disabled={busy || !!proposal || !session.current?.canUndo} onClick={() => history('undo')}>元に戻す</button>
         <button disabled={busy || !!proposal || !session.current?.canRedo} onClick={() => history('redo')}>やり直す</button>
         <button disabled={busy || !!proposal || !selected.length} onClick={() => void shareSelection()}>選択箇所を会話に共有</button>
-        <button disabled={busy} onClick={() => { try { flush(); download(`${record.id}.json`, JSON.stringify(session.current!.content, null, 2), 'application/json'); } catch (e) { setMessage((e as Error).message); } }}>ローカルJSON</button>
+        <button disabled={busy} onClick={() => { try { flush(); download(`${record.id}.json`, JSON.stringify(record.kind === 'graph' ? { graph: session.current!.content, profile: record.profile ?? relationProfile } : session.current!.content, null, 2), 'application/json'); } catch (e) { setMessage((e as Error).message); } }}>ローカルJSON</button>
         <button disabled={busy || dirty || pending.dirty > 0 || !!proposal} onClick={() => void action(async () => {
           const result = await call('export_deck', { deckId: record.id });
           const output = result.structuredContent as Record<string, unknown> | undefined;
@@ -162,26 +185,36 @@ function Editor() {
           if (dirty && !window.confirm('未保存の編集を破棄して、保存先から再読込しますか？')) return;
           void action(async () => { await call('read_deck', { deckId: record.id }, true); setMessage('再読込しました。'); });
         }}>保存先から再読込</button>
+        <button disabled={busy || dirty || pending.dirty > 0 || pending.composing > 0 || !!proposal} onClick={() => void trash(true)}>ゴミ箱へ移動</button>
       </>}
+      {record?.deletedAt && <button disabled={busy} onClick={() => void trash(false)}>成果物を復元</button>}
     </nav>
+    {inventoryOpen && <aside aria-label="保存済みの成果物">
+      <h2>保存済みの成果物</h2>
+      <select aria-label="一覧の対象" disabled={busy} value={listState} onChange={(event) => { const state = event.target.value as 'active' | 'deleted'; setListState(state); void action(() => refreshInventory(state)); }}><option value="active">保存済み</option><option value="deleted">ゴミ箱</option></select>
+      <button onClick={() => setInventoryOpen(false)}>一覧を閉じる</button>
+      {!items.length && <p>成果物はありません。</p>}
+      {items.map((item) => <div className="proposal" key={item.id}><span>{item.title} · {domainLabels[item.kind as ArtifactKind]} · v{item.revision}</span><button disabled={busy || dirty || pending.dirty > 0 || pending.composing > 0} onClick={() => void action(async () => { await call('read_artifact', { artifactId: item.id }); })}>開く</button></div>)}
+      {nextCursor && <button disabled={busy} onClick={() => void action(() => refreshInventory(listState, nextCursor))}>続きを表示</button>}
+    </aside>}
     <p className="status" role="status">{message}</p>
-    {record?.proposals.length ? <aside aria-label="AIの変更案"><h2>AIの変更案</h2>{record.proposals.map((p) => <div className="proposal" key={p.id}>
+    {!record?.deletedAt && record?.proposals.length ? <aside aria-label="AIの変更案"><h2>AIの変更案</h2>{record.proposals.map((p) => <div className="proposal" key={p.id}>
       <span>{p.summary}{p.baseRevision !== record.revision ? '（保存内容が更新されたため失効）' : ''}</span>
       <button disabled={busy || pending.dirty > 0 || pending.composing > 0 || dirty} onClick={() => setPreviewId(previewId === p.id ? undefined : p.id)}>{previewId === p.id ? '編集に戻る' : '変更案を表示'}</button>
       <button disabled={busy || previewId !== p.id || p.baseRevision !== record.revision || dirty || pending.dirty > 0} onClick={() => void decision(p.id, true)}>適用</button>
       <button disabled={busy} onClick={() => void decision(p.id, false)}>却下</button>
     </div>)}</aside> : null}
-    {content ? <section className="surface" aria-label={proposal ? '変更案プレビュー' : `${domainLabels[record?.kind ?? 'slide']} Editor`}>
+    {content && !record?.deletedAt ? <section className="surface" aria-label={proposal ? '変更案プレビュー' : `${domainLabels[record?.kind ?? 'slide']} Editor`}>
       <EditorInputsContext.Provider value={inputs}>
         <EditorHistoryContext.Provider value={{ undo: () => history('undo'), redo: () => history('redo') }}>
           <EditorExportGuardContext.Provider value={flush}>
             <EditorOfficeCapabilitiesContext.Provider value={{ pptx: false, docx: false, reason: 'この接続ではJSONとSVGを利用してください。' }}>
-              <NativeSurface key={`${record!.id}:${proposal ? 'preview-'+proposal.id : 'edit'}`} kind={record!.kind ?? 'slide'} content={content} execute={execute} select={(ids) => setSelected(Array.isArray(ids) ? ids : [ids])} selected={selected} readOnly={busy || !!proposal} artifactId={record!.id} />
+              <NativeSurface key={`${record!.id}:${proposal ? 'preview-'+proposal.id : 'edit'}`} kind={record!.kind ?? 'slide'} content={content} execute={execute} select={(ids) => setSelected(Array.isArray(ids) ? ids : [ids])} selected={selected} readOnly={busy || !!proposal} artifactId={record!.id} profile={record!.profile} />
             </EditorOfficeCapabilitiesContext.Provider>
           </EditorExportGuardContext.Provider>
         </EditorHistoryContext.Provider>
       </EditorInputsContext.Provider>
-    </section> : <section className="empty"><p>ChatGPT / Claude + Open Editor</p><h2>作る。触る。会話で直す。</h2><p>AIの変更は、プレビューしてから適用できます。</p></section>}
+    </section> : <section className="empty"><p>{record?.deletedAt ? 'この成果物はゴミ箱にあります。復元すると再び編集できます。' : 'ChatGPT / Claude + Open Editor'}</p><h2>作る。触る。会話で直す。</h2><p>AIの変更は、プレビューしてから適用できます。</p></section>}
     <footer>手編集のUndoは直近の読込・保存以降が対象です。保存先はこのMCPサーバーです。<a href="https://github.com/ryo0221/editor-platform-plugins" target="_blank" rel="noreferrer">ソース</a></footer>
   </main>;
 }

@@ -89,7 +89,7 @@ test('installed MCPB works offline, across relocation and restart, with no check
   };
   try {
     await connect();
-    assert.equal((await client!.listTools()).tools.length, 18);
+    assert.equal((await client!.listTools()).tools.length, 21);
     const capabilities = await invoke('list_editors', {});
     assert.equal(capabilities.editors.length, 9);
     const saved: { id: string; kind: string }[] = [];
@@ -99,6 +99,18 @@ test('installed MCPB works offline, across relocation and restart, with no check
       assert.deepEqual((result.artifact ?? result.deck).content, guide.exampleContent);
       saved.push({ id: (result.artifact ?? result.deck).id, kind });
     }
+    const customGuide = await invoke('get_editor_guide', { kind: 'graph' });
+    const custom = (await invoke('create_artifact', customGuide.customCreateExample.arguments)).artifact;
+    const trashedCustom = (await invoke('delete_artifact', { artifactId: custom.id, baseRevision: 1 })).artifact;
+    assert.ok(trashedCustom.deletedAt);
+    assert.deepEqual(trashedCustom.profile, customGuide.customGraph.profile);
+    const slide = saved.find((item) => item.kind === 'slide')!;
+    const slideRecord = (await invoke('read_deck', { deckId: slide.id })).deck;
+    const slideCandidate = structuredClone(slideRecord.content);
+    slideCandidate.slides[0].objects.find((o: any) => o.chart).chart.values = [20, 60, 20];
+    const slideProposal = (await invoke('propose_slide_changes', { deckId: slide.id, baseRevision: 1, summary: 'Packaged native chart change', content: slideCandidate })).deck;
+    const appliedSlide = (await invoke('apply_slide_proposal', { deckId: slide.id, proposalId: slideProposal.proposals[0].id })).deck;
+    assert.deepEqual(appliedSlide.content, slideCandidate);
     const document = saved.find((item) => item.kind === 'document')!;
     const original = (await invoke('read_artifact', { artifactId: document.id })).artifact;
     const candidate = structuredClone(original.content);
@@ -115,6 +127,13 @@ test('installed MCPB works offline, across relocation and restart, with no check
     await mkdir(dirname(relocated), { recursive: true });
     await rename(installation, relocated); installation = relocated;
     await connect();
+    const trash = await invoke('list_artifacts', { state: 'deleted' });
+    assert.ok(trash.artifacts.some((item: any) => item.id === custom.id));
+    const restored = (await invoke('restore_artifact', { artifactId: custom.id, baseRevision: 2 })).artifact;
+    assert.equal(restored.revision, 3);
+    assert.deepEqual(restored.profile, custom.profile);
+    const customExport = await invoke('export_artifact', { artifactId: custom.id });
+    assert.deepEqual(JSON.parse(customExport.files[1].text), { graph: custom.content, profile: custom.profile });
     const retained = (await invoke('read_artifact', { artifactId: document.id })).artifact;
     assert.equal(retained.proposals[0].id, proposal.id);
     assert.deepEqual(retained.content, original.content);
