@@ -20,9 +20,12 @@
     "start:stdio": "node --import tsx src/server/main.ts --stdio",
     "test": "node --import tsx --test tests/*.test.ts",
     "test:e2e": "playwright test",
-    "check": "npm run build && npm run build:test-host && npm test && npm run test:e2e",
+    "check": "npm run build && npm run build:browser && npm run build:test-host && npm test && npm run test:e2e",
     "package:claude": "node scripts/package-claude.mjs",
-    "test:claude-package": "node --import tsx --test tests/desktop/package.test.ts"
+    "test:claude-package": "node --import tsx --test tests/desktop/package.test.ts",
+    "build:browser": "vite build --config vite.browser.config.ts",
+    "package:claude-code": "node scripts/package-claude.mjs --code",
+    "test:claude-code-package": "node --import tsx --test tests/claude-code/package.test.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/ext-apps": "2.0.3",

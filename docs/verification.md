@@ -157,3 +157,66 @@ agent has not signed in to Claude Desktop or certified live 0.1.2 generation.
 - These are deterministic protocol, Surface and package checks. Live signed-in
   Claude generation, Windows/macOS installation acceptance and mobile are not
   re-tested. No upstream files, performance collection or Actions were changed.
+
+## Issue #1 — Claude Code distribution candidate (2026-10-16)
+
+Status: **配布準備中**. This implements a candidate and does **not** close the
+parent issue. The actual authenticated model-driven acceptance scenario and demo
+remain release blockers. No release, marketplace review or supported OS matrix
+is claimed by a successful local package build.
+
+Environment: Debian GNU/Linux 13 x64, Node 24.19.0 (included in the candidate),
+Chromium 151.0.7922.173, Claude Code 2.1.301, plugin 0.1.3 candidate, public upstream
+`a9e708331ff9b78886a02d3c30dca67bfafdf2e8`. Native macOS/Windows/WSL: NOT RUN.
+
+| Check | Result | Boundary |
+| --- | --- | --- |
+| Public upstream pin / strict types / production Editor build | PASS | Unmodified public submodule; no private source |
+| Production local browser bridge build | PASS | Same real Editor HTML as MCP Apps, no mock replacement |
+| Unit/protocol suite | PASS, 26 tests | Includes model-only tool discovery/direct-call refusal, browser bearer and Origin checks, stale saves and listener/lock shutdown |
+| Chromium browser suite | PASS, 21 tests | Existing 20 cases plus separate Code browser channel: actual manual Document edit/save, model reread, preview/reject/apply, Markdown download, tab reload/discovery |
+| Isolated prebuilt archive | PASS, 1 test | Bundled Node, no npm/Git/tsx or system Node on runtime PATH, path with spaces/Japanese, all nine rich native domains create/read/export, UI bytes, explicit browser save, relocation/restart retention, opener error recovery |
+| Claude Code plugin and marketplace validation | PASS | Actual CLI 2.1.301, not only JSON validation |
+| Persistent user-scope install and fresh CLI process listing | PASS | Temporary isolated CLAUDE_CONFIG_DIR, local extracted marketplace; enabled version 0.1.3 |
+| Existing Desktop MCPB packaging and isolated tests | PASS, 2 tests | Shared packager still validates and runs the separate Desktop artifact |
+| CLI marketplace/plugin update | PASS | Local directory source, CLI confirms next-session reloading; not an accepted version-to-version application upgrade |
+| Signed-in model-generated three-slide request / skill invocation | NOT RUN | No authenticated interactive Claude Code account/session available |
+| Real graphical desktop/browser launch in Claude Code | NOT RUN | Browser opener captured by test stub; actual browser rendered with Playwright |
+| Fresh signed-in host install through restart/new conversation | NOT RUN | CLI install/list is narrower evidence |
+| Real-host update/data retention, end-user permissions, demo video | NOT RUN | Relocation test is narrower evidence |
+| Public release URL / actual-host demo URL | NOT AVAILABLE | LP must keep preparing state and download disabled |
+| Office export | OUT OF SCOPE | Disabled by this host, no PPTX/DOCX success claimed |
+
+The new local browser uses an ephemeral 127.0.0.1 port and a random 256-bit token.
+It receives the token through the OS opener's fragment only; model tool output
+contains neither URL nor capability. The shell removes the fragment and keeps it
+in session storage for tab reload. The model's stdio connection does not register
+UI-only operations; a separately authenticated browser connection retains explicit
+save/review actions. This protects against model use of those stdio tools, not a
+malicious same-user process with shell/process/browser-storage access.
+
+One workspace lock prevents multiple Code sessions sharing the same storage.
+Unexpected process death conservatively leaves a lock; recovery instructions
+require closing all sessions and backing up before removing it. No silent stale
+lock deletion or multi-process revision coordination is claimed.
+
+Initial browser verification exposed a missing favicon request (HTTP 404). Serving
+an empty favicon response removed that console error. The new rich Document test
+initially changed text without synchronizing its authoritative rich spans; the
+fixture now follows the native contract. Final passing runs use those corrected
+sources and the unchanged browser assertions. No performance collection or Actions
+were added.
+
+Reproduce the candidate separately from the existing Desktop MCPB:
+
+```sh
+PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run check
+EDITOR_NODE_LICENSE=/absolute/path/to/matching-node-LICENSE npm run package:claude-code
+npm run test:claude-code-package
+```
+
+The packager includes public corresponding source, dependency/license notices,
+the matching runtime license, build metadata, Node/UI/browser hashes and archive
+SHA-256. Generated `release/` artifacts and private test workspaces stay out of Git.
+See [the Code guide](claude-code.md) for persistent install/update/uninstall,
+backup, data disclosure, unsupported environments and the remaining release gates.

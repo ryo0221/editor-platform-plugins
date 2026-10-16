@@ -30,6 +30,11 @@ preview never changes canonical content. Only the explicit View action applies i
 
 ## Local clients
 
+The Claude Code distribution candidate uses a separate model-only stdio connection
+and authenticated loopback browser bridge. It does not assume CLI MCP Apps display.
+See [Claude Code](claude-code.md); the source configurations below remain developer
+previews, and the Desktop MCPB is not a Code installer.
+
 Claude Desktop users can install the prebuilt `.mcpb` through Settings without
 Git/npm or a separate Node.js installation. See [the installation guide](claude-desktop.md).
 The extension uses Desktop's built-in runtime and keeps data outside its install

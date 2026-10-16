@@ -19,11 +19,12 @@ function authenticated(req: IncomingMessage, token: string) {
 }
 export function startHttp(options: {
   host: string; port: number; token?: string; demo?: boolean;
-  store: DeckStore; html?: URL; allowedHost?: string;
+  store: DeckStore; html?: URL; allowedHost?: string; browserHtml?: URL;
 }) {
   const local = ['127.0.0.1', '::1', 'localhost'].includes(options.host);
   if (!local && (!options.token || options.token.length < 32)) throw Error('Remote binding requires EDITOR_ACCESS_TOKEN of at least 32 characters.');
   if (options.demo && !local) throw Error('The demo harness is loopback-only.');
+  if (options.browserHtml && (!local || !options.token)) throw Error('The browser host requires loopback and an access token.');
   const htmlFile = options.html ?? html;
   const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
     try {
@@ -31,7 +32,15 @@ export function startHttp(options: {
       const allowed = new Set(['127.0.0.1', 'localhost', '[::1]', options.allowedHost].filter(Boolean));
       if (!allowed.has(hostname)) { res.writeHead(403).end('Host not allowed'); return; }
       const path = new URL(req.url ?? '/', 'http://localhost').pathname;
+      if (req.method === 'GET' && path === '/favicon.ico') { res.writeHead(204).end(); return; }
       if (req.method === 'GET' && path === '/health') { res.writeHead(200, { 'Content-Type': 'application/json' }).end('{"status":"ok"}'); return; }
+      // The shell and generic editor contain no user data or credentials. The
+      // fragment capability never reaches HTTP logs; every MCP call needs it.
+      if (options.browserHtml && req.method === 'GET' && (path === '/browser' || path === '/editor.html')) {
+        res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-store',
+          'Referrer-Policy': 'no-referrer', 'X-Content-Type-Options': 'nosniff',
+          'Content-Security-Policy': "frame-ancestors 'self'" }).end(await readFile(path === '/browser' ? options.browserHtml : htmlFile, 'utf8')); return;
+      }
       if (options.token && !authenticated(req, options.token)) {
         res.writeHead(401, { 'WWW-Authenticate': 'Bearer', 'Cache-Control': 'no-store' }).end('Unauthorized'); return;
       }

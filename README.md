@@ -39,6 +39,12 @@ adapters require an approved public-source export and are not claimed complete.
 
 ## Set up
 
+**Claude Code first distribution: 配布準備中.** A prebuilt local-marketplace candidate
+and protected local-browser Editor route are under development. See the
+[Claude Code guide](docs/claude-code.md) for installation, storage, permissions,
+recovery and release gates. No accepted OS, public download or live-host acceptance
+is claimed. The Desktop `.mcpb` below is a separate format.
+
 For **Claude Desktop**, install the prebuilt `.mcpb` extension from its Settings
 screen: see [the installation guide](docs/claude-desktop.md). It includes the UI,
 server and runtime dependencies, and uses Desktop's built-in Node.js. No Git,

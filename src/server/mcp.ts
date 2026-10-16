@@ -10,7 +10,7 @@ import { join } from 'node:path';
 import { inventory } from './inventory';
 import { authoringInstructions, getEditorGuide } from './authoring';
 
-export function createEditorServer(store: DeckStore, htmlPath = new URL('../../dist/editor.html', import.meta.url)) {
+export function createEditorServer(store: DeckStore, htmlPath = new URL('../../dist/editor.html', import.meta.url), host: { modelOnly?: boolean; openEditor?: () => Promise<unknown> } = {}) {
   const artifacts = sharedArtifacts.get(store) ?? new ArtifactStore(join(store.directory, 'artifacts'));
   sharedArtifacts.set(store, artifacts);
   const server = new McpServer({ name: 'editor-platform-plugins', version: '0.1.3' }, { instructions: authoringInstructions });
@@ -22,6 +22,7 @@ export function createEditorServer(store: DeckStore, htmlPath = new URL('../../d
   }));
   function tool<S extends z.ZodObject>(name: string, title: string, description: string, schema: S,
     run: (args: z.infer<S>) => Promise<unknown>, options: { appOnly?: boolean; readOnly?: boolean; widget?: boolean; destructive?: boolean } = {}) {
+    if (host.modelOnly && options.appOnly) return;
     registerAppTool(server, name, {
       title, description, inputSchema: schema.shape,
       annotations: { readOnlyHint: !!options.readOnly, destructiveHint: !!options.destructive, openWorldHint: false, idempotentHint: !!options.readOnly },
@@ -37,6 +38,7 @@ export function createEditorServer(store: DeckStore, htmlPath = new URL('../../d
       }
     });
   }
+  if (host.openEditor) tool('open_editor', 'Open the local Editor', 'Open the real Editor in the local browser for manual editing, explicit Save and proposal review. The plugin manages the loopback server. Never use shell or hidden UI tools to accept proposals or save for the user.', z.object({}).strict(), host.openEditor, { widget: false });
   tool('get_editor_guide', 'Learn how to author an Editor artifact', 'Read this before authoring. Returns the selected domain\'s native field contract, a validated rich example and limitations. Adapt the example to the user request; do not copy fictional data as fact.', z.object({ kind: kindSchema }).strict(),
     async ({ kind }) => getEditorGuide(kind), { readOnly: true, widget: false });
   tool('create_deck', 'Create designed editable slides', 'Create a real designed slide deck. First call get_editor_guide(kind="slide"), then supply content with native text, shapes, charts, tables, images, typography and deliberate layout. The legacy slides field produces title/body-only pages. Do not use it for a visual presentation. Opens the Slide Editor.', createArgs,
