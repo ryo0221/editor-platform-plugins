@@ -1,5 +1,13 @@
 # Security boundary
 
+The Claude Code candidate starts an ephemeral loopback listener with a random
+256-bit browser capability. It omits UI-only operations from its model stdio
+connection. The browser capability is passed only to the OS opener as a fragment,
+then held in tab session storage. It is not returned to the model. Local processes
+with process/browser-storage access remain trusted; this is not OS isolation.
+Host, Origin and bearer checks protect MCP calls. Generic HTML contains no saved
+content. See docs/claude-code.md for persistence and conservative workspace locking.
+
 This is a single-owner integration preview. Files in its data directory are not
 separated by user or organization. Run one process per workspace; atomic writes
 and revision serialization do not coordinate multiple server processes.

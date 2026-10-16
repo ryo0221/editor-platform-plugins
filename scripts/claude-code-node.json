@@ -1,0 +1,10 @@
+{
+  "version": "24.19.0",
+  "platform": "linux",
+  "arch": "x64",
+  "filename": "node-v24.19.0-linux-x64.tar.gz",
+  "sha256": "f625d97cd707df4ff96254916fbc5ff014f09c09effe5a1e0ca8f6d41a8789d4",
+  "url": "https://nodejs.org/dist/v24.19.0/node-v24.19.0-linux-x64.tar.gz",
+  "checksumsUrl": "https://nodejs.org/dist/v24.19.0/SHASUMS256.txt",
+  "baseline": "Official Linux x64 Node distribution; glibc >=2.28, libstdc++ >=6.0.25"
+}

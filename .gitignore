@@ -10,3 +10,4 @@ playwright-report/
 work/
 release/
 *.mcpb
+dist-browser/

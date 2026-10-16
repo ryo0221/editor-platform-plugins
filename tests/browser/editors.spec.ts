@@ -134,6 +134,10 @@ test('Slide: rich native creation renders actual chart, table, image and styled 
   await frame.getByRole('button', { name: '保存先から再読込', exact: true }).click();
   await expect(surface.locator('[data-canvas-target="priority_heading"]')).toContainText('重点投資 65%');
   expect(errors).toEqual([]);
+  await surface.locator('[data-canvas-target="strategy_title"]').click();
+  await frame.getByRole('button', { name: '選択箇所を会話に共有', exact: true }).click();
+  await expect(frame.getByRole('status')).toContainText('選択箇所を会話に共有しました');
+  await expect(page.locator('#host-status')).toContainText('strategy_title');
   await page.screenshot({ path: 'test-results/rich-slide.png', fullPage: true });
 });
 

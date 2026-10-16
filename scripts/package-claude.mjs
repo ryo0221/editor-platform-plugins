@@ -1,4 +1,5 @@
 import { build } from 'esbuild';
+import { installNodeDistribution, verifyNodeDistribution, nodeDistribution } from './claude-code-node.mjs';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { createRequire, isBuiltin } from 'node:module';
@@ -8,10 +9,11 @@ import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const require = createRequire(import.meta.url);
-const stage = join(root, 'work', 'claude-desktop-bundle');
+const code = process.argv.includes('--code');
+const stage = join(root, 'work', code ? 'claude-code-bundle/plugins/editor-platform' : 'claude-desktop-bundle');
 const outputDirectory = join(root, 'release');
 const manifest = JSON.parse(await readFile(join(root, 'desktop', 'manifest.json'), 'utf8'));
-const output = join(outputDirectory, `editor-platform-claude-${manifest.version}.mcpb`);
+const output = join(outputDirectory, code ? `editor-platform-claude-code-${manifest.version}-${process.platform}-${process.arch}.tar.gz` : `editor-platform-claude-${manifest.version}.mcpb`);
 const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
 function run(command, args, cwd = root) {
@@ -30,19 +32,23 @@ async function copyFile(source, destination) {
 }
 
 // Only the maintainer runs npm. Installation and startup never use npm or Git.
+if (code) {
+  if (process.platform !== nodeDistribution.platform || process.arch !== nodeDistribution.arch) throw Error('Only Linux x64 candidate packaging is currently implemented.');
+  await verifyNodeDistribution(process.env.EDITOR_NODE_ARCHIVE);
+}
 if (!process.env.npm_execpath) throw Error('Run this packager using npm run package:claude.');
 run(process.execPath, [process.env.npm_execpath, 'run', 'build']);
 await rm(stage, { recursive: true, force: true });
 await mkdir(stage, { recursive: true });
 await mkdir(outputDirectory, { recursive: true });
-await copyFile(join(root, 'desktop', 'manifest.json'), join(stage, 'manifest.json'));
-await copyFile(join(root, 'desktop', 'index.mjs'), join(stage, 'server', 'index.mjs'));
+if (!code) await copyFile(join(root, 'desktop', 'manifest.json'), join(stage, 'manifest.json'));
+if (!code) await copyFile(join(root, 'desktop', 'index.mjs'), join(stage, 'server', 'index.mjs'));
 await copyFile(join(root, 'dist', 'editor.html'), join(stage, 'ui', 'editor.html'));
 await copyFile(join(root, 'LICENSE'), join(stage, 'LICENSE'));
-await copyFile(join(root, 'docs', 'claude-desktop.md'), join(stage, 'INSTALL.md'));
+await copyFile(join(root, 'docs', code ? 'claude-code.md' : 'claude-desktop.md'), join(stage, 'INSTALL.md'));
 await copyFile(join(root, 'SECURITY.md'), join(stage, 'SECURITY.md'));
 await writeFile(join(stage, 'package.json'), JSON.stringify({
-  name: 'editor-platform-desktop', version: manifest.version, private: true,
+  name: code ? 'editor-platform-claude-code' : 'editor-platform-desktop', version: manifest.version, private: true,
   type: 'module', license: 'AGPL-3.0-only', engines: { node: '>=20.19.0' },
 }, null, 2) + '\n');
 // The CLI normally drops lockfiles, declarations and tsconfig files. Retain
@@ -51,11 +57,12 @@ await writeFile(join(stage, '.mcpbignore'), '!source/**\n');
 
 // Compile public editor model code and all server dependencies into one portable
 // package. No platform-specific native modules or runtime package downloads.
-const runtimeDirectory = join(stage, 'node_modules', 'editor-platform-desktop-runtime');
+const runtimePackage = code ? 'editor-platform-code-runtime' : 'editor-platform-desktop-runtime';
+const runtimeDirectory = join(stage, 'node_modules', runtimePackage);
 await mkdir(runtimeDirectory, { recursive: true });
 const compiled = await build({
   absWorkingDir: root,
-  entryPoints: ['src/desktop/runtime.ts'],
+  entryPoints: [code ? 'src/claude-code/runtime.ts' : 'src/desktop/runtime.ts'],
   outfile: join(runtimeDirectory, 'index.mjs'),
   bundle: true, platform: 'node', format: 'esm', target: 'node20.19',
   metafile: true, legalComments: 'external', sourcemap: false,
@@ -69,7 +76,7 @@ for (const artifact of Object.values(compiled.metafile.outputs)) {
   }
 }
 await writeFile(join(runtimeDirectory, 'package.json'), JSON.stringify({
-  name: 'editor-platform-desktop-runtime', version: manifest.version, private: true,
+  name: runtimePackage, version: manifest.version, private: true,
   type: 'module', main: 'index.mjs', license: 'AGPL-3.0-only',
 }, null, 2) + '\n');
 
@@ -140,12 +147,46 @@ await writeFile(join(stage, 'build-info.json'), JSON.stringify({
   uiSha256: digest(await readFile(join(stage, 'ui', 'editor.html'))),
   runtimeSha256: digest(await readFile(join(runtimeDirectory, 'index.mjs'))),
   sourceFiles: sourceFiles.length,
-  runtime: 'Claude Desktop built-in Node.js >=20.19.0',
-  verification: 'Portable package/stdio checks; signed-in Claude Desktop acceptance is separate.',
+  runtime: code ? `Official Node ${nodeDistribution.version} ${nodeDistribution.platform}/${nodeDistribution.arch}` : 'Claude Desktop built-in Node.js >=20.19.0',
+  verification: code ? 'Release candidate only; signed-in Claude Code acceptance is separate.' : 'Portable package/stdio checks; signed-in Claude Desktop acceptance is separate.',
 }, null, 2) + '\n');
 
-const cli = join(dirname(require.resolve('@anthropic-ai/mcpb')), 'cli', 'cli.js');
-run(process.execPath, [cli, 'validate', join(stage, 'manifest.json')]);
-run(process.execPath, [cli, 'pack', stage, output]);
+if (code) {
+  run(process.execPath, [process.env.npm_execpath, 'run', 'build:browser']);
+  await copyFile(join(root, 'dist-browser', 'browser.html'), join(stage, 'ui', 'browser.html'));
+  await installNodeDistribution(process.env.EDITOR_NODE_ARCHIVE, join(stage, 'runtime'));
+  await copyFile(join(root, '.claude-plugin', 'plugin.json'), join(stage, '.claude-plugin', 'plugin.json'));
+  await cp(join(root, 'skills'), join(stage, 'skills'), { recursive: true });
+  await writeFile(join(stage, '.mcp.json'), JSON.stringify({ mcpServers: { 'editor-platform': {
+    command: '${CLAUDE_PLUGIN_ROOT}/runtime/node', args: ['${CLAUDE_PLUGIN_ROOT}/server/code.mjs'],
+  } } }, null, 2) + '\n');
+  await mkdir(join(stage, 'server'), { recursive: true });
+  await writeFile(join(stage, 'server', 'code.mjs'), [
+    `import { startCode } from '../node_modules/${runtimePackage}/index.mjs';`,
+    "try { await startCode(new URL('../', import.meta.url)); }",
+    "catch (error) { console.error('Editor startup failed:', error.message); process.exitCode = 1; }", '',
+  ].join('\n'));
+  const infoPath = join(stage, 'build-info.json');
+  const info = JSON.parse(await readFile(infoPath, 'utf8'));
+  info.nodeDistribution = nodeDistribution;
+  info.nodeSha256 = digest(await readFile(join(stage, 'runtime', 'node')));
+  info.nodeLicenseSha256 = digest(await readFile(join(stage, 'runtime', 'LICENSE')));
+  info.browserSha256 = digest(await readFile(join(stage, 'ui', 'browser.html')));
+  info.platform = process.platform; info.arch = process.arch;
+  await writeFile(infoPath, JSON.stringify(info, null, 2) + '\n');
+  const marketplace = join(stage, '..', '..');
+  await mkdir(join(marketplace, '.claude-plugin'), { recursive: true });
+  await writeFile(join(marketplace, '.claude-plugin', 'marketplace.json'), JSON.stringify({
+    name: 'editor-platform-local', metadata: { description: 'Local prebuilt Claude Code integration candidate; release acceptance pending.' }, owner: { name: 'Open Editor Platform maintainers' },
+    plugins: [{ name: 'editor-platform', source: './plugins/editor-platform', version: manifest.version,
+      description: 'Claude Code local browser integration candidate; actual-host acceptance pending.' }],
+  }, null, 2) + '\n');
+  await copyFile(join(root, 'docs', 'claude-code.md'), join(marketplace, 'INSTALL.md'));
+  run('tar', ['-czf', output, '-C', marketplace, '.']);
+} else {
+  const cli = join(dirname(require.resolve('@anthropic-ai/mcpb')), 'cli', 'cli.js');
+  run(process.execPath, [cli, 'validate', join(stage, 'manifest.json')]);
+  run(process.execPath, [cli, 'pack', stage, output]);
+}
 await writeFile(`${output}.sha256`, `${digest(await readFile(output))}  ${relative(outputDirectory, output)}\n`);
 console.log(`Created ${output}`);
