@@ -40,7 +40,10 @@ test('Code archive: standalone runtime/UI, human-only channel, relocation and re
       };
       try {
         const names = (await client.listTools()).tools.map((tool) => tool.name);
-        assert.ok(!names.includes('apply_slide_proposal'));
+        for (const name of ['save_slide_draft', 'apply_slide_proposal', 'reject_slide_proposal', 'set_slide_selection', 'save_artifact_draft', 'apply_artifact_proposal', 'reject_artifact_proposal', 'set_artifact_selection']) {
+          assert.ok(!names.includes(name), name);
+          assert.equal((await client.callTool({ name, arguments: {} })).isError, true, name);
+        }
         if (!restart) {
           for (const kind of ['slide', 'document', 'design', 'whiteboard', 'data', 'graph', 'review', 'file', 'react-ui']) {
             const guide = await call('get_editor_guide', { kind });

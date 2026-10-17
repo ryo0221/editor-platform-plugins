@@ -25,7 +25,8 @@
     "test:claude-package": "node --import tsx --test tests/desktop/package.test.ts",
     "build:browser": "vite build --config vite.browser.config.ts",
     "package:claude-code": "node scripts/package-claude.mjs --code",
-    "test:claude-code-package": "node --import tsx --test tests/claude-code/package.test.ts"
+    "test:claude-code-package": "node --import tsx --test tests/claude-code/package.test.ts",
+    "test:platform-packages": "node --test tests/claude-code/platform-packages.test.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/ext-apps": "2.0.3",
