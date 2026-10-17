@@ -291,3 +291,12 @@ play/pause, buffered manual edit followed immediately by Save, Undo/Redo, previe
 reject/apply and reload. The actual Animation screenshot was visually inspected.
 These are local harness checks. Signed-in host acceptance, native Windows/macOS,
 mobile, Release and demo recording remain NOT RUN. No performance measurement.
+
+Animation package checkpoint: source commit `d6308b4` (subsequent evidence-only
+commit not rebuilt). Linux Code isolated package PASS (1), Desktop MCPB PASS (2),
+Node 24.19.0 on Debian 13 x64. Generated files remain outside Git:
+
+```text
+5b4b85b5cb78f2bd9f6dadc22687900d8db783b37d023e8879b9b795ff40d82f  editor-platform-claude-0.1.3.mcpb
+61c05d29e4ab72f33adac7be0b38c11c37f63c83995d0f34fe7a11407587542c  editor-platform-claude-code-0.1.3-linux-x64.tar.gz
+```
