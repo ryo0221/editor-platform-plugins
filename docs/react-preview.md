@@ -82,7 +82,14 @@ the Code browser tests.
 
 Base: plugin PR #14, `b7dd4c255f7b2f8d9c1c3d347dc112712b536a9b`;
 public upstream `97ea905745101b3814d14febcc0c31b157023c71` unchanged.
-Implementation commit and final check counts are recorded below after validation.
+Implementation commit: `43a7d4f934e9316142bbeada4f8aae76cd78d9d5`.
+Environment: Debian 13 x64, Node 24.19.0, Chromium 151.0.7922.173.
+`PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run check` passed with
+30 unit/protocol tests and 23 browser tests. After adding the missing-bundle startup
+cleanup regression, the final `npm test` passed all 31 tests and typecheck passed.
+The production implementation did not change between those runs. No retries or
+skips were used. Chromium used the existing test launch option `--no-sandbox`;
+these checks establish browser-origin behavior, not OS sandbox certification.
 
 | Check | Result |
 | --- | --- |
@@ -91,7 +98,11 @@ Implementation commit and final check counts are recorded below after validation
 | Real Code browser compose/props/interact/save/reread/TSX ZIP, restart and reload | PASS, targeted Chromium check |
 | Parent/top DOM and credential storage denial, CSP fetch/script denial, malformed JSON | PASS, targeted Chromium check |
 | Component exception, malformed/replayed/session-swapped requests | PASS, fault-injected test-only browser build; no production failure hook |
-| Full required check and isolated package | Pending final run |
+| Required check (public pin/build/types + unit/protocol + all 23 browser cases) | PASS |
+| Final unit/protocol suite including missing-bundle startup cleanup | PASS, 31 tests |
+| Exported source bundling with React external and no Editor runtime | PASS |
+| Isolated Linux Code package, preview HTML SHA-256, endpoint/CSP/no credentials, relocation/restart and listener shutdown | PASS, 1 package test |
+| Screenshot inspection | PASS, `test-results/react-preview-code.png` (generated, outside Git) |
 | Actual signed-in Claude Code, persistent installation, OS graphical opener | NOT RUN |
 | Native macOS/Windows and other browser families | NOT RUN |
 | Release, Issue close, merge, CI and general performance measurement | NOT RUN / not authorized |
@@ -113,6 +124,11 @@ PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run check
 EDITOR_NODE_ARCHIVE=/path/to/pinned-official-node.tar.gz npm run package:claude-code
 npm run test:claude-code-package
 ```
+
+The local Linux candidate was built from implementation commit `43a7d4f` and is
+retained at `release/editor-platform-claude-code-0.1.3-linux-x64.tar.gz` (not published).
+Its SHA-256 is `552d781da07aa7a493f66a108926b6d9a3270dac43d1c64426f95cabeb358874`.
+The archive contains the corresponding public source and runtime/license inventory.
 
 Screenshots, downloaded source ZIPs and generated distributions stay outside Git.
 The browser tests use an injected OS opener and the real stdio/browser bridge;
