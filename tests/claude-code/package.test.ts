@@ -30,6 +30,8 @@ test('Code archive: standalone runtime/UI, human-only channel, relocation and re
       assert.deepEqual(info.nodeDistribution, pin);
       assert.equal(createHash('sha256').update(await readFile(join(plugin, 'runtime/node'))).digest('hex'), info.nodeSha256);
       assert.equal(createHash('sha256').update(await readFile(join(plugin, 'runtime/LICENSE'))).digest('hex'), info.nodeLicenseSha256);
+      assert.equal(createHash('sha256').update(await readFile(join(plugin, 'ui/react-preview.html'))).digest('hex'), info.reactPreviewSha256);
+      let previewUrl = '';
       const client = new Client({ name: 'installed-code-model', version: '1' });
       const browser = new Client({ name: 'installed-browser', version: '1' });
       await client.connect(new StdioClientTransport({ command: join(plugin, 'runtime/node'), args: [join(plugin, 'server/code.mjs')],
@@ -76,13 +78,22 @@ test('Code archive: standalone runtime/UI, human-only channel, relocation and re
         assert.match(html, /iframe/); assert.ok(!html.includes(token));
         const ui = await (await fetch(new URL('/editor.html', url))).text();
         assert.ok(ui.length > 1_000_000);
+        previewUrl = /<meta name="editor-react-preview" content="([^"]+)">/.exec(ui)![1];
+        assert.notEqual(new URL(previewUrl).origin, url.origin);
+        const preview = await fetch(previewUrl); assert.equal(preview.status, 200);
+        assert.match(preview.headers.get('content-security-policy')!, /connect-src 'none'/);
+        assert.ok(!(await preview.text()).includes(token));
+        assert.equal((await fetch(new URL('/mcp', previewUrl))).status, 404);
         await browser.connect(new StreamableHTTPClientTransport(new URL('/mcp', url), { requestInit: { headers: { Authorization: `Bearer ${token}` } } }));
         if (!restart) {
           const saved = await call('read_deck', { deckId: id });
           const result = await browser.callTool({ name: 'save_slide_draft', arguments: { deckId: id, baseRevision: 1, content: saved.deck.content } });
           assert.equal((result.structuredContent as any).deck.revision, 2);
         }
-      } finally { await browser.close(); await client.close(); }
+      } finally {
+        await browser.close(); await client.close();
+        if (previewUrl) await assert.rejects(fetch(previewUrl));
+      }
       if (!restart) {
         const moved = join(temp, 'relocated-install'); await rename(install, moved); install = moved;
       }

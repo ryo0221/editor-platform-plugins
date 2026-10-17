@@ -10,6 +10,7 @@ test('Code local browser: real manual edits, saved reread, reject/apply and expo
   const directory = await mkdtemp(join(tmpdir(), 'code-browser-'));
   const bundle = join(directory, 'bundle');
   await mkdir(join(bundle, 'ui'), { recursive: true });
+  await cp('dist-react-preview/react-preview.html', join(bundle, 'ui/react-preview.html'));
   await cp('dist/editor.html', join(bundle, 'ui/editor.html'));
   await cp('dist-browser/browser.html', join(bundle, 'ui/browser.html'));
   const client = new Client({ name: 'code-browser-model', version: '1' });

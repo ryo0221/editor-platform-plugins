@@ -155,6 +155,7 @@ await writeFile(join(stage, 'build-info.json'), JSON.stringify({
 if (code) {
   run(process.execPath, [process.env.npm_execpath, 'run', 'build:browser']);
   await copyFile(join(root, 'dist-browser', 'browser.html'), join(stage, 'ui', 'browser.html'));
+  await copyFile(join(root, 'dist-react-preview', 'react-preview.html'), join(stage, 'ui', 'react-preview.html'));
   await installNodeDistribution(process.env.EDITOR_NODE_ARCHIVE, join(stage, 'runtime'), nodeDistribution);
   await copyFile(join(root, '.claude-plugin', 'plugin.json'), join(stage, '.claude-plugin', 'plugin.json'));
   await cp(join(root, 'skills'), join(stage, 'skills'), { recursive: true });
@@ -172,6 +173,7 @@ if (code) {
   info.nodeDistribution = nodeDistribution;
   info.nodeSha256 = digest(await readFile(join(stage, 'runtime', nodeExecutable)));
   info.nodeLicenseSha256 = digest(await readFile(join(stage, 'runtime', 'LICENSE')));
+  info.reactPreviewSha256 = digest(await readFile(join(stage, 'ui', 'react-preview.html')));
   info.browserSha256 = digest(await readFile(join(stage, 'ui', 'browser.html')));
   info.platform = nodeDistribution.platform; info.arch = nodeDistribution.arch;
   await writeFile(infoPath, JSON.stringify(info, null, 2) + '\n');

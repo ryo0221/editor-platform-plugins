@@ -34,7 +34,7 @@ for (const kind of artifactKinds) {
     const download = page.waitForEvent('download');
     await frame.getByRole('button', { name: 'ローカルJSON', exact: true }).click();
     expect((await download).suggestedFilename()).toMatch(/\.json$/);
-    if (kind === 'react-ui') await expect(frame.getByText('実コンポーネントの描画には独立preview runtimeの設定が必要です。', { exact: false })).toBeVisible();
+    if (kind === 'react-ui') await expect(frame.getByText('実行プレビューは Claude Code のローカルブラウザで利用できます。', { exact: false })).toBeVisible();
     expect(errors).toEqual([]);
     await page.screenshot({ path: `test-results/${kind}.png`, fullPage: true });
   });

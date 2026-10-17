@@ -25,7 +25,7 @@ export type HttpOAuth = {
 };
 export function startHttp(options: {
   host: string; port: number; token?: string; demo?: boolean;
-  store: DeckStore; html?: URL; allowedHost?: string; browserHtml?: URL; oauth?: HttpOAuth;
+  store: DeckStore; html?: URL; allowedHost?: string; browserHtml?: URL; oauth?: HttpOAuth; reactPreviewUrl?: string;
 }) {
   const local = ['127.0.0.1', '::1', 'localhost'].includes(options.host);
   if (!local && (!options.token || options.token.length < 32)) throw Error('Remote binding requires EDITOR_ACCESS_TOKEN of at least 32 characters.');
@@ -56,7 +56,7 @@ export function startHttp(options: {
       if (options.browserHtml && req.method === 'GET' && (path === '/browser' || path === '/editor.html')) {
         res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-store',
           'Referrer-Policy': 'no-referrer', 'X-Content-Type-Options': 'nosniff',
-          'Content-Security-Policy': "frame-ancestors 'self'" }).end(await readFile(path === '/browser' ? options.browserHtml : htmlFile, 'utf8')); return;
+          'Content-Security-Policy': "frame-ancestors 'self'" }).end((await readFile(path === '/browser' ? options.browserHtml : htmlFile, 'utf8')).replace('<head>', path === '/editor.html' && options.reactPreviewUrl ? `<head><meta name="editor-react-preview" content="${options.reactPreviewUrl}">` : '<head>')); return;
       }
       if (oauth && req.method === 'GET' && ['/.well-known/oauth-protected-resource/mcp', '/.well-known/oauth-protected-resource'].includes(req.url ?? '')) {
         res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }).end(JSON.stringify({ resource: oauth.resource, authorization_servers: [oauth.issuer], scopes_supported: [oauth.scope], bearer_methods_supported: ['header'] })); return;
