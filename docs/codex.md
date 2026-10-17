@@ -6,6 +6,22 @@ availability claim. There is no Release download yet. The existing
 `.mcp.codex.json` / compatibility manifest is a source-development configuration;
 `${PLUGIN_ROOT}` expansion and automatic loading by Codex are not established.
 
+## Finding this guide in the archive
+
+After extracting the prebuilt Code candidate, open `CODEX.md` at the archive root.
+It links to `plugins/editor-platform/docs/codex.md` (this guide); its security link
+resolves to the bundled `plugins/editor-platform/SECURITY.md`. There is no need to
+browse the corresponding-source directory or install Claude Code to read it.
+The archive also contains the executable in `plugins/editor-platform/runtime/`
+and entry point `plugins/editor-platform/server/code.mjs`. Use `runtime/node` on
+Linux/macOS and `runtime/node.exe` on Windows, with the matching target archive.
+This identifies files, not native Windows/macOS installation acceptance.
+
+Do not load the archive's Claude `.mcp.json` as Codex configuration or assume that
+Codex expands `${CLAUDE_PLUGIN_ROOT}` / `${PLUGIN_ROOT}`. The explicit MCP command
+below uses absolute paths and is the documented candidate route. No automatic
+registration or changes to Codex settings occur by extracting the archive.
+
 ## Route and package
 
 Use the prebuilt Claude Code marketplace candidate's portable runtime directly as
@@ -50,8 +66,10 @@ Windows/macOS instructions require their respective candidate and native accepta
 the commands above are not Windows instructions.
 
 Ask Codex to call `get_editor_guide`, create a fictional artifact with native
-content, then call `open_editor`. The browser opens through the local OS opener;
-the tool response deliberately contains no capability URL. Manually Save and
+content, then call `open_editor`. The request uses the local OS opener;
+`launch_requested` and `launch_unconfirmed` both have `browserVerified: false`.
+Ask the user to inspect the existing window; do not automatically retry. Neither
+status proves visible content, and the tool response contains no capability URL. Manually Save and
 review proposals in that browser. Ask Codex to `read_artifact` / `read_deck` after
 Save or selection changes; selection is not automatically pushed to the model.
 The model's stdio channel must neither list nor execute human-only save/apply/

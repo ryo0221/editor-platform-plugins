@@ -193,6 +193,14 @@ if (code) {
       description: 'Claude Code local browser integration candidate; actual-host acceptance pending.' }],
   }, null, 2) + '\n');
   await copyFile(join(root, 'docs', 'claude-code.md'), join(marketplace, 'INSTALL.md'));
+  await copyFile(join(root, 'docs', 'codex.md'), join(stage, 'docs', 'codex.md'));
+  await writeFile(join(marketplace, 'CODEX.md'), [
+    '# Codex CLI candidate', '',
+    'Read [the bundled Codex guide](plugins/editor-platform/docs/codex.md).',
+    'This uses the bundled model-only stdio runtime and local browser; no Claude Code installation or source build is required.',
+    'Actual Codex acceptance is NOT RUN. Do not register persistently without approval.', '',
+  ].join('\n'));
+
   run('tar', ['-czf', output, '-C', marketplace, '.']);
 } else {
   const cli = join(dirname(require.resolve('@anthropic-ai/mcpb')), 'cli', 'cli.js');
