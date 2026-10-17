@@ -24,9 +24,13 @@ export function referenceService(directory: string, artifacts: ArtifactStore) {
   }
   const host: ReferenceHost = {
     async list() {
-      const records = await inventory(join(directory, 'artifacts'), 'artifact_', 'active', '', 1000);
       const options = [];
-      for (const item of records.filter((r) => r.kind === 'data' || r.kind === 'graph')) {
+      let cursor = '';
+      for (;;) {
+        const records = await inventory(join(directory, 'artifacts'), 'artifact_', 'active', cursor, 1000);
+        if (!records.length) break;
+        cursor = records.at(-1)!.id;
+        for (const item of records.filter((r) => r.kind === 'data' || r.kind === 'graph')) {
         const record = await artifacts.read(item.id);
         if (record.deletedAt) continue;
         if (record.kind === 'graph') options.push({ label: `${record.title} · Graph`, source: { artifactId: item.id, domain: 'structured-graph', target: { kind: 'graph', viewId: (record.content as { id: string }).id } } });
@@ -34,6 +38,7 @@ export function referenceService(directory: string, artifacts: ArtifactStore) {
           const views = [{ id: 'default', name: 'Default' }, ...((record.content as { views?: { id: string; name: string }[] }).views ?? [])];
           for (const view of views) for (const kind of ['table', 'chart']) options.push({ label: `${record.title} · ${view.name} · ${kind}`, source: { artifactId: item.id, domain: 'data', target: { kind, viewId: view.id } } });
         }
+      }
       }
       return options;
     },
