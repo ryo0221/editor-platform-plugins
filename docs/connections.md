@@ -12,8 +12,8 @@ reject/selection tools use `artifactId`. Tool results carry either the original
 `deck` envelope or a native `artifact` envelope; the View selects the real upstream
 Surface by its domain. No universal content model is introduced. Generic proposals
 carry complete native candidates with revision checks; they are not collaborative
-merge operations. React UI live preview needs a separate pinned runtime; its
-structure/properties remain editable and retainable. Animation supports public schema-1 rectangles/groups and native JSON export through
+merge operations. React UI includes a bundled fixed Panel/Text/Counter preview; see
+[its trusted catalog boundary](react-preview.md). Animation supports public schema-1 rectangles/groups and native JSON export through
 the real controlled Surface/Player. Video/GIS adapters remain unimplemented.
 
 UI-only tools are `save_slide_draft`, `apply_slide_proposal`,
@@ -61,6 +61,13 @@ CLI hosts can use tools without rendering the UI; UI-only proposal acceptance
 then requires a compatible MCP Apps UI host.
 
 ## Web chat
+
+Optional single-owner OAuth candidates are documented in the
+[transport gateway guide](../integrations/chatgpt/README.md) and
+[direct verifier guide](../integrations/chatgpt/tool-auth.md). Use one mode only:
+the direct verifier must receive the original Authorization header, not the
+transport gateway’s substituted credential. Live TLS/IdP and real-host acceptance
+are NOT RUN. The following static-token guidance describes the default mode.
 
 Both providers need an endpoint reachable from their servers, not a loopback URL
 on the user's computer. Deploy behind TLS with a host-compatible OAuth gateway.

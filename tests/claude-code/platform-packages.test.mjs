@@ -49,6 +49,7 @@ for (const target of Object.keys(pins)) {
       const info = JSON.parse(bytes('build-info.json'));
       assert.deepEqual(info.nodeDistribution, pin);
       assert.equal(`${info.platform}-${info.arch}`, target);
+      if (info.reactPreviewSha256) assert.equal(digest(bytes('ui/react-preview.html')), info.reactPreviewSha256);
       const config = JSON.parse(bytes('.mcp.json')).mcpServers['editor-platform'];
       assert.equal(config.command, '${CLAUDE_PLUGIN_ROOT}/runtime/' + executable);
       assert.deepEqual(config.args, ['${CLAUDE_PLUGIN_ROOT}/server/code.mjs']);
