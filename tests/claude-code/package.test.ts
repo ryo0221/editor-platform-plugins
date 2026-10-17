@@ -130,6 +130,8 @@ test('bundled shell client: no external Node/npm, JSON lines, model boundary and
   execFileSync('tar', ['-xzf', resolve('release/editor-platform-claude-code-0.1.3-linux-x64.tar.gz'), '-C', extracted]);
   const plugin = join(extracted, 'plugins/editor-platform');
   const data = join(directory, 'data');
+  assert.match(execFileSync(join(plugin, 'runtime/node'), [join(plugin, 'server/shell-client.mjs'), '--help'],
+    { cwd: directory, env: { PATH: '' }, encoding: 'utf8' }), /EOF stops the server/);
   const info = JSON.parse(await readFile(join(plugin, 'build-info.json'), 'utf8'));
   assert.equal(createHash('sha256').update(await readFile(join(plugin, 'server/shell-client.mjs'))).digest('hex'), info.shellClientSha256);
   assert.match(await readFile(join(plugin, 'docs/codex-shell.md'), 'utf8'), /not bundled runtime requirements/);

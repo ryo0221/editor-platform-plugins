@@ -181,6 +181,7 @@ if (code) {
     outfile: join(stage, 'server', 'shell-client.mjs'), bundle: true,
     platform: 'node', format: 'esm', target: 'node24', metafile: true,
     legalComments: 'external', sourcemap: false,
+    banner: { js: "import { createRequire as __editorCreateRequire } from 'node:module'; const require = __editorCreateRequire(import.meta.url);" },
   });
   for (const artifact of Object.values(shellClient.metafile.outputs)) {
     for (const dependency of artifact.imports) {
