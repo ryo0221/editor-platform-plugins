@@ -51,6 +51,10 @@ test('Code archive: standalone runtime/UI, human-only channel, relocation and re
             const record = made.deck ?? made.artifact;
             assert.deepEqual(record.content, guide.exampleContent);
             await call('export_artifact', { artifactId: record.id });
+            if (kind === 'data' || kind === 'graph') {
+              const prepared = await call('create_reference', { source: { artifactId: record.id, domain: kind === 'graph' ? 'structured-graph' : 'data', target: { kind: kind === 'graph' ? 'graph' : 'table', viewId: kind === 'graph' ? record.content.id : 'default' } }, mode: 'fixed' });
+              assert.deepEqual(prepared.reference.snapshot.content, record.content);
+            }
             if (kind === 'slide') id = record.id;
           }
         } else {
