@@ -36,7 +36,7 @@ for (const target of Object.keys(pins)) {
       assert.equal(new Set(entries).size, entries.length);
       for (const entry of entries) {
         assert.ok(entry.startsWith('./') && !entry.includes('\\') && !entry.split('/').includes('..'), entry);
-        assert.match(entry, /^\.\/(?:$|(?:INSTALL|CODEX)\.md$|\.claude-plugin\/(?:$|marketplace\.json$)|plugins\/(?:$|editor-platform\/(?:$|(?:LICENSE|INSTALL\.md|SECURITY\.md|SOURCE\.md|THIRD-PARTY-NOTICES\.json|build-info\.json|package\.json|\.mcpbignore|\.mcp\.json)$|(?:runtime|source|licenses|node_modules|server|ui|skills|\.claude-plugin)\/.*$|docs\/(?:$|codex\.md$))))/);
+        assert.match(entry, /^\.\/(?:$|(?:INSTALL|CODEX)\.md$|\.claude-plugin\/(?:$|marketplace\.json$)|plugins\/(?:$|editor-platform\/(?:$|(?:LICENSE|INSTALL\.md|SECURITY\.md|SOURCE\.md|THIRD-PARTY-NOTICES\.json|build-info\.json|package\.json|\.mcpbignore|\.mcp\.json)$|(?:runtime|source|licenses|node_modules|server|ui|skills|\.claude-plugin)\/.*$|docs\/(?:$|codex(?:-shell)?\.md$))))/);
       }
       const types = execFileSync('tar', ['-tvzf', archive], { encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 }).trim().split('\n');
       assert.ok(types.every((entry) => entry.startsWith('-') || entry.startsWith('d')), 'only regular files/directories are allowed');
@@ -48,12 +48,15 @@ for (const target of Object.keys(pins)) {
       const bytes = (path) => execFileSync('tar', ['-xOf', archive, root + path], { maxBuffer: 150 * 1024 * 1024 });
       const entryGuide = await readFile(join(extracted, 'CODEX.md'), 'utf8');
       assert.match(entryGuide, /\(plugins\/editor-platform\/docs\/codex\.md\)/);
-      assert.match(entryGuide, /Actual Codex acceptance is NOT RUN/);
+      assert.match(entryGuide, /Native CLI registration acceptance is NOT RUN/);
+      assert.match(entryGuide, /plugins\/editor-platform\/docs\/codex-shell\.md/);
       assert.deepEqual(bytes('docs/codex.md'), await readFile(new URL('../../docs/codex.md', import.meta.url)));
+      assert.deepEqual(bytes('docs/codex-shell.md'), await readFile(new URL('../../docs/codex-shell.md', import.meta.url)));
       // The shipped guide's relative security link must resolve within the package.
       assert.match(bytes('docs/codex.md').toString(), /\(\.\.\/SECURITY\.md\)/);
       assert.ok(bytes('SECURITY.md').length > 0);
       const info = JSON.parse(bytes('build-info.json'));
+      assert.equal(digest(bytes('server/shell-client.mjs')), info.shellClientSha256);
       assert.deepEqual(info.nodeDistribution, pin);
       const record = JSON.parse(await readFile(`${archive}.acceptance-template.json`, 'utf8'));
       assert.equal(record.package.sha256, digest(await readFile(archive)));

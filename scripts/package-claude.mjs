@@ -176,6 +176,17 @@ if (code) {
     "try { await startCode(new URL('../', import.meta.url)); }",
     "catch (error) { console.error('Editor startup failed:', error.message); process.exitCode = 1; }", '',
   ].join('\n'));
+  const shellClient = await build({
+    absWorkingDir: root, entryPoints: ['src/claude-code/shell-client.ts'],
+    outfile: join(stage, 'server', 'shell-client.mjs'), bundle: true,
+    platform: 'node', format: 'esm', target: 'node24', metafile: true,
+    legalComments: 'external', sourcemap: false,
+  });
+  for (const artifact of Object.values(shellClient.metafile.outputs)) {
+    for (const dependency of artifact.imports) {
+      if (!dependency.external || !isBuiltin(dependency.path)) throw Error(`Unbundled shell client dependency: ${dependency.path}`);
+    }
+  }
   const infoPath = join(stage, 'build-info.json');
   const info = JSON.parse(await readFile(infoPath, 'utf8'));
   info.nodeDistribution = nodeDistribution;
@@ -183,6 +194,7 @@ if (code) {
   info.nodeLicenseSha256 = digest(await readFile(join(stage, 'runtime', 'LICENSE')));
   info.reactPreviewSha256 = digest(await readFile(join(stage, 'ui', 'react-preview.html')));
   info.browserSha256 = digest(await readFile(join(stage, 'ui', 'browser.html')));
+  info.shellClientSha256 = digest(await readFile(join(stage, 'server', 'shell-client.mjs')));
   info.platform = nodeDistribution.platform; info.arch = nodeDistribution.arch;
   await writeFile(infoPath, JSON.stringify(info, null, 2) + '\n');
   const marketplace = join(stage, '..', '..');
@@ -194,11 +206,13 @@ if (code) {
   }, null, 2) + '\n');
   await copyFile(join(root, 'docs', 'claude-code.md'), join(marketplace, 'INSTALL.md'));
   await copyFile(join(root, 'docs', 'codex.md'), join(stage, 'docs', 'codex.md'));
+  await copyFile(join(root, 'docs', 'codex-shell.md'), join(stage, 'docs', 'codex-shell.md'));
   await writeFile(join(marketplace, 'CODEX.md'), [
-    '# Codex CLI candidate', '',
+    '# Codex candidate routes', '',
     'Read [the bundled Codex guide](plugins/editor-platform/docs/codex.md).',
+    'For an existing Codex session with shell access, read [the shell route](plugins/editor-platform/docs/codex-shell.md).',
     'This uses the bundled model-only stdio runtime and local browser; no Claude Code installation or source build is required.',
-    'Actual Codex acceptance is NOT RUN. Do not register persistently without approval.', '',
+    'Native CLI registration acceptance is NOT RUN. The shell route has separate, limited evidence; do not infer GUI or other OS acceptance.', '',
   ].join('\n'));
 
   run('tar', ['-czf', output, '-C', marketplace, '.']);
