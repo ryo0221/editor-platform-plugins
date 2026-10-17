@@ -1,0 +1,488 @@
+{
+  "sourceHead": "72b8e42bd6a398d496a63a6d483eabeed43861fb",
+  "groups": {
+    "fallback": {
+      "initialPort": "6d221bd1c183cb01acf6b19ed32d4122c02b160e",
+      "paths": [
+        "src/UnicodeLayoutEngine.coffee",
+        "src/layout/UnicodeLayoutEngine.coffee",
+        "src/layout/UnicodeLayoutEngine.js"
+      ],
+      "postPortCommitCount": 6,
+      "commits": [
+        {
+          "commit": "799dc1e717708879d7ff445613ed89a18d6495df",
+          "date": "2015-04-27T00:42:37-07:00",
+          "subject": "Move glyph layout processing out of TTFFont and into it's own class (LayoutEngine)",
+          "patchSha256": "a0b601745ff7ab98c850239dc27ad6f52b6be92c819f14a00c11c8c9ebed3058",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "23942974a5c1f729c6b5cb9e57d07fcb549d56b3",
+          "date": "2015-07-02T18:56:57-07:00",
+          "subject": "Fix tests",
+          "patchSha256": "03a25811c05ebb00eee15964bb2cb95960eb14fa25319693c3598c2e835f901d",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "4b6fbca80fbaa3e762659663f9f7b21f2c4aef0a",
+          "date": "2016-05-01T16:59:20-07:00",
+          "subject": "Initial port from CoffeeScript to ES6",
+          "patchSha256": "b1bdfd26a2ba2360c5513e7964faf4e6dd85ab4df269f92ecd7e5ed10b476b7f",
+          "addedNoticeLines": [
+            "+// Based on code from Harfbuzz, thanks!",
+            "+// https://github.com/behdad/harfbuzz/blob/master/src/hb-ot-shape-fallback.cc"
+          ]
+        },
+        {
+          "commit": "af8f90f7bf96e759ccbe09afc57411d7c3ba5378",
+          "date": "2016-08-25T14:39:00-04:00",
+          "subject": "Whitespace",
+          "patchSha256": "62531d31a182e815b07c74521a6ca6a10d3655f758d0929210ce5b8b6a66e7e0",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "310dcc156d2fa9746ef3ef49969816fe834da699",
+          "date": "2016-08-25T17:58:58-04:00",
+          "subject": "Formatting",
+          "patchSha256": "653e8b091f4ece6e3b827f84de4c5946378090999735369661bb08fe664bd598",
+          "addedNoticeLines": [
+            "+ * Based on code from Harfbuzz, thanks!",
+            "+ * https://github.com/behdad/harfbuzz/blob/master/src/hb-ot-shape-fallback.cc"
+          ]
+        },
+        {
+          "commit": "cc4b9b3817c214a1029f452a833c3e9b5ebaea90",
+          "date": "2018-12-19T15:51:25-06:00",
+          "subject": "Point to @pdf-lib/* dependencies",
+          "patchSha256": "fb98de5c8d65e08b628bb0c5e284f24cbbd41e17c433f7242998507e9b943b52",
+          "addedNoticeLines": []
+        }
+      ]
+    },
+    "arabic": {
+      "initialPort": "44ac7ea7fae7dcee19349e8e18892531f936ee6b",
+      "paths": [
+        "src/opentype/shapers/ArabicShaper.coffee",
+        "src/opentype/shapers/ArabicShaper.js"
+      ],
+      "postPortCommitCount": 10,
+      "commits": [
+        {
+          "commit": "f82baae4c15dd7583c754cca8ce3290ac343324c",
+          "date": "2016-02-14T22:14:07-08:00",
+          "subject": "Update shapers to use ShapingPlans",
+          "patchSha256": "06eb3232baf947779a0fc8cb02f3fe86ee5f2bdee39c8b24ace1dffc67720b97",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "4b6fbca80fbaa3e762659663f9f7b21f2c4aef0a",
+          "date": "2016-05-01T16:59:20-07:00",
+          "subject": "Initial port from CoffeeScript to ES6",
+          "patchSha256": "92955e249a87f93ba37e3f0c2265bb93d594b2bbcbdfc4286b55433bfe30b58e",
+          "addedNoticeLines": [
+            "+// The shaping state machine was ported from Harfbuzz.",
+            "+// https://github.com/behdad/harfbuzz/blob/master/src/hb-ot-shape-complex-arabic.cc"
+          ]
+        },
+        {
+          "commit": "af8f90f7bf96e759ccbe09afc57411d7c3ba5378",
+          "date": "2016-08-25T14:39:00-04:00",
+          "subject": "Whitespace",
+          "patchSha256": "82beaa8de7030e170543a55ec77fb27109456ecc12b0d51fd3febd2c601a58fd",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "3632483c0ac673fc07a08cc2cdf3009ec89d1695",
+          "date": "2016-08-25T15:28:33-04:00",
+          "subject": "Formatting",
+          "patchSha256": "4d4b1ead016914afe5035805f213ae13a630dd3c6e4f8fe7074cd93e51e82e7d",
+          "addedNoticeLines": [
+            "+ * The shaping state machine was ported from Harfbuzz.",
+            "+ * https://github.com/behdad/harfbuzz/blob/master/src/hb-ot-shape-complex-arabic.cc"
+          ]
+        },
+        {
+          "commit": "e6aad0526ae1215080e978aba1b25fbf2ab97f9a",
+          "date": "2016-08-25T23:02:18-04:00",
+          "subject": "Use rollup for build",
+          "patchSha256": "782bc3981d425aa6ff690e05a79848f0f596378b67c5977378733847d0667da6",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "968e35c158589294e9543818f56d0b229b95a475",
+          "date": "2018-01-15T12:29:58-06:00",
+          "subject": "Serialize trie files as JSON",
+          "patchSha256": "e18e9ebf53d12355e45687f0991447a29005e72516c24603ef43ac8524a9929f",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "99a35c7b0f0f6549d7727bcbc1ddabb7f9ca19bf",
+          "date": "2018-01-15T13:03:21-06:00",
+          "subject": "Fix trie json file name type",
+          "patchSha256": "1b026c1bec2ae2b8707472130dc8f0f0fbe048c710887aa1aeeb1d94b1f5199a",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "08cacefa3e745f83a2c95051e38985b02aa2f16d",
+          "date": "2018-12-18T08:50:28-06:00",
+          "subject": "Fix json embedding in rolledup files",
+          "patchSha256": "9c0768fd9eeb919f326372fdbc3a26ff145acec3ccb891f68130c8b22172d089",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "2f1445d9a3f8426bc259690819eea8306a98545a",
+          "date": "2018-12-18T14:56:58-06:00",
+          "subject": "Further compress JSON data",
+          "patchSha256": "0e38dfb06d88f8ad4ded0bc4719dc1fdd00d3a6a11a535a49c10b6036a5bfbb2",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "cc4b9b3817c214a1029f452a833c3e9b5ebaea90",
+          "date": "2018-12-19T15:51:25-06:00",
+          "subject": "Point to @pdf-lib/* dependencies",
+          "patchSha256": "a948e03e9a0abe66b40f20abea0f5d97eccf9e263e7be021e0efcd670d48e090",
+          "addedNoticeLines": []
+        }
+      ]
+    },
+    "indic": {
+      "initialPort": "ef7e415b6970ae29a1fc9c49387354825f4e9dec",
+      "paths": [
+        "src/opentype/shapers/IndicShaper.js",
+        "src/opentype/shapers/indic-data.js",
+        "src/opentype/shapers/indic.machine"
+      ],
+      "postPortCommitCount": 30,
+      "commits": [
+        {
+          "commit": "696da60dce867e5c0fe71469ee17c9c2c61f533b",
+          "date": "2017-05-20T16:19:27-07:00",
+          "subject": "[indic] Add indic position to trie",
+          "patchSha256": "215c0587bf4ebe030c2cb9ad6a857dba427731dfa4b4a6eea58a449af7ec3b4d",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "9f76cf7dd3f6863a5fa5a3c3a867e8f9f33da6ee",
+          "date": "2017-05-20T16:20:01-07:00",
+          "subject": "[indic] Beginnings of initial reordering",
+          "patchSha256": "55743636ff2e806f592992a26b12d9eb033cc04340d9e4baa6aa67b2bec62d10",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "10f9f82f916c7552497ee52eb6b4f79fa551df9f",
+          "date": "2017-05-20T16:26:58-07:00",
+          "subject": "[indic] Move shared indic data to a separate file",
+          "patchSha256": "0e74078c997ce041d42dece65af826831fe4bbff0d8d332e4f4ba8d645191350",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "fee5f072ead741370325b5c4bd87224eefa01b19",
+          "date": "2017-05-20T18:56:16-07:00",
+          "subject": "[indic] Final reordering",
+          "patchSha256": "5ca63f65d164de9dd40a317328b2a1fa84fdf7a5417f038ff19800099f956247",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "046fa0dff6537d893591f31cbcc6123dd9b51d7f",
+          "date": "2017-05-20T20:43:13-07:00",
+          "subject": "[indic] Decompose split matras",
+          "patchSha256": "dd14fdda70abf9c5fc171d1c1496e26f630a9f1c721aac4549d5e0a774bb7dda",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "0aaf9b4bd12b13282f54914ee9d4ac962ffec7f1",
+          "date": "2017-05-21T01:50:50-07:00",
+          "subject": "[indic] Fill in blank shaper infos for broken syllables",
+          "patchSha256": "b074abd50c74b01bcc3a058fe5f7bbeb0afc43003824f6b261b1665eb409f2a8",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "8c2c44f51417fb9d032718289fbe6f343d314763",
+          "date": "2017-05-21T01:51:19-07:00",
+          "subject": "[indic] Get consonant position by checking features",
+          "patchSha256": "86e2f2333cae009e0093f26cf1f0abc4fe22c7c37ed08dd82046966b2b3efff9",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "c288cf0d8ef9be624f536626f5ae98b38158b503",
+          "date": "2017-05-21T01:51:57-07:00",
+          "subject": "[indic] Insert dotted circles in broken clusters",
+          "patchSha256": "03a54378fbf3665380e7887bbaf79249876aab4694efd8aea4916565acbb81ab",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "23fa009c1b8e5e63c29dfc704fd4783e917b1449",
+          "date": "2017-05-21T01:52:48-07:00",
+          "subject": "[indic] Get more reordering behavior working",
+          "patchSha256": "5d39c3180515d19cf1bcea40ec087f4a2daefbd996c2382239a2f308fae2371e",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "f95256e3f75c0ab3aacfa1da8a763b9df76484b4",
+          "date": "2017-05-26T00:20:15-07:00",
+          "subject": "[indic] More indic features",
+          "patchSha256": "d6eea339057ece4d4874facfb0015239d85edc807e797552e93aedd7aa5e1c9d",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "612827899e612c8f623d18e4eed6a843d72a61e0",
+          "date": "2017-05-26T00:58:38-07:00",
+          "subject": "[indic] Implement more reph positioning modes",
+          "patchSha256": "6ecbc6cd31a711748ee5409bbba0df416e3be177368270fe776cd455b2634877",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "f342e3c41c012706d30ae4e3a528675f9880ba3c",
+          "date": "2017-05-27T17:53:51-07:00",
+          "subject": "[indic] Support some old spec features",
+          "patchSha256": "67473718b7bf9e2721d651bd362051eec69dcc940dfae019ed90a72c17d5afd2",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "76c96192fbe7b67c2e960e1c3350bce948d39d39",
+          "date": "2017-05-27T17:54:31-07:00",
+          "subject": "[indic] Some additional decompositions and compositions",
+          "patchSha256": "f815824684a67c7fcb29c07eac609d5618debc39b10fce5cd2fc11c38c47574c",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "25fcd38859462f06492c43f06f89507267a2c4be",
+          "date": "2017-05-27T17:54:58-07:00",
+          "subject": "[indic] Fix behavior of dotted circles",
+          "patchSha256": "c6ff13a54f5d564ccdbec66a0dcf5eca457507248fafa219fc355c8be00102b3",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "2b0770c9b5f333d1f30121ea147efc2c08527361",
+          "date": "2017-05-27T17:55:32-07:00",
+          "subject": "[indic] Add special case for Malayalam",
+          "patchSha256": "8530d469bfb8352f75a9cae336b9848604b67485ab84820095aa27668e842c39",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "a7f3737e00f345811f1d1405c7b51bd47e27288d",
+          "date": "2017-05-27T17:57:11-07:00",
+          "subject": "[indic] Fix behavior or reph reordering",
+          "patchSha256": "456ec89fe78be53d27d2b0a4e6a8bd3e2fba6749585ecd975147fafa8a066a49",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "11d746a216fd3de449e5849aae5d8b845aec1ab8",
+          "date": "2017-05-27T19:52:47-07:00",
+          "subject": "[indic] Make positions bit flags like categories",
+          "patchSha256": "c432a0d89bbe8898771884ccb4c040a6bed2e97e4084c10d16bb33e93a94976d",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "847e6e92e50193a21cb7f5453ccf5485233149f0",
+          "date": "2017-05-27T22:51:42-07:00",
+          "subject": "[ot] Clean up",
+          "patchSha256": "0e5f8c3e3894451104e9196764e8a1e386a55c29abf624b9d7e8d5d9cb6b25c6",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "94ac4cddc328d23b39f924f785e1374bcdb8dd5a",
+          "date": "2017-05-28T00:12:35-07:00",
+          "subject": "tabs -> spaces",
+          "patchSha256": "443810365db65e3f0ec1ef53187a66d76c6c6565653944fea899fdb007c09436",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "d770917c73fbaf87ddf7d0e8bd6826e6b77eea09",
+          "date": "2017-05-28T00:27:09-07:00",
+          "subject": "Change formatting of block comments",
+          "patchSha256": "ca6e5e9fdcc8e5635e01232f66a1cddeb5829df7ac24f30c5db6bb666625df54",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "7c1eb1c6b4dea4001b9e0af0854c6835341eef77",
+          "date": "2017-05-28T00:49:24-07:00",
+          "subject": "[indic] Clean up isHalantOrCoeng",
+          "patchSha256": "047ffd0b2cbda1e04012ca801cfbeef978f090586c302a9635ceee858538f8c3",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "09b18a58f0e184cb37d29ff2291945d3c9465daa",
+          "date": "2017-05-28T00:49:55-07:00",
+          "subject": "[indic] Handle old spec devanagari eye-lash",
+          "patchSha256": "32fb80c72862a202bade184ef5dbb19a1ccf31e43560ef0c5a4d62595d1e4dfc",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "58288e210289e1d448a6464fc470cdb9630b01d5",
+          "date": "2017-05-28T00:58:11-07:00",
+          "subject": "[indic] Clean up",
+          "patchSha256": "947ab8ff93d66d14db076ed5a7d9558be9f0226ac769ae634084c59bc92a9df7",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "a904c095d6aeb0125c1b7c9f6ac1cdd48764ebdd",
+          "date": "2017-05-28T01:14:14-07:00",
+          "subject": "[indic] Add comment acknowledging harfbuzz",
+          "patchSha256": "e26a316a128cc588e377f0a628b63114890970d7f704f9e199dc6c748ac86adb",
+          "addedNoticeLines": [
+            "+ * Based on code from Harfbuzz: https://github.com/behdad/harfbuzz/blob/master/src/hb-ot-shape-complex-indic.cc"
+          ]
+        },
+        {
+          "commit": "b8357c5a979f392e28eb230e967d4faa9d3ab197",
+          "date": "2017-05-28T14:10:08-07:00",
+          "subject": "[indic] Add additional Khmer decompositions that aren\u2019t in Unicode",
+          "patchSha256": "83aed96a820b6c17acd13de5d3ae7866b186e5f17014740b191a9585a41df1d2",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "968e35c158589294e9543818f56d0b229b95a475",
+          "date": "2018-01-15T12:29:58-06:00",
+          "subject": "Serialize trie files as JSON",
+          "patchSha256": "86250eaf4447b206946f2be073ea5c1f65695d46f0a196d9985f4a167258d870",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "08cacefa3e745f83a2c95051e38985b02aa2f16d",
+          "date": "2018-12-18T08:50:28-06:00",
+          "subject": "Fix json embedding in rolledup files",
+          "patchSha256": "371dc4da5e7cd07bd83587a896eb7f48aaf97bb59c7f01283e17000c2080ca24",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "2f1445d9a3f8426bc259690819eea8306a98545a",
+          "date": "2018-12-18T14:56:58-06:00",
+          "subject": "Further compress JSON data",
+          "patchSha256": "c5243e33a861b61cefce4daf0b791476efa411bb401b31947f9e17d44cca0d53",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "cc4b9b3817c214a1029f452a833c3e9b5ebaea90",
+          "date": "2018-12-19T15:51:25-06:00",
+          "subject": "Point to @pdf-lib/* dependencies",
+          "patchSha256": "9fed80deeef5388286ffee07631e70ceb2a02f2a4ed829f6c0f8346f9f490061",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "f674bf2e3c8a8e0a34083e19f0abe65df20520e3",
+          "date": "2018-12-20T06:52:25-06:00",
+          "subject": "Remove use of spread operator (for React Native Android); Fix tests",
+          "patchSha256": "e5ce459522dce5e3a8548878718941787e3a663c4de4c52413ba2061c2fe0a0f",
+          "addedNoticeLines": []
+        }
+      ]
+    },
+    "use": {
+      "initialPort": "f8cd52e42c86f72f685765b74bd3558eadf7d805",
+      "paths": [
+        "src/opentype/shapers/UniversalShaper.js",
+        "src/opentype/shapers/use.machine"
+      ],
+      "postPortCommitCount": 15,
+      "commits": [
+        {
+          "commit": "e061b1cb5bf87d0e6524fcc9c93cb2d34194de1c",
+          "date": "2016-10-10T22:13:59-07:00",
+          "subject": "Bootstrap universal shaping engine, setup syllables",
+          "patchSha256": "004a54cce6a852aec61972481632c33bda7646550b26a7eee21444b51e0dd3f3",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "7aca71722eb6ccefbdbc38f38b040f1dd8a88468",
+          "date": "2016-10-10T22:16:33-07:00",
+          "subject": "Implement USE reordering logic",
+          "patchSha256": "a48aa61a2338fe03e374d4fe5f07dc3c2cc8a8de8fc629068f6556940edbb6a2",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "f31a655e26d60db68b06405137f8969097c7bede",
+          "date": "2016-10-10T22:21:10-07:00",
+          "subject": "Decompose split vowels in USE",
+          "patchSha256": "df87267b7af4e87206ccee1640090662ae20ad674ec4a4790695d4b14f13fae6",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "a2b2de74627ae2c842a3dd33a3ea7cbf9d0e5999",
+          "date": "2016-10-10T22:21:23-07:00",
+          "subject": "Insert dotted circles in broken clusters",
+          "patchSha256": "9540a99863052e7dda7d10e66a626f87bd0ed445278bd2bb0a8865c01f1a39fe",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "2eff22f45b355413d48eb175d127f0af57dd08e9",
+          "date": "2016-10-11T20:55:39-07:00",
+          "subject": "Rename state machine compiler",
+          "patchSha256": "72616337bf09469c12a17b665aae65836e4ba77749344cb177cc78bb4c95012e",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "2703ac004694f8123a4fbe4900bda34315a1a570",
+          "date": "2016-10-21T20:42:55-07:00",
+          "subject": "Only call callbacks in ShapingPlan during gsub processing",
+          "patchSha256": "5882b379a81f620f37c9c73ee3e30c7412087acef8ed17a8ef81ed9e39eb176d",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "b642d9ad2faf10fdff6a452af2a5ac8cf42bbd17",
+          "date": "2016-10-21T20:44:30-07:00",
+          "subject": "Implement USE rpfh and pref feature behavior",
+          "patchSha256": "546b765fff0d52d762e9e3810879faf14f69a6756e8f8981645457d2e628d31d",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "83f68c5c66b85c42626deff38daa90966e118830",
+          "date": "2016-10-21T20:44:43-07:00",
+          "subject": "Cleanup USE",
+          "patchSha256": "1af93eb45c6d9e8f825766083faf2223b59e2b25992b1c94d89ed7b31d925271",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "760d646f3bb830d2cae49ec531f6292551aa2af7",
+          "date": "2016-10-21T20:52:07-07:00",
+          "subject": "Tabs -> spaces",
+          "patchSha256": "63e5d26878a92dfd1d37699acc0a004be7d77241da0cb7cd3efdd8c47b972dfb",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "b70e0b834894bdd74f1d5dba595621aecc1622f2",
+          "date": "2016-10-21T21:03:06-07:00",
+          "subject": "Make mark advance zeroing configurable by the shaper",
+          "patchSha256": "cd8484efb6c9220fa9a83fd338143513c0c59e0974754df505d4d5196676479f",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "733c75ef423e0ad315ba31ae20172c7d6c34308b",
+          "date": "2016-12-30T11:07:56-05:00",
+          "subject": "Fix browserify build",
+          "patchSha256": "5ab783c760c12d652efc7fec2760ae05959a63d4258a9d92c30daaab1b9bc83a",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "968e35c158589294e9543818f56d0b229b95a475",
+          "date": "2018-01-15T12:29:58-06:00",
+          "subject": "Serialize trie files as JSON",
+          "patchSha256": "3745e258f661771621484b8c8358b76f932dd7c993cbd08988bdcafef8f008b9",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "08cacefa3e745f83a2c95051e38985b02aa2f16d",
+          "date": "2018-12-18T08:50:28-06:00",
+          "subject": "Fix json embedding in rolledup files",
+          "patchSha256": "8b8cc57984a6c80072cb1779f178f0c88c62b468a59b3b743790eba4220a0027",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "2f1445d9a3f8426bc259690819eea8306a98545a",
+          "date": "2018-12-18T14:56:58-06:00",
+          "subject": "Further compress JSON data",
+          "patchSha256": "b3f73e43c700a89e7fc0195884d50b996a5615b6600a48dea065531c009bf9e1",
+          "addedNoticeLines": []
+        },
+        {
+          "commit": "f674bf2e3c8a8e0a34083e19f0abe65df20520e3",
+          "date": "2018-12-20T06:52:25-06:00",
+          "subject": "Remove use of spread operator (for React Native Android); Fix tests",
+          "patchSha256": "ac8d23f132c4a22c84fda358dc799719af0fea9aefba68bc4fc45d1e4f47f71c",
+          "addedNoticeLines": []
+        }
+      ]
+    }
+  }
+}

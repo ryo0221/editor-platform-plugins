@@ -1,0 +1,619 @@
+{
+  "schemaVersion": 1,
+  "input": {
+    "tarball": "https://registry.npmjs.org/@pdf-lib/fontkit/-/fontkit-1.1.1.tgz",
+    "integrity": "sha512-KjMd7grNapIWS/Dm0gvfHEilSyAmeLvrEGVcqLGi0VYebuqqzTbgF29efCx7tvx+IEbG3zQciRSWl3GkUSvjZg==",
+    "path": "dist/fontkit.es.js",
+    "sha256": "62ad9c769e6a7a9028b0c711504908f0a231955b39619aaabd56dd4eabe800be"
+  },
+  "packages": [
+    {
+      "name": "rollup-plugin-node-builtins",
+      "version": "2.1.2",
+      "key": "rollup-plugin-node-builtins-2.1.2",
+      "license": "ISC",
+      "gitHead": "385b27079d74dff17eaaff87215078b407f44946",
+      "tarball": "https://registry.npmjs.org/rollup-plugin-node-builtins/-/rollup-plugin-node-builtins-2.1.2.tgz",
+      "integrity": "sha512-bxdnJw8jIivr2yEyt8IZSGqZkygIJOGAWypXvHXnwKAbUcN4Q/dGTx7K0oAJryC/m6aq6tKutltSeXtuogU6sw==",
+      "shasum": "24a1fed4a43257b6b64371d8abc6ce1ab14597e9",
+      "sha256": "dd1bce06b58d62f852d76a20c2415ca00dada935200a68245eb336683276a910",
+      "notices": [
+        "package/src/es6/zlib-lib/LICENSE"
+      ]
+    },
+    {
+      "name": "process-es6",
+      "version": "0.11.6",
+      "key": "process-es6-0.11.6",
+      "license": "MIT",
+      "gitHead": "6c218e5f68b918226380abec10c08587f240503e",
+      "tarball": "https://registry.npmjs.org/process-es6/-/process-es6-0.11.6.tgz",
+      "integrity": "sha512-GYBRQtL4v3wgigq10Pv58jmTbFXlIiTbSfgnNqZLY0ldUPqy1rRxDI5fCjoCpnM6TqmHQI8ydzTBXW86OYc0gA==",
+      "shasum": "c6bb389f9a951f82bd4eb169600105bd2ff9c778",
+      "sha256": "b92ace26d77767521f0c935a98172536d4f573cc46a231a0e6c522da5a9299ac",
+      "notices": [
+        "package/LICENSE"
+      ]
+    },
+    {
+      "name": "regenerator-runtime",
+      "version": "0.13.5",
+      "key": "regenerator-runtime-0.13.5",
+      "license": "MIT",
+      "gitHead": null,
+      "tarball": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.5.tgz",
+      "integrity": "sha512-ZS5w8CpKFinUzOwW3c83oPeVXoNsrLsaCoLtJvAClH135j/R77RuymhiSErhm2lKcwSCIpmvIWSbDkIfAqKQlA==",
+      "shasum": "d878a1d094b4306d10b9096484b33ebd55e26697",
+      "sha256": "4004caf19419db34b95c41af1fa23b5009d7468fc0e3417fd34edb214a0d24c4",
+      "notices": [
+        "package/LICENSE"
+      ]
+    },
+    {
+      "name": "regenerator-runtime",
+      "version": "0.11.1",
+      "key": "regenerator-runtime-0.11.1",
+      "license": "MIT",
+      "gitHead": null,
+      "tarball": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz",
+      "integrity": "sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==",
+      "shasum": "be05ad7f9bf7d22e056f9726cee5017fbf19e2e9",
+      "sha256": "cdd8985b84b3b6b08fe5dcb39b9506d70ddddffda9f9d703dd33534c60bc373b",
+      "notices": []
+    }
+  ],
+  "matches": [
+    {
+      "name": "rollup-plugin-node-builtins",
+      "version": "2.1.2",
+      "sourceFile": "src/es6/util.js",
+      "count": 35,
+      "matches": [
+        {
+          "file": "src/es6/util.js",
+          "fileSha256": "2b5589efcad9b8ab8ecedc8482084b29973b2bdaac37e4bf6325a381cdca56a2",
+          "sourceLine": 209,
+          "function": "formatValue",
+          "astSha256": "7fd34285473d33fc0f0a55c38ca071a511c652f293a288134c9d18f3acee72fb",
+          "bundleLines": [
+            2942
+          ],
+          "bundleRanges": [
+            [
+              2942,
+              3053
+            ]
+          ],
+          "size": 22318
+        },
+        {
+          "file": "src/es6/util.js",
+          "fileSha256": "2b5589efcad9b8ab8ecedc8482084b29973b2bdaac37e4bf6325a381cdca56a2",
+          "sourceLine": 366,
+          "function": "formatProperty",
+          "astSha256": "4a4cc048a8b76bda3db2e7bfc5ce2f6edfc1ae74b8a5f0242708638131c6ccf4",
+          "bundleLines": [
+            3092
+          ],
+          "bundleRanges": [
+            [
+              3092,
+              3155
+            ]
+          ],
+          "size": 15316
+        }
+      ]
+    },
+    {
+      "name": "rollup-plugin-node-builtins",
+      "version": "2.1.2",
+      "sourceFile": "src/es6/readable-stream/readable.js",
+      "count": 46,
+      "matches": [
+        {
+          "file": "src/es6/readable-stream/readable.js",
+          "fileSha256": "d1ce5bd11da7ca31137f7ce89934e9e9c855a5486e4973adddb7b8756dd563e1",
+          "sourceLine": 251,
+          "function": "(anonymous)",
+          "astSha256": "91c9d37d84e6fe0043a5ae84075d6acfd8f9dee321171e34aa1f266969074a67",
+          "bundleLines": [
+            3804
+          ],
+          "bundleRanges": [
+            [
+              3804,
+              3896
+            ]
+          ],
+          "size": 16178
+        },
+        {
+          "file": "src/es6/readable-stream/readable.js",
+          "fileSha256": "d1ce5bd11da7ca31137f7ce89934e9e9c855a5486e4973adddb7b8756dd563e1",
+          "sourceLine": 145,
+          "function": "readableAddChunk",
+          "astSha256": "31d4cc2958470d5f806e05e6ba1704dda725db820129b81eebcaa524e0630094",
+          "bundleLines": [
+            3692
+          ],
+          "bundleRanges": [
+            [
+              3692,
+              3739
+            ]
+          ],
+          "size": 12188
+        }
+      ]
+    },
+    {
+      "name": "rollup-plugin-node-builtins",
+      "version": "2.1.2",
+      "sourceFile": "src/es6/string-decoder.js",
+      "count": 9,
+      "matches": [
+        {
+          "file": "src/es6/string-decoder.js",
+          "fileSha256": "a29e715bfbaa012c59804e697b28d36344a086cab874456dba6ebcf6675c889c",
+          "sourceLine": 89,
+          "function": "(anonymous)",
+          "astSha256": "2003f34b770e5dd0df83a68abd97a3983aff6e0c6d7951a1693102a5838acf91",
+          "bundleLines": [
+            3451
+          ],
+          "bundleRanges": [
+            [
+              3451,
+              3513
+            ]
+          ],
+          "size": 14611
+        },
+        {
+          "file": "src/es6/string-decoder.js",
+          "fileSha256": "a29e715bfbaa012c59804e697b28d36344a086cab874456dba6ebcf6675c889c",
+          "sourceLine": 161,
+          "function": "(anonymous)",
+          "astSha256": "b01f2e8dc3ab3332601706865527e607d97f7c2e3770986301f45d60a877cf22",
+          "bundleLines": [
+            3519
+          ],
+          "bundleRanges": [
+            [
+              3519,
+              3547
+            ]
+          ],
+          "size": 5268
+        }
+      ]
+    },
+    {
+      "name": "rollup-plugin-node-builtins",
+      "version": "2.1.2",
+      "sourceFile": "src/es6/readable-stream/writable.js",
+      "count": 24,
+      "matches": [
+        {
+          "file": "src/es6/readable-stream/writable.js",
+          "fileSha256": "386bb13e956409a722776709e0289cb2c8bc809d5cee9effda0c5def0ea526f7",
+          "sourceLine": 23,
+          "function": "WritableState",
+          "astSha256": "30c3cae760326aecdc562f219678593e0159ca85aafc3def390e19a6a00039a3",
+          "bundleLines": [
+            4477
+          ],
+          "bundleRanges": [
+            [
+              4477,
+              4553
+            ]
+          ],
+          "size": 13297
+        },
+        {
+          "file": "src/es6/readable-stream/writable.js",
+          "fileSha256": "386bb13e956409a722776709e0289cb2c8bc809d5cee9effda0c5def0ea526f7",
+          "sourceLine": 338,
+          "function": "clearBuffer",
+          "astSha256": "528c9ede3dfd1b3bf7ce6b19ba7963c2567055586f22348363ef6a6160d0444f",
+          "bundleLines": [
+            4761
+          ],
+          "bundleRanges": [
+            [
+              4761,
+              4815
+            ]
+          ],
+          "size": 11209
+        }
+      ]
+    },
+    {
+      "name": "rollup-plugin-node-builtins",
+      "version": "2.1.2",
+      "sourceFile": "src/es6/events.js",
+      "count": 18,
+      "matches": [
+        {
+          "file": "src/es6/events.js",
+          "fileSha256": "8e8b80b8cb009cd76d0b8d750151ad08f0abf27cc265c47a7b172f00a3507475",
+          "sourceLine": 193,
+          "function": "_addListener",
+          "astSha256": "954db631b38bcad507ad72e9ae8ed590aaa1d8b0407b6b18cb7ebe63625611c1",
+          "bundleLines": [
+            2217
+          ],
+          "bundleRanges": [
+            [
+              2217,
+              2274
+            ]
+          ],
+          "size": 11951
+        },
+        {
+          "file": "src/es6/events.js",
+          "fileSha256": "8e8b80b8cb009cd76d0b8d750151ad08f0abf27cc265c47a7b172f00a3507475",
+          "sourceLine": 300,
+          "function": "removeListener",
+          "astSha256": "00f73a8f8662f5c5cc8c60ca7a7edf50e4312b1716a337534098c7180d336925",
+          "bundleLines": [
+            2319
+          ],
+          "bundleRanges": [
+            [
+              2319,
+              2362
+            ]
+          ],
+          "size": 11259
+        }
+      ]
+    },
+    {
+      "name": "rollup-plugin-node-builtins",
+      "version": "2.1.2",
+      "sourceFile": "src/es6/readable-stream/transform.js",
+      "count": 10,
+      "matches": [
+        {
+          "file": "src/es6/readable-stream/transform.js",
+          "fileSha256": "bc0a1485dde4c16264b97281dfb31c6503fc314bc4226860c79b5579f9a10133",
+          "sourceLine": 84,
+          "function": "Transform",
+          "astSha256": "267c3adc48c31882b66fe3606f9877767b69bb861be4034d8766797efebf1d12",
+          "bundleLines": [
+            4974
+          ],
+          "bundleRanges": [
+            [
+              4974,
+              4997
+            ]
+          ],
+          "size": 5582
+        },
+        {
+          "file": "src/es6/readable-stream/transform.js",
+          "fileSha256": "bc0a1485dde4c16264b97281dfb31c6503fc314bc4226860c79b5579f9a10133",
+          "sourceLine": 62,
+          "function": "afterTransform",
+          "astSha256": "863dc71e8222eab81bf82f09f17968d720298c620f06e2f8ed6628cc13be5c86",
+          "bundleLines": [
+            4958
+          ],
+          "bundleRanges": [
+            [
+              4958,
+              4973
+            ]
+          ],
+          "size": 5206
+        }
+      ]
+    },
+    {
+      "name": "rollup-plugin-node-builtins",
+      "version": "2.1.2",
+      "sourceFile": "src/es6/readable-stream/duplex.js",
+      "count": 2,
+      "matches": [
+        {
+          "file": "src/es6/readable-stream/duplex.js",
+          "fileSha256": "95cfd86bc948699947de296caeb4864bcf36933707f3f1d34d5c3b2c9c6a65bf",
+          "sourceLine": 16,
+          "function": "Duplex",
+          "astSha256": "a1011c9818b533e6a458c16ee7ae0134dd872a4d397bdf27f1b5abc2100f53df",
+          "bundleLines": [
+            4919
+          ],
+          "bundleRanges": [
+            [
+              4919,
+              4928
+            ]
+          ],
+          "size": 4167
+        },
+        {
+          "file": "src/es6/readable-stream/duplex.js",
+          "fileSha256": "95cfd86bc948699947de296caeb4864bcf36933707f3f1d34d5c3b2c9c6a65bf",
+          "sourceLine": 33,
+          "function": "onend",
+          "astSha256": "c96434c8dc397ad323b3fe7e67270c53e5fcf0c010d7040a8345d5fe3471b98d",
+          "bundleLines": [
+            4930
+          ],
+          "bundleRanges": [
+            [
+              4930,
+              4937
+            ]
+          ],
+          "size": 823
+        }
+      ]
+    },
+    {
+      "name": "rollup-plugin-node-builtins",
+      "version": "2.1.2",
+      "sourceFile": "src/es6/stream.js",
+      "count": 5,
+      "matches": [
+        {
+          "file": "src/es6/stream.js",
+          "fileSha256": "f8da30c880d8e59754c164ef9c06e6e851dcccf0e64f098ea28a587795c62405",
+          "sourceLine": 85,
+          "function": "cleanup",
+          "astSha256": "f1070c58f1636d64873fabb2eef70f4d0c9db0fa2eab3a9f6ee4b31addb78713",
+          "bundleLines": [
+            5135
+          ],
+          "bundleRanges": [
+            [
+              5135,
+              5145
+            ]
+          ],
+          "size": 3195
+        },
+        {
+          "file": "src/es6/stream.js",
+          "fileSha256": "f8da30c880d8e59754c164ef9c06e6e851dcccf0e64f098ea28a587795c62405",
+          "sourceLine": 32,
+          "function": "ondata",
+          "astSha256": "13090be3abeadfd139f5960488752e86dbfafe3a6119823f28a8175b4b68d066",
+          "bundleLines": [
+            5085
+          ],
+          "bundleRanges": [
+            [
+              5085,
+              5091
+            ]
+          ],
+          "size": 1264
+        }
+      ]
+    },
+    {
+      "name": "rollup-plugin-node-builtins",
+      "version": "2.1.2",
+      "sourceFile": "src/es6/readable-stream/buffer-list.js",
+      "count": 6,
+      "matches": [
+        {
+          "file": "src/es6/readable-stream/buffer-list.js",
+          "fileSha256": "c3e65fc88e34c4768931f029c2c4a1e7f4809e41d16cb3807844f0e9a321377d",
+          "sourceLine": 25,
+          "function": "(anonymous)",
+          "astSha256": "12c771d21804dbf617c907b9074044b65107e64724da0ef62055b1c926262142",
+          "bundleLines": [
+            3307
+          ],
+          "bundleRanges": [
+            [
+              3307,
+              3313
+            ]
+          ],
+          "size": 2473
+        },
+        {
+          "file": "src/es6/readable-stream/buffer-list.js",
+          "fileSha256": "c3e65fc88e34c4768931f029c2c4a1e7f4809e41d16cb3807844f0e9a321377d",
+          "sourceLine": 11,
+          "function": "(anonymous)",
+          "astSha256": "4e37aab163c225ff07a3e1bcf1c9a865a34bc5462ad3b9a98518d2039db2ec14",
+          "bundleLines": [
+            3287
+          ],
+          "bundleRanges": [
+            [
+              3287,
+              3295
+            ]
+          ],
+          "size": 2207
+        }
+      ]
+    },
+    {
+      "name": "rollup-plugin-node-builtins",
+      "version": "2.1.2",
+      "sourceFile": "src/es6/inherits.js",
+      "count": 1,
+      "matches": [
+        {
+          "file": "src/es6/inherits.js",
+          "fileSha256": "edfbb12fadf6c5a5ddb8236c4a64042ee9690729bc1910a4818b2abc744e228b",
+          "sourceLine": 4,
+          "function": "inherits",
+          "astSha256": "c0f547fb63e07cd6af673ea75ef4f2797a1a6e2904f7c9542ce6874891624fe2",
+          "bundleLines": [
+            2725
+          ],
+          "bundleRanges": [
+            [
+              2725,
+              2736
+            ]
+          ],
+          "size": 1934
+        }
+      ]
+    },
+    {
+      "name": "rollup-plugin-node-builtins",
+      "version": "2.1.2",
+      "sourceFile": "src/es6/readable-stream/passthrough.js",
+      "count": 2,
+      "matches": [
+        {
+          "file": "src/es6/readable-stream/passthrough.js",
+          "fileSha256": "e3047dff25efd0f0059851c93887e9127d7ff038aad1b88ddbddb0f44e7dfc9f",
+          "sourceLine": 7,
+          "function": "PassThrough",
+          "astSha256": "4b85cd9489d39d2d5b0d4944b2425e45a5cb6e176d323b5b50433e88b9f4259f",
+          "bundleLines": [
+            5059
+          ],
+          "bundleRanges": [
+            [
+              5059,
+              5062
+            ]
+          ],
+          "size": 911
+        },
+        {
+          "file": "src/es6/readable-stream/passthrough.js",
+          "fileSha256": "e3047dff25efd0f0059851c93887e9127d7ff038aad1b88ddbddb0f44e7dfc9f",
+          "sourceLine": 13,
+          "function": "(anonymous)",
+          "astSha256": "426af3088faddb15bb59db15b870395fb047a5d8f2706c9a0045d6af10033f93",
+          "bundleLines": [
+            5064
+          ],
+          "bundleRanges": [
+            [
+              5064,
+              5066
+            ]
+          ],
+          "size": 523
+        }
+      ]
+    },
+    {
+      "name": "rollup-plugin-node-builtins",
+      "version": "2.1.2",
+      "sourceFile": "src/es6/qs.js",
+      "count": 1,
+      "matches": [
+        {
+          "file": "src/es6/qs.js",
+          "fileSha256": "73738d352f12f91d8907bea9d3eaf59a30520519b5e10e90677156138f14a969",
+          "sourceLine": 26,
+          "function": "hasOwnProperty",
+          "astSha256": "8c0a59e01dbfc1080180b059115dbe47988453a461058742c223a428f3f60f8e",
+          "bundleLines": [
+            3252
+          ],
+          "bundleRanges": [
+            [
+              3252,
+              3254
+            ]
+          ],
+          "size": 758
+        }
+      ]
+    },
+    {
+      "name": "process-es6",
+      "version": "0.11.6",
+      "sourceFile": "browser.js",
+      "count": 9,
+      "matches": [
+        {
+          "file": "browser.js",
+          "fileSha256": "7274c714eb5831588c5469239700438065d467a25f2e7e2d6cb09ad375aecea1",
+          "sourceLine": 176,
+          "function": "hrtime",
+          "astSha256": "024c85ab707beeedc33db11f83eade0ff7b574f7567d9f1ea4f0d259aaa728f4",
+          "bundleLines": [
+            2673
+          ],
+          "bundleRanges": [
+            [
+              2673,
+              2689
+            ]
+          ],
+          "size": 3804
+        },
+        {
+          "file": "browser.js",
+          "fileSha256": "7274c714eb5831588c5469239700438065d467a25f2e7e2d6cb09ad375aecea1",
+          "sourceLine": 91,
+          "function": "drainQueue",
+          "astSha256": "af46a389a0d28a2666c56c6a838cae48367bc7a800b2bafd0383313c456c84f9",
+          "bundleLines": [
+            2579
+          ],
+          "bundleRanges": [
+            [
+              2579,
+              2605
+            ]
+          ],
+          "size": 3696
+        }
+      ]
+    }
+  ],
+  "regeneratorRuntime": [
+    {
+      "line": 27473,
+      "parent": "PropertyAccessExpression",
+      "statement": "regeneratorRuntime.mark"
+    },
+    {
+      "line": 27475,
+      "parent": "PropertyAccessExpression",
+      "statement": "regeneratorRuntime.wrap"
+    }
+  ],
+  "utilHeaderMatchesExistingStringDecoderIgnoringCommentPrefixWhitespace": true,
+  "coverage": [
+    {
+      "file": "process-es6-0.11.6/package/LICENSE",
+      "sha256": "59a400d04c5078579acc27ddd6452c1bdf763f9506e01364700935fbb1a7c91b",
+      "existing": []
+    },
+    {
+      "file": "readable-stream-2.1.5/package/LICENSE",
+      "sha256": "6239c6144c31e58cf925c34483606969c555574d64ffa96518ab5d7f45c75d43",
+      "existing": []
+    },
+    {
+      "file": "events-1.1.1/package/LICENSE",
+      "sha256": "631987b7616a325a5b97566c232418481ddf7dbb5ecadefb991e791876cc2599",
+      "existing": []
+    },
+    {
+      "file": "util-0.10.3/package/LICENSE",
+      "sha256": "6239c6144c31e58cf925c34483606969c555574d64ffa96518ab5d7f45c75d43",
+      "existing": []
+    },
+    {
+      "file": "util-original-header.txt",
+      "sha256": "2196d3c9a86bd2fb76fa4fa0f2d1df4aa8412143ab258b177c496bd458c8bf75",
+      "existing": []
+    }
+  ]
+}

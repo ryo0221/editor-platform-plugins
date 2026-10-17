@@ -1,5 +1,9 @@
 # Fontkit embedded component reconciliation
 
+Historical PR #35 audit. The [data/runtime follow-up](fontkit-data-runtime.md)
+resolves the represented Unicode editions and USE grammar chain, adds confirmed
+notices, and narrows remaining terms/polyfill/shaper uncertainties.
+
 This records the completed local investigation of the requested Buffer, iconv-lite,
 restructure, Unicode, clone and HarfBuzz-derived shaper groups. It retains nine
 additional original notices, confirms two already retained notices, and records

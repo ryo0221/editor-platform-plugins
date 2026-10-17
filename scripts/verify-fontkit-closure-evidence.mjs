@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 const root = process.argv[2];
 if (!root) throw Error('Supply the evidence directory containing <package-key>/package/');
-const record = JSON.parse(await readFile(new URL('../docs/license-audits/fontkit-closure-evidence.json', import.meta.url)));
+const record = JSON.parse(await readFile(process.argv[3] ?? new URL('../docs/license-audits/fontkit-closure-evidence.json', import.meta.url)));
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 function normalize(node) {
   if (ts.isParenthesizedExpression(node)) return normalize(node.expression);
@@ -42,3 +42,20 @@ for (const component of record.matches) {
   console.log(`${component.name}@${component.version}: recorded function witnesses match`);
 }
 console.log('Witnesses verify code association, not unique release identity or full-bundle clearance.');
+
+if (record.regeneratorRuntime) {
+  const source = ts.createSourceFile('evidence.js', input.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const references = [];
+  function walk(node) {
+    if (ts.isIdentifier(node) && node.text === 'regeneratorRuntime') references.push({
+      line: source.getLineAndCharacterOfPosition(node.getStart()).line + 1,
+      parent: ts.SyntaxKind[node.parent.kind], statement: node.parent.getText()
+    });
+    ts.forEachChild(node, walk);
+  }
+  walk(source);
+  assert.deepEqual(references, record.regeneratorRuntime);
+  assert.equal(references.length, 2);
+  assert.ok(references.every(reference => reference.parent === 'PropertyAccessExpression'));
+  console.log('regeneratorRuntime: two caller references; no identifier binding in this bundle.');
+}

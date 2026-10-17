@@ -1,0 +1,44 @@
+{
+  "historicalDifferences": [
+    "null",
+    "M"
+  ],
+  "bundleSha256": "62ad9c769e6a7a9028b0c711504908f0a231955b39619aaabd56dd4eabe800be",
+  "sourceUseJsonSha256": "0a321ebc5b0cdef5c41daed8bd63741fe64b7a5c825114264ef8e8b659d1bb2f",
+  "decodedUseDataSha256": "98de30bc007d0e3fb180839e167de030dd579acd40285865d67718d713b2e9b1",
+  "grammarSha256": "fb1ec6f50006241999ef2faa83b198860ef023249d5509bbec3bdb7159c5a318",
+  "compilerSha256": "fc1362901ed557e189957f374d1550bc771b10738d16133d7ce7fdeba9de19a2",
+  "harfbuzzSourceSha256": "dd71c83eca553527f716054eb7d7f2c853bb216f0b8d60b57b65a901bf8e6a9e",
+  "exactRules": [
+    "consonant_modifiers",
+    "medial_consonants",
+    "dependent_vowels",
+    "vowel_modifiers",
+    "final_consonants",
+    "virama_terminated_cluster",
+    "standard_cluster",
+    "broken_cluster",
+    "number_joiner_terminated_cluster",
+    "numeral_cluster",
+    "symbol_cluster"
+  ],
+  "modifiedRule": {
+    "name": "independent_cluster",
+    "fontkit": "(IND|O|WJ)VS?",
+    "harfbuzz": "(IND|O|Rsv|WJ)VS?"
+  },
+  "generatedKeys": [
+    "stateTable",
+    "accepting",
+    "tags"
+  ],
+  "stateRows": 55,
+  "categories": 38,
+  "generatedFields": [
+    "stateTable",
+    "accepting",
+    "tags"
+  ],
+  "tableSha256": "0e51efa33018441048c63219ad79c50a5f6c44317fd535a8d14464cd3be185dc",
+  "noticeSha256": "e809090de81a2eddde35300d51778a238a08fc310181fd2a793ca71fa8978cb5"
+}

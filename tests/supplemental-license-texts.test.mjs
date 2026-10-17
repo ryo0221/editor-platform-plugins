@@ -20,7 +20,7 @@ test('retain official fastdom README verbatim, without treating fontkit generic 
         assert.match(await readFile(join(dir, 'README.md'), 'utf8'), /Copyright \(c\) 2016 Wilson Page/);
       } else {
         assert.ok(!texts.includes('README.md'));
-        assert.equal(texts.length, 13);
+        assert.equal(texts.length, 18);
         assert.ok(texts.every(path => path.startsWith('embedded/')));
         assert.equal(licenseEvidence.status, 'UNRESOLVED');
       }

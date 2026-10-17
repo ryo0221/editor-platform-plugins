@@ -12,8 +12,8 @@ test('fontkit partial notices preserve exact source bytes; changed bundled code 
     const texts = [];
     const metadata = await retainFontkitEmbeddedNotices('node_modules/@pdf-lib/fontkit', temp, texts);
     assert.equal(metadata.status, 'PARTIAL');
-    assert.equal(texts.length, 13);
-    assert.equal(metadata.evidenceFiles.length, 6);
+    assert.equal(texts.length, 18);
+    assert.equal(metadata.evidenceFiles.length, 10);
     assert.ok(metadata.evidenceFiles.every(file => !texts.includes(file.path)));
     assert.ok(texts.includes('embedded/buffer-5.6.0-LICENSE.txt'));
     assert.ok(texts.includes('embedded/harfbuzz-arabic-NOTICE.txt'));

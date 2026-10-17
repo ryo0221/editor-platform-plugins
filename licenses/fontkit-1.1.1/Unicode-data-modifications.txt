@@ -1,0 +1,17 @@
+Unicode data transformation disclosure
+
+The embedded fontkit input contains transformed Unicode data, not an unchanged
+Unicode Character Database distribution. Its property lookup trie represents
+selected Unicode 8.0.0 categories, combining classes, scripts, East Asian widths
+and encoded numeric values. Arabic, Indic and Universal Shaping Engine lookups
+represent Unicode 12.0.0 properties with the fontkit generators' joining-class
+mappings, category rules and overrides. Selected values are packed into numeric
+lookup tries and compressed; USE categories and decompositions are generated.
+
+These transformations were present in the upstream fontkit input. This notice
+retention patch does not change the data. Original UCD ReadMe notices and separately
+labeled historical Unicode terms evidence accompany this disclosure. Exact
+release-day terms URL history is not established by the same-year evidence.
+
+This is a project-authored transformation disclosure, not a replacement for or
+alteration of any original copyright or permission notice.

@@ -376,12 +376,148 @@
         "excerpt": "complete file",
         "limitation": "MIT declaration is explicit; no separate full notice in this package. Not labeled a missing permission or a complete license text."
       }
+    },
+    {
+      "file": "process-es6-0.11.6-LICENSE.txt",
+      "sha256": "59a400d04c5078579acc27ddd6452c1bdf763f9506e01364700935fbb1a7c91b",
+      "source": {
+        "kind": "official-npm-file",
+        "name": "process-es6",
+        "version": "0.11.6",
+        "key": "process-es6-0.11.6",
+        "license": "MIT",
+        "gitHead": "6c218e5f68b918226380abec10c08587f240503e",
+        "tarball": "https://registry.npmjs.org/process-es6/-/process-es6-0.11.6.tgz",
+        "integrity": "sha512-GYBRQtL4v3wgigq10Pv58jmTbFXlIiTbSfgnNqZLY0ldUPqy1rRxDI5fCjoCpnM6TqmHQI8ydzTBXW86OYc0gA==",
+        "shasum": "c6bb389f9a951f82bd4eb169600105bd2ff9c778",
+        "sha256": "b92ace26d77767521f0c935a98172536d4f573cc46a231a0e6c522da5a9299ac",
+        "notices": [
+          "package/LICENSE"
+        ],
+        "path": "package/LICENSE",
+        "association": "Fixed fork lock candidate and nine complete function witnesses in exact shipped bundle; see fontkit-runtime-evidence.json."
+      }
+    },
+    {
+      "file": "rollup-node-builtins-2.1.2-declaration.txt",
+      "role": "evidence-only",
+      "sha256": "3ca3bb2b21a3d4a88ee96ac80812cb16ce17f2b8a2ebe33f4e7aa37a6fb32368",
+      "source": {
+        "kind": "official-npm-license-declaration",
+        "name": "rollup-plugin-node-builtins",
+        "version": "2.1.2",
+        "key": "rollup-plugin-node-builtins-2.1.2",
+        "license": "ISC",
+        "gitHead": "385b27079d74dff17eaaff87215078b407f44946",
+        "tarball": "https://registry.npmjs.org/rollup-plugin-node-builtins/-/rollup-plugin-node-builtins-2.1.2.tgz",
+        "integrity": "sha512-bxdnJw8jIivr2yEyt8IZSGqZkygIJOGAWypXvHXnwKAbUcN4Q/dGTx7K0oAJryC/m6aq6tKutltSeXtuogU6sw==",
+        "shasum": "24a1fed4a43257b6b64371d8abc6ce1ab14597e9",
+        "sha256": "dd1bce06b58d62f852d76a20c2415ca00dada935200a68245eb336683276a910",
+        "notices": [
+          "package/src/es6/zlib-lib/LICENSE"
+        ],
+        "path": "package/readme.md",
+        "excerpt": "License section through EOF",
+        "limitation": "package.json declares ISC while README says MIT except ES6 ports retain original library terms. Evidence only; no synthesized grant or resolution of the difference."
+      }
+    },
+    {
+      "file": "rollup-node-builtins-2.1.2-metadata.txt",
+      "role": "evidence-only",
+      "sha256": "761e6b4c2b258c9e100078716ad4c149f539a053f77e69e5c9c59088c3b6c4b6",
+      "source": {
+        "kind": "official-npm-license-declaration",
+        "name": "rollup-plugin-node-builtins",
+        "version": "2.1.2",
+        "key": "rollup-plugin-node-builtins-2.1.2",
+        "license": "ISC",
+        "gitHead": "385b27079d74dff17eaaff87215078b407f44946",
+        "tarball": "https://registry.npmjs.org/rollup-plugin-node-builtins/-/rollup-plugin-node-builtins-2.1.2.tgz",
+        "integrity": "sha512-bxdnJw8jIivr2yEyt8IZSGqZkygIJOGAWypXvHXnwKAbUcN4Q/dGTx7K0oAJryC/m6aq6tKutltSeXtuogU6sw==",
+        "shasum": "24a1fed4a43257b6b64371d8abc6ce1ab14597e9",
+        "sha256": "dd1bce06b58d62f852d76a20c2415ca00dada935200a68245eb336683276a910",
+        "notices": [
+          "package/src/es6/zlib-lib/LICENSE"
+        ],
+        "path": "package/package.json",
+        "excerpt": "complete file",
+        "limitation": "package.json declares ISC while README says MIT except ES6 ports retain original library terms. Evidence only; no synthesized grant or resolution of the difference."
+      }
+    },
+    {
+      "file": "harfbuzz-use-NOTICE.txt",
+      "sha256": "e809090de81a2eddde35300d51778a238a08fc310181fd2a793ca71fa8978cb5",
+      "source": {
+        "kind": "historical-upstream-file-header",
+        "name": "use-machine",
+        "commit": "9b6312f9451db790db00dc2c2e27a5a1db852e72",
+        "url": "https://raw.githubusercontent.com/harfbuzz/harfbuzz/9b6312f9451db790db00dc2c2e27a5a1db852e72/src/hb-ot-shape-complex-use-machine.rl",
+        "sha256": "dd71c83eca553527f716054eb7d7f2c853bb216f0b8d60b57b65a901bf8e6a9e",
+        "headerSha256": "e809090de81a2eddde35300d51778a238a08fc310181fd2a793ca71fa8978cb5",
+        "association": "11 grammar rules match; original fontkit grammar regenerated exact shipped 55x38 state table, accepting and tags. See fontkit-use-evidence.json."
+      }
+    },
+    {
+      "file": "Unicode-8.0.0-ReadMe.txt",
+      "sha256": "e4dc6045cb89ddaca938ff7ffffc2c2aafc5d4fc85023fffb9b36d4aee47986b",
+      "source": {
+        "kind": "official-versioned-data-notice",
+        "url": "https://www.unicode.org/Public/zipped/8.0.0/UCD.zip",
+        "archiveSha256": "e3959c0b96c5ea7ff118254b55e1a752c2a28170b3404ba6bb5ab2c58536ce2e",
+        "path": "ReadMe.txt",
+        "association": "Every represented trie property agrees with this edition; source data files match official archive bytes. README contains edition/copyright and a mutable terms link, not complete terms."
+      }
+    },
+    {
+      "file": "Unicode-12.0.0-ReadMe.txt",
+      "sha256": "ecc46cb63f649b88a33746a2ef031ebbc0d028f4c89b81eacf1fca45307e052d",
+      "source": {
+        "kind": "official-versioned-data-notice",
+        "url": "https://www.unicode.org/Public/zipped/12.0.0/UCD.zip",
+        "archiveSha256": "b0e63d9bee7cae523001b2dc7f7873615773beec999f74c2b6b84ec9d2f0f0c5",
+        "path": "ReadMe.txt",
+        "association": "Every represented trie property agrees with this edition; source data files match official archive bytes. README contains edition/copyright and a mutable terms link, not complete terms."
+      }
+    },
+    {
+      "file": "Unicode-2015-historical-terms.txt",
+      "sha256": "f4b8c5bb9b1d3f8720579fcc49c238222b54afc4f2eda58c2e80f2acedfc8727",
+      "source": {
+        "kind": "historical-official-terms-evidence",
+        "url": "https://raw.githubusercontent.com/unicode-org/icu/dd8356c7545a570b56136d3e44c62f7efdf5495f/icu4c/license.html",
+        "fileSha256": "a4fd81c0bb0aee44d90376562f53c62d17ce252b93190251d172ec837ee5c6c8",
+        "excerpt": "Complete Unicode Data Files and Software section; original HTML preserved",
+        "limitation": "Same-year official Unicode original, not proof of UCD release-day mutable terms URL contents. Evidence only; not marked exact release-point terms."
+      },
+      "role": "evidence-only"
+    },
+    {
+      "file": "Unicode-2019-historical-terms.txt",
+      "sha256": "cdbb1c5d0a643009997806c021c5d807f5b8d5b0f25d93dd1a0ba6540a6b461e",
+      "source": {
+        "kind": "historical-official-terms-evidence",
+        "url": "https://raw.githubusercontent.com/unicode-org/icu/2f2aec5f91cffe49b7526d9b0d18a9acbdd0cc89/icu4c/LICENSE",
+        "fileSha256": "6a18c5fac70d7860b57f5b72b4e2c9a1ba6b3d2741eef7ff9767c5379364f10d",
+        "excerpt": "Initial Unicode notice block; ICU 58 and later heading preserved",
+        "limitation": "Same-year official Unicode original, not proof of UCD release-day mutable terms URL contents. Evidence only; not marked exact release-point terms."
+      },
+      "role": "evidence-only"
+    },
+    {
+      "file": "Unicode-data-modifications.txt",
+      "sha256": "80770c7827693004928f9d585aa50bdc98fb736076237e582ea98f3bff881378",
+      "source": {
+        "kind": "project-authored-modification-disclosure",
+        "basis": "Full represented-property comparisons and pinned fontkit generator inputs recorded in docs/license-audits/fontkit-unicode-evidence.json."
+      },
+      "role": "modification-notice"
     }
   ],
   "remaining": [
-    "Core/fork MIT declaration is established; public history has no separate core copyright notice. Do not manufacture one or treat root LICENSE absence as absence of permission.",
-    "Generated Unicode dataset version/terms have not been uniquely matched to the shipped compressed data. The later codepoints 1.3.0 lock alone is insufficient.",
-    "Some polyfill/generator and HarfBuzz-derived algorithm attribution beyond the recorded matches remains unverified. See bounded code-range audit; build reproducibility is not asserted as an independent legal requirement."
+    "Core/fork MIT is explicit; no separate original core copyright notice found. Root LICENSE absence is not absence of permission.",
+    "Unicode represented-property editions are matched (properties 8.0.0; Arabic/Indic/USE 12.0.0). Exact release-day mutable terms URL snapshots remain unproved; same-year official terms are retained as evidence only.",
+    "Node polyfill implementation is matched to fixed plugin sources, but earlier events/stream import revision and conflicting plugin core license declarations remain bounded.",
+    "Post-port shaper history examined; USE grammar notice retained. Full cross-language fallback/surrounding shaper revision and Hangul source identity remain unproved. Reproducibility is not asserted as an independent legal requirement."
   ],
   "supportingTarballs": [
     {
