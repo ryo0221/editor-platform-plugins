@@ -42,8 +42,9 @@ test('Code stdio omits human-only tools; isolated browser auth, saved revisions 
     }
     const opening = await client.callTool({ name: 'open_editor', arguments: {} });
     assert.ok(!opening.isError);
-    assert.equal(opening.structuredContent?.status, 'launch_unconfirmed');
-    assert.equal(opening.structuredContent?.browserVerified, false);
+    const openingReport = opening.structuredContent as Record<string, unknown>;
+    assert.equal(openingReport.status, 'launch_unconfirmed');
+    assert.equal(openingReport.browserVerified, false);
     assert.ok(!JSON.stringify(opening).includes('http://'));
     assert.match(JSON.stringify(opening), /Do not automatically retry/);
     url = new URL(await readFile(urlFile, 'utf8'));
