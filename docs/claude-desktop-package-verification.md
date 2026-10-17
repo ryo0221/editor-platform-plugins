@@ -42,6 +42,10 @@ candidate, including Animation's rectangle/group/native-JSON limit. Desktop stil
 has no React preview listener, Office export, Video or GIS adapter. No runtime
 code, shared README, package.json, lockfile or public upstream pin was changed.
 
+The packaged INSTALL.md also used relative links whose targets were not at the
+archive root. Links now address the repository, with an explicit pointer to the
+exact source-snapshot documents bundled in the archive.
+
 The installation guide now distinguishes the required Node version from an
 observed Desktop runtime, explains private-package manual updates and exact-hash
 identification, and records policy refusals without relaxing trust settings.
@@ -52,22 +56,36 @@ native execution or installation tests.
 
 ## Local evidence
 
-Implementation/test commit and final results are filled after the local runs.
+Candidate implementation/test commit: `669c81f2c4d170edd03a2befc92fe657de451d29`
+(on requested main `4fee5fc39c6c31b76f3db58b4d85c7f575957b83`). Build metadata
+records a clean source checkout. Later evidence-only documentation is not rebuilt.
+Environment: Debian 13 x64, Node 24.19.0, Chromium 151.0.7922.173; test child runtime
+also Node 20.19.0 on Linux. MCPB CLI 2.1.2 is the existing pinned dependency.
+The local candidate is `release/editor-platform-claude-0.1.3.mcpb`, SHA-256
+`d1e224269b6f4f015e1f451c1bc9d55f48db942199b87fa7ed85506cd9963ded`.
+It has not been published.
 All generated bundles, logs, runtimes and temporary workspaces stay outside Git.
 A Linux Node 20.19.0 binary was downloaded for the declared-minimum runtime check;
-its archive hash was verified against Node's official SHASUMS256.txt:
+its archive hash was verified against [Node's official SHASUMS256.txt](https://nodejs.org/dist/v20.19.0/SHASUMS256.txt):
 `8a4dbcdd8bccef3132d21e8543940557e55dcf44f00f0a99ba8a062f4552e722`.
 It is a test runtime only, not included in the MCPB or installed into Desktop.
 
 | Evidence | Result |
 | --- | --- |
 | Pinned MCPB CLI manifest validation | PASS |
-| Required local build/type/unit/browser suite | Pending |
-| MCPB packaging and isolated package checks on Node 24.19.0 | Pending |
-| Same installed package on declared minimum Node 20.19.0 | Pending |
+| Required local build/type/unit/browser suite | PASS: 51 unit/protocol + 26 Chromium; no retries/skips |
+| MCPB packaging and isolated package checks on Node 24.19.0 | PASS: 4 checks |
+| Same installed package on declared minimum Node 20.19.0 | PASS: 4 checks, server child executed on Linux Node 20.19.0 |
 | Signed-in Windows / macOS Desktop installation, permissions, UI/save/reopen, update and sandbox | NOT RUN |
 | Signed-package verification against native trust stores | NOT RUN; unsigned preview retained |
 | Formal status / LP promotion / public distribution | Pending user decision; keep preview |
+
+The full check passed before the final guide-link correction; the final package
+rebuild repeated typecheck/build, and both runtime package runs include the new
+bundled-guide link check. Initial full-check attempt failed on a test's incorrect
+MCPB schema export name; it was corrected to the exported versioned schema API.
+No production runtime change was needed. `mcpb info` and the verifier report the
+final package **unsigned**, not a successful signed trust-chain verification.
 
 The isolated package test launches the real bundled stdio server outside the
 checkout with only its runtime files, exercises all ten native domains and saved
