@@ -327,3 +327,16 @@ Builder: Debian 13 x64, Node 24.19.0, Chromium 151.0.7922.173.
 205129a51d8a8d48d884f4c391bd5318580488d3b52f24667e67637854126d19  editor-platform-claude-code-0.1.3-linux-x64.tar.gz
 584628aac01b36ca7a23b448b32bcbc8fddd1c63b7ab979b3b340a540bc4ea3e  editor-platform-claude-code-0.1.3-win32-x64.tar.gz
 ```
+
+### PR #13 source-closure review follow-up
+
+The offline inspector now reads every `source/FILES.sha256` entry, verifies its
+actual bytes and count, compares both packaged source/build upstream pins with the
+reviewed checkout pin, verifies the public export-manifest digest and every public
+file declared by that manifest. Only regular files/directories are extracted;
+foreign runtimes are never executed. Five focused tests PASS, including missing
+source, modified source, wrong expected pin, and public-source tampering even when
+the outer source manifest/hash is recomputed. All four existing 13e4a34 candidate
+archives PASS the stronger inspection. These are verifier changes; no new archive
+hash or rebuild of those candidates is claimed. The integration build will include
+the updated verifier and record its own source commit and hashes.

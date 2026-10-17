@@ -6,9 +6,11 @@ import { execFileSync } from 'node:child_process';
 import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
+import { verifyPackageSource } from '../../scripts/verify-package-source.mjs';
 import { installNodeDistribution, selectNodeDistribution, verifyNodeDistribution } from '../../scripts/claude-code-node.mjs';
 
 const pins = JSON.parse(await readFile(new URL('../../scripts/claude-code-node-targets.json', import.meta.url)));
+const expectedPin = JSON.parse(await readFile(new URL('../../upstream.json', import.meta.url)));
 const version = JSON.parse(await readFile(new URL('../../package.json', import.meta.url))).version;
 const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
 for (const target of Object.keys(pins)) {
@@ -36,6 +38,12 @@ for (const target of Object.keys(pins)) {
         assert.ok(entry.startsWith('./') && !entry.includes('\\') && !entry.split('/').includes('..'), entry);
         assert.match(entry, /^\.\/(?:$|INSTALL\.md$|\.claude-plugin\/(?:$|marketplace\.json$)|plugins\/(?:$|editor-platform\/(?:$|(?:LICENSE|INSTALL\.md|SECURITY\.md|SOURCE\.md|THIRD-PARTY-NOTICES\.json|build-info\.json|package\.json|\.mcpbignore|\.mcp\.json)$|(?:runtime|source|licenses|node_modules|server|ui|skills|\.claude-plugin)\/.*$)))/);
       }
+      const types = execFileSync('tar', ['-tvzf', archive], { encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 }).trim().split('\n');
+      assert.ok(types.every((entry) => entry.startsWith('-') || entry.startsWith('d')), 'only regular files/directories are allowed');
+      const extracted = join(temp, 'package');
+      await (await import('node:fs/promises')).mkdir(extracted);
+      execFileSync('tar', ['-xzf', archive, '-C', extracted]);
+      await verifyPackageSource((path) => readFile(join(extracted, 'plugins/editor-platform', path)), expectedPin);
       const root = './plugins/editor-platform/';
       const bytes = (path) => execFileSync('tar', ['-xOf', archive, root + path], { maxBuffer: 150 * 1024 * 1024 });
       const info = JSON.parse(bytes('build-info.json'));
