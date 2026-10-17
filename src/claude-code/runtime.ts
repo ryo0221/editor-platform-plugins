@@ -9,6 +9,7 @@ import { createEditorServer } from '../server/mcp';
 import { startHttp } from '../server/main';
 import { desktopDataDirectory } from '../desktop/storage';
 import { lockWorkspace } from './lock';
+import { startReactPreview } from '../react-preview/server';
 
 export function codeDataDirectory(env: NodeJS.ProcessEnv = process.env) {
   // Reuse the OS path policy, but never mix Code and Desktop workspaces.
@@ -24,10 +25,19 @@ export async function startCode(bundleRoot: URL, openBrowser = launchBrowser) {
   const token = randomBytes(32).toString('hex');
   const html = new URL('ui/editor.html', bundleRoot);
   // An ephemeral port avoids collisions. Only this process owns the store.
-  const http = startHttp({ host: '127.0.0.1', port: 0, token, store, html,
-    browserHtml: new URL('ui/browser.html', bundleRoot) });
+  const httpOptions = { host: '127.0.0.1', port: 0, token, store, html,
+    browserHtml: new URL('ui/browser.html', bundleRoot), reactPreviewUrl: '' };
+  const http = startHttp(httpOptions);
   try { await once(http, 'listening'); } catch (error) { await unlock(); throw error; }
   const address = `http://127.0.0.1:${(http.address() as { port: number }).port}`;
+  let preview: Awaited<ReturnType<typeof startReactPreview>>;
+  try {
+    preview = await startReactPreview(address, new URL('ui/react-preview.html', bundleRoot));
+    httpOptions.reactPreviewUrl = preview.url;
+  } catch (error) {
+    http.closeAllConnections(); await new Promise<void>(resolve => http.close(() => resolve()));
+    await unlock(); throw error;
+  }
   const server = createEditorServer(store, html, { modelOnly: true, openEditor: async () => {
     await openBrowser(`${address}/browser#${token}`);
     return { status: 'opened', message: 'Use the local browser window. Choose Saved artifacts to open the created artifact. Save and apply/reject proposals there; read the saved artifact again afterwards.' };
@@ -35,7 +45,7 @@ export async function startCode(bundleRoot: URL, openBrowser = launchBrowser) {
   let closed = false;
   const close = async () => {
     if (closed) return;
-    closed = true; http.closeAllConnections();
+    closed = true; await preview.close(); http.closeAllConnections();
     await new Promise<void>((resolve) => http.close(() => resolve()));
     await server.close(); await unlock();
   };

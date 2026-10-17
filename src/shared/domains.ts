@@ -6,7 +6,7 @@ import { createWhiteboard, isWhiteboard, exportWhiteboardSvg, type WhiteboardCon
 import { createData, isStructuredData, exportCsv, type StructuredData } from '@editor-platform/structured-data/model';
 import { createReview, isReview, createFile, isFile } from '@editor-platform/review-surfaces/model';
 import { createRelationGraph, relationProfile, assertGraph, type GraphProfile } from '@editor-platform/structured-graph/model';
-import { isReactUiDocument, sealReactEnvironment, type ReactUiDocument } from '@editor-platform/react-ui-core';
+import { isReactUiDocument } from '@editor-platform/react-ui-core';
 
 export const artifactKinds = ['slide', 'document', 'design', 'whiteboard', 'data', 'graph', 'review', 'file', 'react-ui', 'animation'] as const;
 export type ArtifactKind = typeof artifactKinds[number];
@@ -14,10 +14,8 @@ export type ExtraKind = Exclude<ArtifactKind, 'slide'>;
 export const kindSchema = z.enum(artifactKinds);
 export const domainLabels: Record<ArtifactKind, string> = { slide: 'Slide', document: 'Document', design: 'Design', whiteboard: 'Whiteboard', data: 'Data', graph: 'Graph', review: 'Review', file: 'File', 'react-ui': 'React UI', animation: 'Animation' };
 
-export const reactEnvironment = sealReactEnvironment({ schemaVersion: 1, ref: { id: 'plugin-react', version: '1.0.0' }, reactVersion: '19.1.1', dependencies: [], providerOrder: [], stylePolicy: 'allow-literals', tokenVariables: {} });
-function createReactDocument(): ReactUiDocument {
-  return { schemaVersion: 1, domain: 'react-ui', environment: reactEnvironment, components: [], inputs: {}, callbacks: {}, fixture: {}, breakpoints: [], roots: [], nodes: [] };
-}
+export { previewEnvironment as reactEnvironment } from '../react-preview/catalog';
+import { createPreviewDocument } from '../react-preview/catalog';
 interface NativeAdapter {
   create(): unknown;
   valid(content: unknown): boolean;
@@ -34,7 +32,7 @@ export const nativeAdapters: Record<ExtraKind, NativeAdapter> = {
   graph: { create: createRelationGraph, valid: (d) => { try { assertGraph(d as Parameters<typeof assertGraph>[0], relationProfile); return true; } catch { return false; } } },
   review: { create: createReview, valid: isReview },
   file: { create: () => createFile('text'), valid: isFile },
-  'react-ui': { create: createReactDocument, valid: isReactUiDocument },
+  'react-ui': { create: createPreviewDocument, valid: isReactUiDocument },
 };
 export interface NativeProposal { id: string; baseRevision: number; summary: string; preview: unknown }
 export interface ArtifactRecord {

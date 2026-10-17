@@ -29,7 +29,7 @@ test('model receives authoring guidance and can create every domain from rich na
       assert.ok(!created.isError, `${kind}: ${JSON.stringify(created)}`);
       const record = (created.structuredContent as any).artifact ?? (created.structuredContent as any).deck;
       assert.deepEqual(record.content, guide.exampleContent, `${kind} native content must not be flattened`);
-      if (kind === 'react-ui') assert.match(guide.limitation, /NOT configured/);
+      if (kind === 'react-ui') assert.match(guide.limitation, /bundled implementations/);
       if (kind === 'data') assert.equal(record.content.views[0].projection, 'Chart');
     }
     const content = getEditorGuide('slide').exampleContent;
