@@ -58,12 +58,20 @@ test('Code local browser: real manual edits, saved reread, reject/apply and expo
     await page.keyboard.press('Enter');
     await expect(frame.getByRole('region', { name: 'Document Editor', exact: true })).toBeVisible();
     await page.setViewportSize({ width: 1280, height: 900 });
-    const text = frame.locator('[contenteditable="true"]').first();
-    await text.fill('人が保存した文章');
+    const text = frame.getByRole('textbox', { name: 'Document body', exact: true });
+    const originalHeading = guide.exampleContent.blocks[0].text;
+    // Keyboard selection is observed by the native editor. fill() selects DOM
+    // contents directly and can race its focus-time selection restoration.
+    await text.click();
+    await text.press('ControlOrMeta+Home');
+    for (const _ of originalHeading) await text.press('Shift+ArrowRight');
+    expect(await text.evaluate(el => el.ownerDocument.getSelection()?.toString())).toBe(originalHeading);
+    await page.keyboard.insertText('人が保存した文章');
     await frame.getByRole('button', { name: '保存', exact: true }).click();
     await expect(frame.locator('.save-state')).toContainText('v2');
     const saved = (await call('read_artifact', { artifactId: artifact.id })).artifact;
     expect(saved.content.blocks[0].text).toBe('人が保存した文章');
+    expect(saved.content.blocks.slice(1)).toEqual(guide.exampleContent.blocks.slice(1));
     const candidate = structuredClone(saved.content); candidate.blocks[0].text = 'レビュー後の文章';
     candidate.blocks[0].rich = [{ ...candidate.blocks[0].rich?.[0], text: 'レビュー後の文章' }];
     for (const accept of [false, true]) {
