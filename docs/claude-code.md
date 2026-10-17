@@ -130,7 +130,9 @@ edits are not included until explicit Save. The plugin calls no AI service itsel
 
 The public pin supports Slide, Document, Design, Whiteboard, Data, Graph, Review,
 File, React UI and Animation native artifacts. See README for the actual export formats and
-limits. No Office export, live executable React preview, cross-artifact sync,
+limits. The Code local browser supports the bundled trusted Panel/Text/Counter
+React preview and TSX export; arbitrary component code cannot execute. Saved
+Data/Graph can be embedded in Slide as fixed/follow references. No Office export,
 Video/GIS adapters or collaborative shared Undo is claimed. Animation is limited to
 schema-1 rectangles/groups and native JSON export. Undo/Redo resets at
 load/save/accepted-proposal boundaries.
