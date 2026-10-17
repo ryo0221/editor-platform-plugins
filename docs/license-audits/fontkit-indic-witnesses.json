@@ -1,0 +1,132 @@
+{
+  "indic": {
+    "fontkitFile": "work/license-audit/fontkit-followup/fontkit-72b8e42bd6a398d496a63a6d483eabeed43861fb/src/opentype/shapers/IndicShaper.js",
+    "fontkitSha256": "9562a6c9972019b0b01ba51aa7585505e27a51ad423e04dbacc094affba5a59b",
+    "sharedBlocks": [
+      {
+        "fontkitLine": 228,
+        "harfbuzzLine": 668,
+        "lines": 11,
+        "normalizedSha256": "1e1f19893e21fd4ba9670919d746970dee4d975cdac4b9eece096ef8362a37ce"
+      },
+      {
+        "fontkitLine": 289,
+        "harfbuzzLine": 746,
+        "lines": 11,
+        "normalizedSha256": "0a5876ae6563248d3cfd80ed1762ea51a63f12c21d37a489e958da96100e1c65"
+      },
+      {
+        "fontkitLine": 306,
+        "harfbuzzLine": 761,
+        "lines": 5,
+        "normalizedSha256": "4971c9afbe5ad395951fa8c74743c66d37d3d730e90faf23d978202547e28ec9"
+      },
+      {
+        "fontkitLine": 328,
+        "harfbuzzLine": 818,
+        "lines": 8,
+        "normalizedSha256": "7b54501a63af6e3cb3185013cb8bcf42b546b33b08d87f0ecd3b5554f312676d"
+      },
+      {
+        "fontkitLine": 337,
+        "harfbuzzLine": 830,
+        "lines": 21,
+        "normalizedSha256": "36172141ef428d4d86801aa011b8e678115113d8ce26a318a21aa046b03a291e"
+      },
+      {
+        "fontkitLine": 358,
+        "harfbuzzLine": 853,
+        "lines": 9,
+        "normalizedSha256": "1736e042497b394098e703b7e434e41d444b9971c190f83072d37c402b027a1e"
+      },
+      {
+        "fontkitLine": 396,
+        "harfbuzzLine": 887,
+        "lines": 17,
+        "normalizedSha256": "e57de77799bf1fbbe6968c1587cccbad2e3520a20cb87998c546227bc967c683"
+      },
+      {
+        "fontkitLine": 443,
+        "harfbuzzLine": 938,
+        "lines": 7,
+        "normalizedSha256": "adc835b1150d358c9e5578df4edd76613c3aff92e393f8de5ceb7a51cb06dc51"
+      },
+      {
+        "fontkitLine": 514,
+        "harfbuzzLine": 1054,
+        "lines": 17,
+        "normalizedSha256": "d6dc44c2364c8d1612c37d7541388b08902ec9e10626121093369d102d0af2ad"
+      },
+      {
+        "fontkitLine": 551,
+        "harfbuzzLine": 1095,
+        "lines": 6,
+        "normalizedSha256": "51129840703c252081a9849fcb3bbf5f0eaea10736f74e4904c7d029ed2c1ad8"
+      },
+      {
+        "fontkitLine": 596,
+        "harfbuzzLine": 1280,
+        "lines": 7,
+        "normalizedSha256": "af61d52d2bbb13257813d82b300e9ed7eb39cd82b35f6ed826dab67fa7aa0007"
+      },
+      {
+        "fontkitLine": 665,
+        "harfbuzzLine": 1346,
+        "lines": 13,
+        "normalizedSha256": "89a26b247dc93ae46de6a67f5df69fb1cbd9959d5287d193c6b8dd40ea68483a"
+      },
+      {
+        "fontkitLine": 716,
+        "harfbuzzLine": 1412,
+        "lines": 13,
+        "normalizedSha256": "2325451579dd09400791cf70d47e4db92fe55843fa31f89c7387bfc1627f83ec"
+      },
+      {
+        "fontkitLine": 729,
+        "harfbuzzLine": 1426,
+        "lines": 8,
+        "normalizedSha256": "967390dcb65598a54298f39880b0ebbe581e30da20aabe5d58fc2511ed7d7aac"
+      },
+      {
+        "fontkitLine": 748,
+        "harfbuzzLine": 1453,
+        "lines": 10,
+        "normalizedSha256": "e0093b0460453a30b09083101dc7bffcc782cbf4b67e62355877d87909b8d3c3"
+      },
+      {
+        "fontkitLine": 782,
+        "harfbuzzLine": 1489,
+        "lines": 8,
+        "normalizedSha256": "2402558248efab9bb0185005a24074be86dc4f59138df42e5619d976cfe153d4"
+      },
+      {
+        "fontkitLine": 798,
+        "harfbuzzLine": 1505,
+        "lines": 8,
+        "normalizedSha256": "d3f948481d6990399c839702d8791e70318e6bd08f19745e6b962a82a1eab0c3"
+      },
+      {
+        "fontkitLine": 827,
+        "harfbuzzLine": 1535,
+        "lines": 8,
+        "normalizedSha256": "beba073a26a974391f9a8fae970a4a0bb3ff9ef102c2fbee42da81f9dd067308"
+      },
+      {
+        "fontkitLine": 860,
+        "harfbuzzLine": 1580,
+        "lines": 8,
+        "normalizedSha256": "d44ec86618cb60d36e5b95ad697392c40de09f6d434938d718502eb72e8c643d"
+      }
+    ]
+  },
+  "hangul": {
+    "fontkitFile": "work/license-audit/fontkit-followup/fontkit-72b8e42bd6a398d496a63a6d483eabeed43861fb/src/opentype/shapers/HangulShaper.js",
+    "fontkitSha256": "626bb0e2603ab4b9c77b9eed8230e5a74432de298c4d24f94930e219215bd2c3",
+    "sharedBlocks": []
+  },
+  "use": {
+    "fontkitFile": "work/license-audit/fontkit-followup/fontkit-72b8e42bd6a398d496a63a6d483eabeed43861fb/src/opentype/shapers/UniversalShaper.js",
+    "fontkitSha256": "ea2516a8f8b1456d33af6820a2608ae2c28a55c776373f6e467ce3e2567bf984",
+    "sharedBlocks": []
+  }
+}

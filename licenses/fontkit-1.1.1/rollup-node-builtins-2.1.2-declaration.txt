@@ -1,0 +1,4 @@
+License
+===
+
+MIT except ES6 ports of browserify modules which are whatever the original library was.
