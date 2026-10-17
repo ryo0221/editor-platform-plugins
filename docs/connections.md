@@ -13,8 +13,8 @@ reject/selection tools use `artifactId`. Tool results carry either the original
 Surface by its domain. No universal content model is introduced. Generic proposals
 carry complete native candidates with revision checks; they are not collaborative
 merge operations. React UI live preview needs a separate pinned runtime; its
-structure/properties remain editable and retainable. Animation/Video/GIS are pending
-public-source availability rather than silently importing private code.
+structure/properties remain editable and retainable. Animation supports public schema-1 rectangles/groups and native JSON export through
+the real controlled Surface/Player. Video/GIS adapters remain unimplemented.
 
 UI-only tools are `save_slide_draft`, `apply_slide_proposal`,
 `reject_slide_proposal` and `set_slide_selection`. Their `visibility: ["app"]`

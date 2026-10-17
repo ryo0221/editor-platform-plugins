@@ -217,7 +217,7 @@ function Editor() {
         <EditorHistoryContext.Provider value={{ undo: () => history('undo'), redo: () => history('redo') }}>
           <EditorExportGuardContext.Provider value={flush}>
             <EditorOfficeCapabilitiesContext.Provider value={{ pptx: false, docx: false, reason: 'この接続ではJSONとSVGを利用してください。' }}>
-              <NativeSurface key={`${record!.id}:${proposal ? 'preview-'+proposal.id : 'edit'}`} kind={record!.kind ?? 'slide'} content={content} execute={execute} select={(ids) => setSelected(Array.isArray(ids) ? ids : [ids])} selected={selected} readOnly={busy || !!proposal} artifactId={record!.id} profile={record!.profile} />
+              <NativeSurface key={`${record!.id}:${proposal ? 'preview-'+proposal.id : 'edit'}`} kind={record!.kind ?? 'slide'} content={content} execute={execute} select={(ids) => setSelected(Array.isArray(ids) ? ids : [ids])} selected={selected} readOnly={busy || !!proposal} artifactId={record!.id} profile={record!.profile} session={session.current!} history={history} />
             </EditorOfficeCapabilitiesContext.Provider>
           </EditorExportGuardContext.Provider>
         </EditorHistoryContext.Provider>
