@@ -1,0 +1,1 @@
+{"name":"editor-platform-chatgpt-resource-preview","private":true,"type":"module","engines":{"node":">=22.18"},"scripts":{"test":"node --test gateway.test.mjs","start":"node gateway.mjs"},"dependencies":{"jose":"6.1.3"}}

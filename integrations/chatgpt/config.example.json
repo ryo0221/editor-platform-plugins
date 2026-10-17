@@ -1,0 +1,10 @@
+{
+  "resource": "https://editor.example.invalid/mcp",
+  "issuer": "https://identity.example.invalid/",
+  "jwks": "https://identity.example.invalid/jwks",
+  "algorithm": "RS256",
+  "subject": "REPLACE_WITH_EXACT_OWNER_SUBJECT",
+  "clientId": "REPLACE_WITH_APPROVED_CHATGPT_CLIENT_ID",
+  "scope": "editor:workspace",
+  "upstream": "http://127.0.0.1:8787/mcp"
+}
