@@ -1,6 +1,8 @@
 import { referenceService } from './references';
 import { ReferenceError } from '@editor-platform/artifact-references';
 import { readFile } from 'node:fs/promises';
+import { ListToolsRequestSchema, type Tool } from '@modelcontextprotocol/sdk/types.js';
+import { toJsonSchemaCompat } from '@modelcontextprotocol/sdk/server/zod-json-schema-compat.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerAppResource, registerAppTool, RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 import { z } from 'zod';
@@ -12,7 +14,7 @@ import { join } from 'node:path';
 import { inventory } from './inventory';
 import { authoringInstructions, getEditorGuide } from './authoring';
 
-export function createEditorServer(store: DeckStore, htmlPath = new URL('../../dist/editor.html', import.meta.url), host: { modelOnly?: boolean; openEditor?: () => Promise<unknown> } = {}) {
+export function createEditorServer(store: DeckStore, htmlPath = new URL('../../dist/editor.html', import.meta.url), host: { modelOnly?: boolean; openEditor?: () => Promise<unknown>; oauth?: { scope: string; authorize: () => Promise<string | undefined> } } = {}) {
   const artifacts = sharedArtifacts.get(store) ?? new ArtifactStore(join(store.directory, 'artifacts'));
   sharedArtifacts.set(store, artifacts);
   const references = referenceService(store.directory, artifacts);
@@ -23,15 +25,21 @@ export function createEditorServer(store: DeckStore, htmlPath = new URL('../../d
       _meta: { ui: { prefersBorder: false, csp: { connectDomains: [], resourceDomains: [] } } },
     }],
   }));
+  const oauthTools: (Tool & { securitySchemes: { type: 'oauth2'; scopes: string[] }[] })[] = [];
   function tool<S extends z.ZodObject>(name: string, title: string, description: string, schema: S,
     run: (args: z.infer<S>) => Promise<unknown>, options: { appOnly?: boolean; readOnly?: boolean; widget?: boolean; destructive?: boolean } = {}) {
     if (host.modelOnly && options.appOnly) return;
-    registerAppTool(server, name, {
+    const securitySchemes = host.oauth ? [{ type: 'oauth2' as const, scopes: [host.oauth.scope] }] : undefined;
+    const config = {
       title, description, inputSchema: schema.shape,
       annotations: { readOnlyHint: !!options.readOnly, destructiveHint: !!options.destructive, openWorldHint: false, idempotentHint: !!options.readOnly },
-      _meta: { ui: { ...(options.widget === false ? {} : { resourceUri }), visibility: options.appOnly ? ['app'] : ['model', 'app'] } },
-    }, async (args: unknown) => {
+      _meta: { ...(securitySchemes ? { securitySchemes } : {}), ui: { ...(options.widget === false ? {} : { resourceUri }), visibility: options.appOnly ? ['app'] : ['model', 'app'] } },
+    };
+    if (securitySchemes) oauthTools.push({ name, ...config, inputSchema: toJsonSchemaCompat(z.object(schema.shape), { strictUnions: true, pipeStrategy: 'input' }) as Tool['inputSchema'], securitySchemes });
+    registerAppTool(server, name, config, async (args: unknown) => {
       try {
+        const challenge = await host.oauth?.authorize();
+        if (challenge) return { isError: true, content: [{ type: 'text' as const, text: 'Authentication required. Reconnect to continue.' }], _meta: { 'mcp/www_authenticate': [challenge] } };
         const result = await run(schema.parse(args));
         return { content: [{ type: 'text' as const, text: JSON.stringify(result) }], structuredContent: result as Record<string, unknown> };
       } catch (error) {
@@ -120,6 +128,9 @@ export function createEditorServer(store: DeckStore, htmlPath = new URL('../../d
     async (args) => ({ artifact: await artifacts.decide(args.artifactId, args.proposalId, false) }), { appOnly: true });
   tool('set_artifact_selection', 'Share native selection', 'UI-only sharing of saved native element IDs.', z.object({ ...base, ids: z.array(artifactId).max(100) }).strict(),
     async (args) => ({ artifact: await artifacts.select(args.artifactId, args.baseRevision, args.ids) }), { appOnly: true, widget: false });
+  // SDK 1.32 emits only known top-level fields. Keep OAuth discovery explicit
+  // without changing the default stdio/HTTP handler or relying on private SDK state.
+  if (host.oauth) server.server.setRequestHandler(ListToolsRequestSchema, () => ({ tools: oauthTools }));
   return server;
 }
 const sharedArtifacts = new WeakMap<DeckStore, ArtifactStore>();
