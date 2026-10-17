@@ -1,10 +1,10 @@
 import { randomBytes } from 'node:crypto';
-import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { DeckStore, DomainError } from '../server/decks';
+import { DeckStore } from '../server/decks';
+import { launchBrowser } from './browser-opener';
 import { createEditorServer } from '../server/mcp';
 import { startHttp } from '../server/main';
 import { desktopDataDirectory } from '../desktop/storage';
@@ -54,12 +54,4 @@ export async function startCode(bundleRoot: URL, openBrowser = launchBrowser) {
   try { await server.connect(new StdioServerTransport()); }
   catch (error) { await close(); throw error; }
   return { server, http, close, directory };
-}
-function launchBrowser(url: string): Promise<void> {
-  const command = process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'explorer.exe' : 'xdg-open';
-  return new Promise((resolve, reject) => {
-    const child = spawn(command, [url], { stdio: 'ignore', shell: false });
-    child.once('error', () => reject(new DomainError('BROWSER_UNAVAILABLE', 'Unable to open the local browser. Check that a graphical browser and the OS URL opener are installed, then retry open_editor. Headless/remote sessions are not supported.')));
-    child.once('exit', (code) => code === 0 ? resolve() : reject(new DomainError('BROWSER_UNAVAILABLE', 'The OS browser opener failed. Restore the graphical desktop/browser association and retry open_editor.')));
-  });
 }
