@@ -1,5 +1,6 @@
 import { AnimationSurface } from './animation-surface';
 import { EditorSession } from '@editor-platform/editor-core';
+import type { ReferenceResolver } from '@editor-platform/artifact-references';
 import { SlideSurface } from '@editor-platform/slide';
 import type { SlideContent } from '@editor-platform/slide/model';
 import { DocumentSurface, type DocumentContent } from '@editor-platform/document';
@@ -19,14 +20,14 @@ const noReactRuntime: ReactRuntimeAdapter = {
   async resolve() { return { diagnostics: [{ code: 'runtime-unconfigured', severity: 'error', path: '$.environment', message: 'Configure a separately hosted, pinned React preview runtime.', recovery: 'Retain the native document and register an isolated runtime before live preview.' }] }; },
   previewEndpoint() { throw Error('React UI: 独立したpreview originの設定が必要です。構造・属性の編集と保存は利用できます。'); },
 };
-export function NativeSurface({ kind, content, execute, select, selected, readOnly, artifactId, profile: ownedProfile, session, history }: {
+export function NativeSurface({ kind, content, execute, select, selected, readOnly, artifactId, profile: ownedProfile, references, session, history }: {
   kind: ArtifactKind; content: unknown; execute(command: EditorCommand<unknown>): boolean;
-  select(ids: string | string[]): void; selected: string[]; readOnly: boolean; artifactId: string; profile?: GraphProfile; session: EditorSession<unknown>; history(direction: 'undo' | 'redo'): void;
+  select(ids: string | string[]): void; selected: string[]; readOnly: boolean; artifactId: string; profile?: GraphProfile; references?: ReferenceResolver; session: EditorSession<unknown>; history(direction: 'undo' | 'redo'): void;
 }) {
   const cmd = <T,>(command: EditorCommand<T>) => execute(command as EditorCommand<unknown>);
   const layout = { viewKey: artifactId, defaultPanels: { left: true, right: true, rightWidth: 250, tab: 'properties' as const, focus: false } };
   if (kind === 'animation') return <AnimationSurface artifactId={artifactId} content={content} session={session} execute={execute} readOnly={readOnly} history={history} />;
-  if (kind === 'slide') return <SlideSurface content={content as SlideContent} execute={cmd} select={select} readOnly={readOnly} layout={layout} />;
+  if (kind === 'slide') return <SlideSurface references={references} content={content as SlideContent} execute={cmd} select={select} readOnly={readOnly} layout={layout} />;
   if (kind === 'document') return <DocumentSurface content={content as DocumentContent} execute={cmd} select={select} selectedId={selected[0]} readOnly={readOnly} layout={layout} />;
   if (kind === 'design') return <DesignSurface content={content as DesignContent} execute={cmd} select={select} readOnly={readOnly} layout={layout} />;
   if (kind === 'whiteboard') return <WhiteboardSurface content={content as WhiteboardContent} execute={cmd} select={select} readOnly={readOnly} layout={layout} />;

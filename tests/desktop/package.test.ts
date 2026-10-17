@@ -89,7 +89,7 @@ test('installed MCPB works offline, across relocation and restart, with no check
   };
   try {
     await connect();
-    assert.equal((await client!.listTools()).tools.length, 21);
+    assert.equal((await client!.listTools()).tools.length, 25);
     const capabilities = await invoke('list_editors', {});
     assert.equal(capabilities.editors.length, 10);
     const saved: { id: string; kind: string }[] = [];
@@ -107,6 +107,9 @@ test('installed MCPB works offline, across relocation and restart, with no check
     const slide = saved.find((item) => item.kind === 'slide')!;
     const slideRecord = (await invoke('read_deck', { deckId: slide.id })).deck;
     const slideCandidate = structuredClone(slideRecord.content);
+    const sourceData = saved.find((item) => item.kind === 'data')!;
+    const embedded = await invoke('create_reference', { source: { artifactId: sourceData.id, domain: 'data', target: { kind: 'table', viewId: 'default' } }, mode: 'follow' });
+    slideCandidate.slides[0].objects.push({ id: 'packaged_reference', type: 'image', bounds: { x: 30, y: 200, width: 400, height: 150 }, text: '', fill: '#ffffff', reference: embedded.reference, src: embedded.src });
     slideCandidate.slides[0].objects.find((o: any) => o.chart).chart.values = [20, 60, 20];
     const slideProposal = (await invoke('propose_slide_changes', { deckId: slide.id, baseRevision: 1, summary: 'Packaged native chart change', content: slideCandidate })).deck;
     const appliedSlide = (await invoke('apply_slide_proposal', { deckId: slide.id, proposalId: slideProposal.proposals[0].id })).deck;

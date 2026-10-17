@@ -115,6 +115,7 @@ remain readable/exportable, but editing and proposal decisions are rejected.
 There is no permanent-delete tool. The UI exposes the same list/trash/restore flow.
 Do not delete an artifact merely because the model considers it unused.
 
-`list_editors` and every domain guide explicitly declare cross-artifact embedding
-and automatic source-update propagation unavailable. No reference/sync fields or
-background copying process are invented to simulate upstream #264.
+`list_editors` and the domain guides declare saved Data/Graph → Slide reference
+support. Fixed/follow metadata comes from `create_reference`; human approval is
+required for existing-deck proposals. See [reference semantics](references.md) for
+source issuance, view refresh, save/export capture, backup and missing-source behavior.

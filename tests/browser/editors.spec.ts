@@ -236,6 +236,42 @@ for (const kind of ['slide', 'document']) test(`${kind}: discover, trash and res
   expect(errors).toEqual([]);
 });
 
+test('Data reference: real Slide follows committed source, preserves destination and shows broken link', async ({ page }) => {
+  const { frame, errors } = await start(page, 'slide');
+  const deck = await page.evaluate(() => (window as any).__editorTest.record());
+  const guide = (await invoke(page, 'get_editor_guide', { kind: 'data' })).structuredContent;
+  const source = (await invoke(page, 'create_artifact', { kind: 'data', title: 'Linked source', content: guide.exampleContent })).structuredContent.artifact;
+  const prepared = (await invoke(page, 'create_reference', { source: { artifactId: source.id, domain: 'data', target: { kind: 'table', viewId: 'default' } }, mode: 'follow' })).structuredContent;
+  const content = structuredClone(deck.content);
+  content.slides[0].objects.push({ id: 'linked_data', type: 'image', bounds: { x: 20, y: 150, width: 600, height: 200 }, text: '', fill: '#ffffff', src: prepared.src, reference: prepared.reference });
+  await invoke(page, 'propose_artifact_changes', { artifactId: deck.id, baseRevision: 1, summary: 'Embed Data', content }, true);
+  await frame.getByRole('button', { name: '変更案を表示', exact: true }).click();
+  await frame.getByRole('button', { name: '適用', exact: true }).click();
+  await expect(frame.locator('.save-state')).toContainText('v2');
+  const projected = () => frame.locator('image').evaluateAll((nodes) => nodes.map((node) => {
+    const value = node.getAttribute('href') ?? node.getAttribute('xlink:href') ?? '';
+    try { return value.startsWith('data:image/svg+xml;base64,') ? atob(value.split(',')[1]) : ''; } catch { return ''; }
+  }).join('\n'));
+  await expect.poll(projected).toContain('550');
+  const next = structuredClone(source.content); next.rows[0].values.investment = 987654;
+  await invoke(page, 'save_artifact_draft', { artifactId: source.id, baseRevision: 1, content: next });
+  await expect.poll(projected, { timeout: 12000 }).toContain('987654');
+  const unchanged = (await invoke(page, 'read_deck', { deckId: deck.id })).structuredContent.deck;
+  expect(unchanged.revision).toBe(2);
+  expect(unchanged.content.slides[0].objects.at(-1).reference.snapshot.revision).toBe(1);
+  await frame.getByRole('button', { name: '保存', exact: true }).click();
+  await expect(frame.locator('.save-state')).toContainText('v3');
+  const captured = (await invoke(page, 'read_deck', { deckId: deck.id })).structuredContent.deck;
+  expect(captured.content.slides[0].objects.at(-1).reference.snapshot.revision).toBe(2);
+  await expect.poll(projected).toContain('987654');
+  await expect(frame.getByText('linked_data: 取得中', { exact: false })).toHaveCount(0);
+  await page.screenshot({ path: 'test-results/data-slide-reference.png', fullPage: true });
+  await invoke(page, 'delete_artifact', { artifactId: source.id, baseRevision: 2 });
+  await expect(frame.getByText('参照元が見つかりません', { exact: false }).first()).toBeVisible({ timeout: 12000 });
+  expect(errors).toEqual([]);
+});
+
+
 test('Animation: real Player, buffered input Save, Undo/Redo, proposal review and reload', async ({ page }) => {
   const { frame, errors } = await start(page, 'animation');
   const surface = frame.getByRole('region', { name: 'Animation Editor', exact: true });

@@ -27,7 +27,7 @@ test('HTTP authentication, DNS/Origin guard, disabled demo and MCP roundtrip', a
     assert.equal(foreignHostStatus, 403);
     assert.equal((await fetch(new URL('/demo', url), { headers: { Authorization: `Bearer ${token}` } })).status, 404);
     await client.connect(new StreamableHTTPClientTransport(url, { requestInit: { headers: { Authorization: `Bearer ${token}` } } }));
-    assert.equal((await client.listTools()).tools.length, 21);
+    assert.equal((await client.listTools()).tools.length, 25);
     const created = await client.callTool({ name: 'create_deck', arguments: { title: 'HTTP test' } });
     assert.ok(!created.isError);
     assert.equal((await fetch(url, { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: '{' })).status, 400);
