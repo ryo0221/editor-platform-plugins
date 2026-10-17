@@ -105,7 +105,7 @@ test('all nine domains have paginated discovery and revision-safe recoverable de
     collected.push(...page.artifacts.map((a: any) => a.id)); cursor = page.nextCursor;
     assert.ok(page.artifacts.every((a: any) => !('content' in a)));
   } while (cursor);
-  assert.equal(new Set(collected).size, 9); assert.equal(collected.length, 9);
+  assert.equal(new Set(collected).size, 10); assert.equal(collected.length, 10);
   for (const record of created) {
     await call('propose_artifact_changes', { artifactId: record.id, baseRevision: 1, summary: 'Pending before delete', content: record.content });
     await call('delete_artifact', { artifactId: record.id, baseRevision: 999 }, true);
@@ -126,5 +126,5 @@ test('all nine domains have paginated discovery and revision-safe recoverable de
     await call('delete_artifact', { artifactId: record.id, baseRevision: 3 });
   }
   assert.equal((await call('list_artifacts', { state: 'active' })).artifacts.length, 0);
-  assert.equal((await call('list_artifacts', { state: 'deleted' })).artifacts.length, 9);
+  assert.equal((await call('list_artifacts', { state: 'deleted' })).artifacts.length, 10);
 }));

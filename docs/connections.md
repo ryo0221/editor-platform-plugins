@@ -13,7 +13,8 @@ reject/selection tools use `artifactId`. Tool results carry either the original
 Surface by its domain. No universal content model is introduced. Generic proposals
 carry complete native candidates with revision checks; they are not collaborative
 merge operations. React UI live preview needs a separate pinned runtime; its
-structure/properties remain editable and retainable. Animation/Video/GIS adapters are separate work; no private source is imported.
+structure/properties remain editable and retainable. Animation supports public schema-1 rectangles/groups and native JSON export through
+the real controlled Surface/Player. Video/GIS adapters remain unimplemented.
 
 UI-only tools are `save_slide_draft`, `apply_slide_proposal`,
 `reject_slide_proposal` and `set_slide_selection`. Their `visibility: ["app"]`
@@ -39,6 +40,10 @@ Git/npm or a separate Node.js installation. See [the installation guide](claude-
 The extension uses Desktop's built-in runtime and keeps data outside its install
 directory. This is a Desktop extension, distinct from the Claude Code plugin
 manifest below. Actual signed-in Desktop installation/UI acceptance is pending.
+
+Codex reviewers can follow the [prebuilt CLI candidate procedure](codex.md),
+which reuses the model-only stdio/local-browser route with a separate data
+directory. Actual signed-in Codex acceptance remains NOT RUN.
 
 For source-based clients:
 

@@ -21,7 +21,7 @@ test('real MCP initialize/discovery, typed proposals, app-only metadata and bund
     assert.equal(tools.length, 25);
     assert.deepEqual((tools.find((t) => t.name === 'apply_slide_proposal')?._meta?.ui as {visibility: string[]}).visibility, ['app']);
     const capabilities = CallToolResultSchema.parse(await client.callTool({ name: 'list_editors', arguments: {} }));
-    assert.equal((capabilities.structuredContent!.editors as unknown[]).length, 9);
+    assert.equal((capabilities.structuredContent!.editors as unknown[]).length, 10);
     const created = CallToolResultSchema.parse(await client.callTool({ name: 'create_deck', arguments: { title: 'MCP integration' } }));
     const deck = created.structuredContent!.deck as DeckRecord;
     assert.equal(deck.title, 'MCP integration');

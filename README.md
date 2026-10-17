@@ -9,7 +9,7 @@ ChatGPT/Claude production-host acceptance is claimed. See [verification](docs/ve
 
 ## What works
 
-- Create and open Slide, Document, Design, Whiteboard, Data, Graph, Review, File and React UI native artifacts.
+- Create and open Slide, Document, Design, Whiteboard, Data, Graph, Review, File, React UI and Animation native artifacts.
 - Author native visual/structured content through `get_editor_guide` and the
   `content` input, including Slide shapes, charts, tables, images and rich text.
 - Mount their upstream editing/viewing controls with local Undo/Redo and explicit saving.
@@ -36,8 +36,9 @@ or follow references in Slide, using the public resolver and adapters; see
 [reference semantics and limits](docs/references.md). Source updates refresh the
 view; explicit Save/export captures versions. Other destination adapters are pending.
 
-The public source now includes Animation, Video and GIS. Their plugin adapters
-are separate work and are not enabled by the reference integration.
+Animation uses the public schema-1 rectangle/group Surface and Player, with native
+JSON export. External assets, nested compositions, prototype migration and video/GIF
+export are not supported. Video and GIS adapters remain unimplemented.
 
 ## Set up
 

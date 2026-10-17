@@ -270,3 +270,40 @@ test('Data reference: real Slide follows committed source, preserves destination
   await expect(frame.getByText('参照元が見つかりません', { exact: false }).first()).toBeVisible({ timeout: 12000 });
   expect(errors).toEqual([]);
 });
+
+
+test('Animation: real Player, buffered input Save, Undo/Redo, proposal review and reload', async ({ page }) => {
+  const { frame, errors } = await start(page, 'animation');
+  const surface = frame.getByRole('region', { name: 'Animation Editor', exact: true });
+  await expect(surface.getByRole('button', { name: 'Play', exact: true })).toBeEnabled();
+  await surface.getByRole('button', { name: 'Play', exact: true }).click();
+  await surface.getByRole('button', { name: 'Pause', exact: true }).click();
+  const y = surface.getByLabel('Base y', { exact: true });
+  await y.fill('145');
+  await frame.getByRole('button', { name: '保存', exact: true }).click();
+  await expect(frame.locator('.save-state')).toContainText('v2');
+  let record = await page.evaluate(() => (window as any).__editorTest.record());
+  expect(record.content.compositions[0].layers[0].transform.y).toBe(145);
+  await y.fill('180');
+  await surface.getByRole('button', { name: 'Apply inputs', exact: true }).click();
+  await frame.getByRole('button', { name: '元に戻す', exact: true }).click();
+  await expect(y).toHaveValue('145');
+  await frame.getByRole('button', { name: 'やり直す', exact: true }).click();
+  await expect(y).toHaveValue('180');
+  await frame.getByRole('button', { name: '保存', exact: true }).click();
+  await expect(frame.locator('.save-state')).toContainText('v3');
+  record = await page.evaluate(() => (window as any).__editorTest.record());
+  const content = structuredClone(record.content); content.compositions[0].layers[0].transform.y = 220;
+  await invoke(page, 'propose_artifact_changes', { artifactId: record.id, baseRevision: 3, summary: 'Move rectangle', content }, true);
+  await frame.getByRole('button', { name: '変更案を表示', exact: true }).click();
+  await expect(frame.getByRole('region', { name: '変更案プレビュー', exact: true }).getByLabel('Base y', { exact: true })).toHaveValue('220');
+  await frame.getByRole('button', { name: '却下', exact: true }).click();
+  await expect(y).toHaveValue('180');
+  await invoke(page, 'propose_artifact_changes', { artifactId: record.id, baseRevision: 3, summary: 'Move rectangle again', content }, true);
+  await frame.getByRole('button', { name: '変更案を表示', exact: true }).click();
+  await frame.getByRole('button', { name: '適用', exact: true }).click();
+  await expect(frame.locator('.save-state')).toContainText('v4');
+  await frame.getByRole('button', { name: '保存先から再読込', exact: true }).click();
+  await expect(y).toHaveValue('220');
+  expect(errors).toEqual([]);
+});
