@@ -1,0 +1,14 @@
+{
+  "resource": "https://editor.example.invalid/mcp",
+  "issuer": "https://identity.example.invalid/",
+  "jwks": "https://identity.example.invalid/jwks",
+  "algorithm": "RS256",
+  "subject": "REPLACE_WITH_EXACT_OWNER_SUBJECT",
+  "clientId": "REPLACE_WITH_APPROVED_CLIENT_ID",
+  "scope": "editor:workspace",
+  "registrationMode": "pre_registered",
+  "tokenEndpointAuthMethod": "none",
+  "dataDirectory": "/absolute/private/chatgpt-workspace",
+  "metadataFile": "/absolute/private/authorization-server-metadata.json",
+  "port": 8788
+}

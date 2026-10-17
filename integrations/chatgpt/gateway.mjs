@@ -5,18 +5,24 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 
-export function configuration(input) {
+export function oauthConfiguration(input) {
   const c = { ...input };
   for (const name of ['resource', 'issuer', 'jwks']) {
+    if (typeof c[name] !== 'string') throw Error(`Invalid ${name}`);
     const u = new URL(c[name]);
     if (u.protocol !== 'https:' || u.username || u.password || u.search || u.hash) throw Error(`Invalid ${name}`);
     if (name === 'resource' && u.pathname !== '/mcp') throw Error('Resource must end in /mcp');
   }
-  if (!c.subject || !c.clientId || typeof c.scope !== 'string' || !/^[\w:.-]+$/.test(c.scope)) throw Error('Owner, client and scope required');
+  if (typeof c.subject !== 'string' || !c.subject.trim() || typeof c.clientId !== 'string' || !c.clientId.trim() || typeof c.scope !== 'string' || !/^[\w:.-]+$/.test(c.scope)) throw Error('Owner, client and scope required');
   if (!['RS256', 'ES256'].includes(c.algorithm)) throw Error('Unsupported algorithm');
+  return Object.freeze(Object.fromEntries(['resource', 'issuer', 'jwks', 'algorithm', 'subject', 'clientId', 'scope'].map(name => [name, c[name]])));
+}
+
+export function configuration(input) {
+  const c = { ...input, ...oauthConfiguration(input) };
   const u = new URL(c.upstream);
   if (u.protocol !== 'http:' || u.hostname !== '127.0.0.1' || u.pathname !== '/mcp' || u.username || u.password || u.search || u.hash) throw Error('Upstream must be fixed loopback /mcp');
-  if (!/^[A-Za-z0-9_-]{32,}$/.test(c.upstreamToken)) throw Error('Internal token must be >=32 base64url characters');
+  if (typeof c.upstreamToken !== 'string' || !/^[A-Za-z0-9_-]{32,}$/.test(c.upstreamToken)) throw Error('Internal token must be >=32 base64url characters');
   return Object.freeze(c);
 }
 
@@ -26,6 +32,8 @@ export function verifier(c, keys = createRemoteJWKSet(new URL(c.jwks), { timeout
       issuer: c.issuer, audience: c.resource, algorithms: [c.algorithm], typ: 'at+jwt',
       requiredClaims: ['exp', 'iat', 'sub', 'client_id'], maxTokenAge: '10m',
     });
+    // maxTokenAge limits use; also reject IdP profiles that mint overlong tokens.
+    if (payload.exp <= payload.iat || payload.exp - payload.iat > 600) throw Error('Access token lifetime exceeds policy');
     if (payload.sub !== c.subject || payload.client_id !== c.clientId) throw Error('Wrong owner/client');
     if (typeof payload.scope !== 'string' || !payload.scope.split(' ').includes(c.scope)) return false;
     return true;

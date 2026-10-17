@@ -133,3 +133,34 @@ test('JWKS rotation respects cache/cooldown and rejects a removed key after refr
   await assert.rejects(verify(oldToken), {code: 'ERR_JWKS_NO_MATCHING_KEY'});
   assert.equal(await verify(nextToken), true); assert.equal(calls, 3);
 });
+
+test('short-token policy rejects overlong issuance and enforces elapsed expiration',async()=>{
+  const verify=verifier(configuration(base),keys);
+  await assert.rejects(verify(await signClaims({...completeClaims(),exp:now()+601})));
+  // Deterministic expired and zero-lifetime profiles; no wall-clock sleeps.
+  await assert.rejects(verify(await signClaims({...completeClaims(),iat:now()-601,exp:now()-1})));
+  await assert.rejects(verify(await signClaims({...completeClaims(),exp:now()})));
+});
+
+test('default JWKS cooldown and cache expiration refresh automatically and fail closed on outage',async t=>{
+  const next=await generateKeyPair('RS256');
+  const firstJwk={...await exportJWK(publicKey),kid:'old'};
+  const nextJwk={...await exportJWK(next.publicKey),kid:'new'};
+  let document={keys:[firstJwk]};let calls=0;let unavailable=false;
+  let clock=Date.now();t.mock.method(Date,'now',()=>clock);
+  const remote=createRemoteJWKSet(new URL(base.jwks),{[customFetch]:async()=>{
+    calls++;if(unavailable)throw Error('Fixture offline');return Response.json(document);
+  }});
+  await remote({alg:'RS256',kid:'old'});assert.equal(calls,1);
+  document={keys:[nextJwk]};
+  await assert.rejects(remote({alg:'RS256',kid:'new'}),{code:'ERR_JWKS_NO_MATCHING_KEY'});
+  assert.equal(calls,1);
+  clock+=30_001; // Default cooldown has elapsed: unknown kid triggers automatic acquisition.
+  await remote({alg:'RS256',kid:'new'});assert.equal(calls,2);
+  await assert.rejects(remote({alg:'RS256',kid:'old'}),{code:'ERR_JWKS_NO_MATCHING_KEY'});
+  unavailable=true;
+  await remote({alg:'RS256',kid:'new'});assert.equal(calls,2); // Cache still valid.
+  clock+=600_001; // Default maximum cache age has elapsed: stale cached keys cannot authorize.
+  await assert.rejects(remote({alg:'RS256',kid:'new'}),/Fixture offline/);
+  assert.equal(calls,3);
+});
