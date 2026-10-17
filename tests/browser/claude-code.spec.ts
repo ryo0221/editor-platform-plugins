@@ -26,7 +26,7 @@ test('Code local browser: real manual edits, saved reread, reject/apply and expo
       expect(reply.isError, JSON.stringify(reply)).not.toBe(true); return reply.structuredContent as any;
     };
     const guide = await call('get_editor_guide', { kind: 'document' });
-    const { artifact } = await call('create_artifact', { kind: 'document', title: 'Code browser acceptance fixture', content: guide.exampleContent });
+    const { artifact } = await call('create_artifact', { kind: 'document', title: 'Code browser acceptance fixture ' + '長い成果物名'.repeat(8), content: guide.exampleContent });
     const handoff = await call('open_editor', {});
     expect(handoff.status).toBe('launch_requested');
     expect(handoff.browserVerified).toBe(false);
@@ -40,7 +40,24 @@ test('Code local browser: real manual edits, saved reread, reject/apply and expo
     await expect(frame.getByRole('region', { name: 'Slide Editor', exact: true })).toHaveCount(0);
     expect((await call('read_artifact', { artifactId: artifact.id })).artifact.revision).toBe(1);
     expect((await call('list_artifacts', {})).artifacts).toHaveLength(1);
-    await frame.getByRole('button', { name: '開く', exact: true }).click();
+    const row = frame.getByRole('group', { name: /Code browser acceptance fixture/ });
+    for (const width of [1280, 390]) {
+      await page.setViewportSize({ width, height: 900 });
+      await expect(row).toBeVisible();
+      const label = await row.locator(':scope > span').boundingBox();
+      const button = await row.getByRole('button', { name: '開く', exact: true }).boundingBox();
+      expect(label).not.toBeNull(); expect(button).not.toBeNull();
+      expect(button!.x - (label!.x + label!.width)).toBeGreaterThanOrEqual(0);
+      expect(button!.x - (label!.x + label!.width)).toBeLessThanOrEqual(12);
+      expect(await row.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
+      expect(button!.x + button!.width).toBeLessThanOrEqual(width);
+    }
+    await frame.getByRole('button', { name: '一覧を閉じる', exact: true }).focus();
+    await page.keyboard.press('Tab');
+    await expect(row.getByRole('button', { name: '開く', exact: true })).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(frame.getByRole('region', { name: 'Document Editor', exact: true })).toBeVisible();
+    await page.setViewportSize({ width: 1280, height: 900 });
     const text = frame.locator('[contenteditable="true"]').first();
     await text.fill('人が保存した文章');
     await frame.getByRole('button', { name: '保存', exact: true }).click();

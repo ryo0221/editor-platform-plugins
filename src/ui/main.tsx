@@ -213,7 +213,7 @@ function Editor() {
       <select aria-label="一覧の対象" disabled={busy} value={listState} onChange={(event) => { const state = event.target.value as 'active' | 'deleted'; setListState(state); void action(() => refreshInventory(state)); }}><option value="active">保存済み</option><option value="deleted">ゴミ箱</option></select>
       <button onClick={() => setInventoryOpen(false)}>一覧を閉じる</button>
       {!items.length && <p>成果物はありません。</p>}
-      {items.map((item) => <div className="proposal" key={item.id}><span>{item.title} · {domainLabels[item.kind as ArtifactKind]} · v{item.revision}</span><button disabled={busy || dirty || pending.dirty > 0 || pending.composing > 0} onClick={() => void action(async () => { await call('read_artifact', { artifactId: item.id }); })}>開く</button></div>)}
+      {items.map((item) => <div className="proposal artifact-row" role="group" aria-labelledby={`artifact-label-${item.id}`} key={item.id}><span id={`artifact-label-${item.id}`}>{item.title} · {domainLabels[item.kind as ArtifactKind]} · v{item.revision}</span><button aria-describedby={`artifact-label-${item.id}`} disabled={busy || dirty || pending.dirty > 0 || pending.composing > 0} onClick={() => void action(async () => { await call('read_artifact', { artifactId: item.id }); })}>開く</button></div>)}
       {nextCursor && <button disabled={busy} onClick={() => void action(() => refreshInventory(listState, nextCursor))}>続きを表示</button>}
     </aside>}
     <p className="status" role="status">{message}</p>
