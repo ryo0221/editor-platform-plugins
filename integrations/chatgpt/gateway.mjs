@@ -8,6 +8,7 @@ import { createRemoteJWKSet, jwtVerify } from 'jose';
 export function oauthConfiguration(input) {
   const c = { ...input };
   for (const name of ['resource', 'issuer', 'jwks']) {
+    if (typeof c[name] !== 'string') throw Error(`Invalid ${name}`);
     const u = new URL(c[name]);
     if (u.protocol !== 'https:' || u.username || u.password || u.search || u.hash) throw Error(`Invalid ${name}`);
     if (name === 'resource' && u.pathname !== '/mcp') throw Error('Resource must end in /mcp');

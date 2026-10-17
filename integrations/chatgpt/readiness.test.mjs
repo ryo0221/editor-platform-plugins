@@ -11,7 +11,7 @@ test('offline readiness rejects missing S256, mismatched identities and incompat
   const config=runtimeConfiguration(input);
   assert.equal(checkMetadata(config,metadata).status,'OFFLINE_METADATA_VALID');
   for(const patch of [{issuer:'https://other.invalid/'},{jwks_uri:'https://other.invalid/jwks'},{authorization_endpoint:'http://identity.example.invalid/authorize'},{token_endpoint:'https://user:password@identity.example.invalid/token'},{code_challenge_methods_supported:undefined},{code_challenge_methods_supported:['plain']},{scopes_supported:[]},{response_types_supported:['token']},{grant_types_supported:['client_credentials']},{token_endpoint_auth_methods_supported:[]}]) assert.throws(()=>checkMetadata(config,{...metadata,...patch}));
-  for(const patch of [{subject:123},{clientId:{}},{dataDirectory:'relative'},{metadataFile:'relative'},{port:-1},{registrationMode:'dcr'},{tokenEndpointAuthMethod:'unexpected'}]) assert.throws(()=>runtimeConfiguration({...input,...patch}));
+  for(const patch of [{resource:[input.resource]},{issuer:[input.issuer]},{jwks:[input.jwks]},{subject:123},{clientId:{}},{dataDirectory:'relative'},{metadataFile:'relative'},{port:-1},{registrationMode:'dcr'},{tokenEndpointAuthMethod:'unexpected'}]) assert.throws(()=>runtimeConfiguration({...input,...patch}));
   const cimd=runtimeConfiguration({...input,registrationMode:'cimd',clientId:'https://chatgpt.com/oauth/client.json'});
   assert.throws(()=>checkMetadata(cimd,metadata));
   assert.equal(checkMetadata(cimd,{...metadata,client_id_metadata_document_supported:true}).status,'OFFLINE_METADATA_VALID');
