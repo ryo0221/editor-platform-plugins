@@ -58,12 +58,28 @@ test('Code local browser: real manual edits, saved reread, reject/apply and expo
     await page.keyboard.press('Enter');
     await expect(frame.getByRole('region', { name: 'Document Editor', exact: true })).toBeVisible();
     await page.setViewportSize({ width: 1280, height: 900 });
-    const text = frame.locator('[contenteditable="true"]').first();
-    await text.fill('人が保存した文章');
+    const text = frame.getByRole('textbox', { name: 'Document body', exact: true });
+    const originalHeading = guide.exampleContent.blocks[0].text;
+    // Keyboard selection is observed by the native editor. fill() selects DOM
+    // contents directly and can race its focus-time selection restoration.
+    await text.click();
+    // Focus restoration can also interrupt an immediate key sequence. Retry
+    // selection only, before entering text; never retry or weaken the saved result.
+    await expect(async () => {
+      await text.press('ControlOrMeta+Home');
+      for (const _ of originalHeading) await text.press('Shift+ArrowRight');
+      expect(await text.evaluate(el => el.ownerDocument.getSelection()?.toString())).toBe(originalHeading);
+    }).toPass({ timeout: 3000 });
+    await page.keyboard.insertText('人が保存した文章');
     await frame.getByRole('button', { name: '保存', exact: true }).click();
     await expect(frame.locator('.save-state')).toContainText('v2');
     const saved = (await call('read_artifact', { artifactId: artifact.id })).artifact;
     expect(saved.content.blocks[0].text).toBe('人が保存した文章');
+    // Native saving normalizes layout/default properties; retain the other
+    // original paragraph's identity and text rather than its sparse input shape.
+    for (const block of guide.exampleContent.blocks.slice(1)) {
+      expect(saved.content.blocks.find((item: { id: string }) => item.id === block.id)?.text).toBe(block.text);
+    }
     const candidate = structuredClone(saved.content); candidate.blocks[0].text = 'レビュー後の文章';
     candidate.blocks[0].rich = [{ ...candidate.blocks[0].rich?.[0], text: 'レビュー後の文章' }];
     for (const accept of [false, true]) {

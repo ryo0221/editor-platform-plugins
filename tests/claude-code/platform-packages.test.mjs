@@ -36,7 +36,7 @@ for (const target of Object.keys(pins)) {
       assert.equal(new Set(entries).size, entries.length);
       for (const entry of entries) {
         assert.ok(entry.startsWith('./') && !entry.includes('\\') && !entry.split('/').includes('..'), entry);
-        assert.match(entry, /^\.\/(?:$|INSTALL\.md$|\.claude-plugin\/(?:$|marketplace\.json$)|plugins\/(?:$|editor-platform\/(?:$|(?:LICENSE|INSTALL\.md|SECURITY\.md|SOURCE\.md|THIRD-PARTY-NOTICES\.json|build-info\.json|package\.json|\.mcpbignore|\.mcp\.json)$|(?:runtime|source|licenses|node_modules|server|ui|skills|\.claude-plugin)\/.*$)))/);
+        assert.match(entry, /^\.\/(?:$|(?:INSTALL|CODEX)\.md$|\.claude-plugin\/(?:$|marketplace\.json$)|plugins\/(?:$|editor-platform\/(?:$|(?:LICENSE|INSTALL\.md|SECURITY\.md|SOURCE\.md|THIRD-PARTY-NOTICES\.json|build-info\.json|package\.json|\.mcpbignore|\.mcp\.json)$|(?:runtime|source|licenses|node_modules|server|ui|skills|\.claude-plugin)\/.*$|docs\/(?:$|codex\.md$))))/);
       }
       const types = execFileSync('tar', ['-tvzf', archive], { encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 }).trim().split('\n');
       assert.ok(types.every((entry) => entry.startsWith('-') || entry.startsWith('d')), 'only regular files/directories are allowed');
@@ -46,6 +46,13 @@ for (const target of Object.keys(pins)) {
       await verifyPackageSource((path) => readFile(join(extracted, 'plugins/editor-platform', path)), expectedPin);
       const root = './plugins/editor-platform/';
       const bytes = (path) => execFileSync('tar', ['-xOf', archive, root + path], { maxBuffer: 150 * 1024 * 1024 });
+      const entryGuide = await readFile(join(extracted, 'CODEX.md'), 'utf8');
+      assert.match(entryGuide, /\(plugins\/editor-platform\/docs\/codex\.md\)/);
+      assert.match(entryGuide, /Actual Codex acceptance is NOT RUN/);
+      assert.deepEqual(bytes('docs/codex.md'), await readFile(new URL('../../docs/codex.md', import.meta.url)));
+      // The shipped guide's relative security link must resolve within the package.
+      assert.match(bytes('docs/codex.md').toString(), /\(\.\.\/SECURITY\.md\)/);
+      assert.ok(bytes('SECURITY.md').length > 0);
       const info = JSON.parse(bytes('build-info.json'));
       assert.deepEqual(info.nodeDistribution, pin);
       const record = JSON.parse(await readFile(`${archive}.acceptance-template.json`, 'utf8'));
