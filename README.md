@@ -26,9 +26,9 @@ selective collaborative Undo. This preview is one workspace on one server proces
 not a multi-user service. Generic native candidates are whole-artifact, single-user
 proposals, not a shared text operation/merge contract. Domain models remain separate.
 
-React UI supports native structure/properties and retention; executable component
-preview requires a separately hosted, pinned React runtime and is not implemented
-by this preview. File and Review retain their upstream viewing/comparison semantics;
+React UI supports native structure/properties, retention and a bundled fixed
+Panel/Text/Counter component preview. This trusted catalog does not execute arbitrary
+user code; see [the preview boundary](docs/react-preview.md). File and Review retain their upstream viewing/comparison semantics;
 they are not arbitrary binary document editors. Graph uses the public relation Profile by default, or a declarative custom Profile supplied at creation and retained immutably with that artifact. Profile schema migration is not supported by this Host.
 
 Slide charts are static snapshots. Saved Data/Graph can also be embedded as fixed
@@ -88,11 +88,12 @@ Web chat requires an HTTPS-reachable MCP endpoint and host-compatible authorizat
 The shared UI is self-contained HTML served through an MCP resource; it does not
 fetch a separately hosted editor or load external scripts/styles.
 
-The current HTTP guard accepts a configured bearer token. OAuth discovery, account
-login, per-user isolation and marketplace publication are **not implemented**.
-Do not assume a static-token config can be installed into every web-chat host.
-Complete a compatible OAuth gateway/integration and actual-host testing before
-offering a public shared service. See the exact deployment boundary in the guide.
+The default HTTP guard accepts a configured bearer token. Optional single-owner
+OAuth candidates provide a [transport gateway](integrations/chatgpt/README.md) or
+[direct tool authorization](integrations/chatgpt/tool-auth.md). These are distinct
+deployment modes and must not be chained together. Live TLS/IdP and actual-host
+acceptance remain NOT RUN; per-user isolation and marketplace publication are not
+implemented. Do not offer this preview as a public shared service.
 
 ## Verify
 

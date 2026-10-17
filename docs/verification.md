@@ -443,3 +443,11 @@ An actual SDK 1.x client also passes a complete ReferenceSource (including targe
 to read_reference_source successfully: schema.shape normalization strips the extra
 field before the strict handler. The reported target/strict-schema candidate is
 not an unresolved bug; no runtime workaround was added.
+
+
+## Nine-PR integration validation
+
+See [the consolidated candidate record](integration-candidate.md) for all adopted
+PR heads, exact tested source commit, OS, PASS/FAIL/NOT RUN results and artifact
+SHA-256 values. This successor combines the independent records above; it does not
+retroactively certify them or constitute actual-host acceptance or a Release.
