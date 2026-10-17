@@ -42,7 +42,8 @@ still apply.
    the selected ID. Delete only on explicit request; deletion is recoverable
    trash, not permanent erasure. Export only advertised formats and check the
    returned files. Office export, cross-artifact sync, executable React preview,
-   Animation, Video and GIS are unavailable in this pin.
+   Animation supports asset-free schema-1 rectangles/groups and native JSON export.
+   Video and GIS adapters are unavailable.
 
 Artifacts persist outside the plugin installation. Local storage does not mean
 AI isolation: read/create/propose/export results share saved content with Claude
