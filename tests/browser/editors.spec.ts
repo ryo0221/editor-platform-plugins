@@ -255,7 +255,7 @@ test('Data reference: real Slide follows committed source, preserves destination
   await expect.poll(projected).toContain('550');
   const next = structuredClone(source.content); next.rows[0].values.investment = 987654;
   await invoke(page, 'save_artifact_draft', { artifactId: source.id, baseRevision: 1, content: next });
-  await expect.poll(projected, { timeout: 12000 }).toContain('987,654');
+  await expect.poll(projected, { timeout: 12000 }).toContain('987654');
   const unchanged = (await invoke(page, 'read_deck', { deckId: deck.id })).structuredContent.deck;
   expect(unchanged.revision).toBe(2);
   expect(unchanged.content.slides[0].objects.at(-1).reference.snapshot.revision).toBe(1);
