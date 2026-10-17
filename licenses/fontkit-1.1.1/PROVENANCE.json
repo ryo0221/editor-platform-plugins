@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "package": "@pdf-lib/fontkit",
+  "version": "1.1.1",
+  "status": "PARTIAL; PUBLICATION BLOCKED",
+  "input": {
+    "tarball": "https://registry.npmjs.org/@pdf-lib/fontkit/-/fontkit-1.1.1.tgz",
+    "integrity": "sha512-KjMd7grNapIWS/Dm0gvfHEilSyAmeLvrEGVcqLGi0VYebuqqzTbgF29efCx7tvx+IEbG3zQciRSWl3GkUSvjZg==",
+    "path": "dist/fontkit.es.js",
+    "sha256": "62ad9c769e6a7a9028b0c711504908f0a231955b39619aaabd56dd4eabe800be"
+  },
+  "sourceCommitEvidence": {
+    "repository": "https://github.com/Hopding/fontkit",
+    "commit": "72b8e42bd6a398d496a63a6d483eabeed43861fb",
+    "packageVersion": "1.1.0",
+    "npm111GitHead": null,
+    "warning": "No authoritative 1.1.1 release commit found; official 1.1.0 and 1.1.1 distributed JS files are identical, but this does not prove source reproducibility."
+  },
+  "astEvidence": [
+    {
+      "component": "base64-arraybuffer encode",
+      "package": "base64-arraybuffer",
+      "version": "0.1.5",
+      "path": "package/lib/base64-arraybuffer.js",
+      "sourceSha256": "f1749f1d4ac924264b74b5511385db93385398bb3c9668d6b91fece182558fd8",
+      "sourceLine": 19,
+      "bundleLine": 23710,
+      "normalizedAstSha256": "3933c4b4128b9199c25a6b82e4b305453612c36ed6e062bec41d66605d8739d3"
+    },
+    {
+      "component": "BrotliBitReader",
+      "package": "@pdf-lib/brotli",
+      "version": "0.0.0",
+      "path": "package/dec/bit_reader.js",
+      "sourceSha256": "1c7488ebdbcb2dba8a61965f5458452fe8cac38c06c3db0cc5184408a5aacf77",
+      "sourceLine": 29,
+      "bundleLine": 34242,
+      "normalizedAstSha256": "d58d774f317be75a9304eaf28d01234c3e98e5fbfffebe2b7c51c1418aca9c62"
+    }
+  ],
+  "files": [
+    {
+      "file": "string-decoder-MIT.txt",
+      "sha256": "0841300ba50a29586aa2aa2e706564f7fbee9d0dccf7c74dd870435d605c2943",
+      "source": {
+        "kind": "verbatim-bundle-excerpt",
+        "package": "@pdf-lib/fontkit",
+        "version": "1.1.1",
+        "path": "dist/fontkit.es.js",
+        "startLine": 3349,
+        "marker": "Copyright Joyent, Inc. and other Node contributors."
+      }
+    },
+    {
+      "file": "base64-arraybuffer-LICENSE-MIT.txt",
+      "sha256": "f3eca6ff762533fa5a77caf954a143e48afa204668cf97dce758c45a9e006be3",
+      "source": {
+        "kind": "official-npm-file",
+        "name": "base64-arraybuffer",
+        "version": "0.1.5",
+        "gitHead": "e9457ccb7b140f5ae54a2880c8e9b967ffb03a7d",
+        "tarball": "https://registry.npmjs.org/base64-arraybuffer/-/base64-arraybuffer-0.1.5.tgz",
+        "integrity": "sha512-437oANT9tP582zZMwSvZGy2nmSeAb8DW2me3y+Uv1Wp2Rulr8Mqlyrv3E7MLxmsiaPSMMDmiDVzgE+e8zlMx9g==",
+        "shasum": "73926771923b5a19747ad666aa5cd4bf9c6e9ce8",
+        "sha256": "1fa54c7c3ccce10f005415b6680df8015834c9614d7556a8220fecf2b7b45a62",
+        "path": "package/LICENSE-MIT",
+        "association": "Matching copyright header and encode AST; upstream 1.1.0 lock specifies 0.1.5. This is not a full fontkit build provenance proof."
+      }
+    },
+    {
+      "file": "brotli-Google-HEADER.txt",
+      "sha256": "1bbf33c8c8567a29b90ad8117bbc3659592f782911d295cc04a3f92799e36bd0",
+      "source": {
+        "kind": "verbatim-bundle-excerpt",
+        "package": "@pdf-lib/fontkit",
+        "version": "1.1.1",
+        "path": "dist/fontkit.es.js",
+        "startLine": 34218,
+        "marker": "Copyright 2013 Google Inc. All Rights Reserved."
+      }
+    },
+    {
+      "file": "Apache-2.0.txt",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "source": {
+        "kind": "official-versioned-license-text",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+        "version": "2.0, January 2004",
+        "association": "License version expressly identified by the retained Google header; appendix is unchanged."
+      }
+    }
+  ],
+  "remaining": [
+    "Version 1.1.1 authoritative release source commit/build lock/module map is absent",
+    "Fontkit fork/core copyright-specific full notice not found",
+    "Complete embedded module attribution remains unverified; partial headers do not clear the full bundle"
+  ],
+  "supportingTarballs": [
+    {
+      "name": "base64-arraybuffer",
+      "version": "0.1.5",
+      "gitHead": "e9457ccb7b140f5ae54a2880c8e9b967ffb03a7d",
+      "tarball": "https://registry.npmjs.org/base64-arraybuffer/-/base64-arraybuffer-0.1.5.tgz",
+      "integrity": "sha512-437oANT9tP582zZMwSvZGy2nmSeAb8DW2me3y+Uv1Wp2Rulr8Mqlyrv3E7MLxmsiaPSMMDmiDVzgE+e8zlMx9g==",
+      "shasum": "73926771923b5a19747ad666aa5cd4bf9c6e9ce8",
+      "sha256": "1fa54c7c3ccce10f005415b6680df8015834c9614d7556a8220fecf2b7b45a62"
+    },
+    {
+      "name": "@pdf-lib/brotli",
+      "version": "0.0.0",
+      "gitHead": null,
+      "tarball": "https://registry.npmjs.org/@pdf-lib/brotli/-/brotli-0.0.0.tgz",
+      "integrity": "sha512-hUQg09XRVvWglv395r36psY6ysNDOfIRTgVMfsA0/ZXwCk/b0bxjQj/QfpwPWQ/NUkQiiyEDTBoS5Rm0amUbhQ==",
+      "shasum": "18a5309649d4574dab97fa65c5b49cf50ed8ddb8",
+      "sha256": "fc847f0b854bab804004af133c790ec09fcaee56b34e2268d8ee36b7e304884b"
+    }
+  ]
+}
