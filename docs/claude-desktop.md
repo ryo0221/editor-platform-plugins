@@ -1,5 +1,8 @@
 # Claude Desktop 拡張のインストール
 
+実機検証の担当者は [Windows / macOS 受入表](claude-desktop-acceptance.md)を使用してください。
+実機受入と署名・正式提供の判断が完了するまでは、未署名プレビューを維持します。
+
 配布ファイル: `editor-platform-claude-0.1.3.mcpb`
 
 ## インストール
