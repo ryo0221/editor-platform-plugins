@@ -35,7 +35,7 @@ test('Code stdio omits human-only tools; isolated browser auth, saved revisions 
     await client.connect(transport);
     const names = (await client.listTools()).tools.map((tool) => tool.name);
     assert.ok(names.includes('open_editor'));
-    for (const name of ['save_slide_draft', 'apply_slide_proposal', 'reject_slide_proposal', 'save_artifact_draft', 'apply_artifact_proposal', 'set_slide_selection']) {
+    for (const name of ['save_slide_draft', 'apply_slide_proposal', 'reject_slide_proposal', 'save_artifact_draft', 'apply_artifact_proposal', 'reject_artifact_proposal', 'set_artifact_selection', 'set_slide_selection']) {
       assert.ok(!names.includes(name), name);
       const denied = await client.callTool({ name, arguments: {} });
       assert.equal(denied.isError, true);
