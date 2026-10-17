@@ -1,6 +1,6 @@
-# Tool-level OAuth hook candidate (#9, stacked on #15)
+# Tool-level OAuth hook candidate (#9)
 
-This branch adds the protocol signals required by the
+The shared server includes the protocol signals required by the
 [official ChatGPT authentication guide](https://developers.openai.com/plugins/build/auth)
 (checked 2026-10-17): per-tool `securitySchemes` and an error result containing
 `_meta["mcp/www_authenticate"]` with `error` and `error_description`. Actual ChatGPT
@@ -28,9 +28,9 @@ Here `config` is operator-validated configuration, bound to the exact owner,
 client and resource; `privateWorkspaceStore` uses that owner's private directory.
 Neither object comes from a tool call or incoming headers. The `verifier` is the
 JOSE-based implementation in `gateway.mjs`, not a caller-provided boolean or an
-unverified JWT decoder. The default CLI/stdin entrypoints are unchanged; this opt-in
-API is exercised by `tool-auth.test.mjs`. A deployment bootstrap, TLS routing and
-IdP configuration still require the owner-approved deployment work from #15.
+unverified JWT decoder. The default shared CLI/stdio entrypoints are unchanged. The dedicated
+`server.mjs` source launcher now supplies this configuration and verifier; see
+[the runbook](runbook.md). TLS routing and real IdP configuration remain pending.
 
 Use this mode directly behind the approved TLS terminator, preserving public Host
 and the original Authorization header. Do **not** put #15's credential-substituting
@@ -89,8 +89,7 @@ concurrent request isolation, failure between transport and tool checks, and
 model-only omission. Existing real stdio/Code tests remain required regressions.
 No token, private content or auth account is needed from the user.
 
-The prior README's tool-level gap describes #15 alone; this stacked branch supplies
-its local implementation. End-to-end IdP PKCE/consent, approved TLS, initial linking,
+The earlier #15 transport-only adapter remains separate from this integrated mode. End-to-end IdP PKCE/consent, approved TLS, initial linking,
 expiry/relink UI in signed-in ChatGPT, CSP and all actual-host acceptance remain
 NOT RUN. No public-host connection, persistent OAuth registration, release, signing,
 CI change or Issue closure is performed by these checks.
