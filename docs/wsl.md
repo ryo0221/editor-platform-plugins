@@ -16,10 +16,13 @@ fall back to xdg-open in WSL, so a Linux browser does not silently satisfy the
 Windows-browser request. Ordinary Linux uses xdg-open, macOS uses open and native
 Windows uses explorer.exe as before.
 
-An opener's nonzero exit, signal, permission error or 10-second timeout is a
-redacted BROWSER_UNAVAILABLE error. It does not trigger a second opener: a window
-may already exist. In particular, explorer.exe exit 1 is not claimed as success.
-A zero exit means handoff reported success, not proof a Windows window displayed.
+An opener's nonzero exit (except Explorer code 1), signal, permission error or
+10-second timeout is a redacted BROWSER_UNAVAILABLE error. It does not trigger a second opener: a window
+may already exist. Explorer code 1 returns `launch_unconfirmed`, not a BROWSER_UNAVAILABLE failure
+or confirmed success. A zero exit returns `launch_requested`. Both carry
+`browserVerified: false`; neither proves connection, rendering or visible content.
+Ask the user to check the existing window before retrying. No browser acknowledgement
+endpoint is introduced.
 On timeout the launcher process is signalled to stop; descendants may already have
 started. Inspect the actual browser before retrying.
 
@@ -52,7 +55,7 @@ it to a WSL IP or localhost can break React's origin checks. No public bind or L
 port forwarding is part of this implementation.
 
 **Manual URL fallback remains unavailable.** The capability is only passed to the
-opener. open_editor returns no URL, token or port; the browser consumes the fragment
+opener. open_editor returns handoff status, no URL, token or port; the browser consumes the fragment
 into tab session storage and clears the address fragment. Do not retrieve it with
 model tools, paste it into chat, or add diagnostic logging. When launch cannot work,
 record FAIL/BLOCKED and stop; a human-only fallback would need separate review.

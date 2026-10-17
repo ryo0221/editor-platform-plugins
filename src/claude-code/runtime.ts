@@ -4,7 +4,7 @@ import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { DeckStore } from '../server/decks';
-import { launchBrowser } from './browser-opener';
+import { launchBrowser, browserHandoffReport, type BrowserHandoff } from './browser-opener';
 import { createEditorServer } from '../server/mcp';
 import { startHttp } from '../server/main';
 import { desktopDataDirectory } from '../desktop/storage';
@@ -17,7 +17,7 @@ export function codeDataDirectory(env: NodeJS.ProcessEnv = process.env) {
     ? desktopDataDirectory(env)
     : join(desktopDataDirectory({ ...env, EDITOR_DATA_DIR: undefined }), '..', 'ClaudeCode');
 }
-export async function startCode(bundleRoot: URL, openBrowser = launchBrowser) {
+export async function startCode(bundleRoot: URL, openBrowser: (url: string) => Promise<BrowserHandoff | void> = launchBrowser) {
   const directory = codeDataDirectory();
   await mkdir(directory, { recursive: true, mode: 0o700 });
   const unlock = await lockWorkspace(directory);
@@ -39,8 +39,7 @@ export async function startCode(bundleRoot: URL, openBrowser = launchBrowser) {
     await unlock(); throw error;
   }
   const server = createEditorServer(store, html, { modelOnly: true, openEditor: async () => {
-    await openBrowser(`${address}/browser#${token}`);
-    return { status: 'opened', message: 'Use the local browser window. Choose Saved artifacts to open the created artifact. Save and apply/reject proposals there; read the saved artifact again afterwards.' };
+    return browserHandoffReport(await openBrowser(`${address}/browser#${token}`));
   } });
   let closed = false;
   const close = async () => {

@@ -108,7 +108,9 @@ function Editor() {
   useEffect(() => {
     void connection.then(() => {
       setCanShareContext(!!bridge.getHostCapabilities()?.updateModelContext);
-      setMessage('図・表・レイアウトを含む成果物はチャットから依頼できます。空の成果物は下のボタンで作成できます。');
+      const initialInventory = new URLSearchParams(location.search).get('initial') === 'inventory';
+      setMessage(initialInventory ? '保存済みの成果物から対象を選んで開いてください。新規作成の種類は、保存済み成果物の選択ではありません。' : '図・表・レイアウトを含む成果物はチャットから依頼できます。空の成果物は下のボタンで作成できます。');
+      if (initialInventory && !recordRef.current) void action(() => refreshInventory());
     }).catch((e: Error) => setMessage(e.message));
   }, []);
   useEffect(() => {
@@ -172,7 +174,7 @@ function Editor() {
     <header><div><span className="eyebrow">OPEN EDITOR</span><h1>{record?.title ?? '会話から、編集できる成果物へ。'}</h1></div>
       <span className="save-state">{record ? `${domainLabels[record.kind ?? 'slide']} · v${record.revision} · ${record.deletedAt ? 'ゴミ箱' : dirty || pending.dirty ? '未保存' : '保存済み'}` : 'EDITORS'}</span></header>
     <nav aria-label="成果物の操作">
-      <select aria-label="Editorの種類" disabled={busy} value={newKind} onChange={(e) => setNewKind(e.target.value as ArtifactKind)}>{artifactKinds.map((kind) => <option key={kind} value={kind}>{domainLabels[kind]}</option>)}</select>
+      <span>新規作成の種類：</span><select aria-label="Editorの種類" disabled={busy} value={newKind} onChange={(e) => setNewKind(e.target.value as ArtifactKind)}>{artifactKinds.map((kind) => <option key={kind} value={kind}>{domainLabels[kind]}</option>)}</select>
       <button disabled={busy || pending.dirty > 0 || pending.composing > 0 || dirty} onClick={() => void action(async () => {
         await call('create_artifact', { kind: newKind, title: `新しい${domainLabels[newKind]}` }); setMessage('成果物を編集できます。');
       })}>成果物を作成</button>

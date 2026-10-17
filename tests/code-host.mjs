@@ -8,4 +8,5 @@ if (!process.env.EDITOR_TEST_BUNDLE) {
 }
 await startCode(process.env.EDITOR_TEST_BUNDLE ? pathToFileURL(process.env.EDITOR_TEST_BUNDLE + '/') : new URL('../dist-code-test/', import.meta.url), async (url) => {
   await writeFile(process.env.EDITOR_TEST_URL_FILE, url, { mode: 0o600 });
+  return process.env.EDITOR_TEST_HANDOFF === 'unconfirmed' ? 'unconfirmed' : 'handoff_requested';
 });
