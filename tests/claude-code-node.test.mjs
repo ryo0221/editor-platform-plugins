@@ -17,3 +17,17 @@ test('Code runtime rejects host Node, unpinned/repacked archives and missing inp
     await assert.rejects(access(target));
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
+
+test('Code targets preserve the Linux pin and reject unknown or wrong-target input', async () => {
+  const { selectNodeDistribution, nodeDistribution } = await import('../scripts/claude-code-node.mjs');
+  assert.deepEqual(selectNodeDistribution(), nodeDistribution);
+  assert.throws(() => selectNodeDistribution('linux-arm64'), /Unsupported/);
+  assert.throws(() => selectNodeDistribution('__proto__'), /Unsupported/);
+  for (const target of ['linux-x64', 'darwin-arm64', 'darwin-x64', 'win32-x64']) {
+    const pin = selectNodeDistribution(target);
+    assert.equal(`${pin.platform}-${pin.arch}`, target);
+    assert.match(pin.sha256, /^[a-f0-9]{64}$/);
+    assert.equal(new URL(pin.url).hostname, 'nodejs.org');
+    await assert.rejects(verifyNodeDistribution(process.execPath, pin), /SHA-256 mismatch/);
+  }
+});
