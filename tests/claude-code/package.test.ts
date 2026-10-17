@@ -1,7 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, readFile, writeFile, rm, rename } from 'node:fs/promises';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
+import { createInterface } from 'node:readline';
+import { once } from 'node:events';
 import { createHash } from 'node:crypto';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -120,4 +122,77 @@ test('Code archive: standalone runtime/UI, human-only channel, relocation and re
       }
     }
   } finally { await rm(temp, { recursive: true, force: true }); }
+});
+
+test('bundled shell client: no external Node/npm, JSON lines, model boundary and EOF restart', { timeout: 60000 }, async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'shell-package-'));
+  const extracted = join(directory, 'package with spaces'); await mkdir(extracted);
+  execFileSync('tar', ['-xzf', resolve('release/editor-platform-claude-code-0.1.3-linux-x64.tar.gz'), '-C', extracted]);
+  const plugin = join(extracted, 'plugins/editor-platform');
+  const data = join(directory, 'data');
+  assert.match(execFileSync(join(plugin, 'runtime/node'), [join(plugin, 'server/shell-client.mjs'), '--help'],
+    { cwd: directory, env: { PATH: '' }, encoding: 'utf8' }), /EOF stops the server/);
+  const info = JSON.parse(await readFile(join(plugin, 'build-info.json'), 'utf8'));
+  assert.equal(createHash('sha256').update(await readFile(join(plugin, 'server/shell-client.mjs'))).digest('hex'), info.shellClientSha256);
+  assert.match(await readFile(join(plugin, 'docs/codex-shell.md'), 'utf8'), /not bundled runtime requirements/);
+  let artifactId = '';
+  try {
+    for (const input of ['', '{"id":"early","method":"tools/list"}\n']) {
+      const child = spawn(join(plugin, 'runtime/node'), [join(plugin, 'server/shell-client.mjs')], {
+        cwd: directory, env: { PATH: '', EDITOR_DATA_DIR: data }, stdio: ['pipe', 'pipe', 'pipe'],
+      });
+      let output = ''; child.stdout.on('data', chunk => { output += chunk; });
+      const exited = once(child, 'exit');
+      child.stdin.end(input); // Deliberately before MCP initialization/ready.
+      try {
+        const [code, signal] = await exited;
+        assert.equal(code, 0); assert.equal(signal, null);
+        const rows = output.trim().split('\n').map(line => JSON.parse(line));
+        assert.equal(rows[0].event, 'ready');
+        assert.equal(rows.length, input ? 2 : 1);
+        if (input) { assert.equal(rows[1].id, 'early'); assert.ok(rows[1].result.tools.length > 0); }
+      } finally { child.kill('SIGTERM'); }
+    }
+    for (let restart = 0; restart < 2; restart++) {
+      const child = spawn(join(plugin, 'runtime/node'), [join(plugin, 'server/shell-client.mjs')], {
+        cwd: directory, env: { PATH: '', EDITOR_DATA_DIR: data }, stdio: ['pipe', 'pipe', 'pipe'],
+      });
+      const exited = once(child, 'exit');
+      const lines = createInterface({ input: child.stdout })[Symbol.asyncIterator]();
+      const next = async () => {
+        const line = await lines.next(); assert.equal(line.done, false); return JSON.parse(line.value!);
+      };
+      const request = async (value: unknown) => { child.stdin.write(JSON.stringify(value) + '\n'); return next(); };
+      try {
+        assert.deepEqual(await next(), { event: 'ready', channel: 'model-only', browserVerified: false });
+        const tools = (await request({ id: 'list', method: 'tools/list' })).result.tools.map((t: { name: string }) => t.name);
+        assert.ok(tools.includes('create_artifact'));
+        for (const tool of ['save_artifact_draft', 'apply_artifact_proposal', 'reject_artifact_proposal']) {
+          assert.ok(!tools.includes(tool));
+          assert.equal((await request({ id: tool, tool, arguments: {} })).result.isError, true);
+        }
+        child.stdin.write('{broken request\n');
+        assert.deepEqual(await next(), { id: null, error: 'Invalid JSON.' });
+        if (!restart) {
+          const guide = (await request({ id: 1, tool: 'get_editor_guide', arguments: { kind: 'document' } })).result.structuredContent;
+          const created = await request({ id: 2, tool: 'create_artifact', arguments: { kind: 'document', title: 'Fictional shell example', content: guide.exampleContent } });
+          assert.equal(created.id, 2); assert.equal(created.result.isError, undefined);
+          artifactId = created.result.structuredContent.artifact.id;
+          assert.deepEqual(created.result.structuredContent.artifact.content, guide.exampleContent);
+          // Empty PATH proves a failed opener is reported, not silently replaced.
+          const opened = await request({ id: 3, tool: 'open_editor', arguments: {} });
+          assert.equal(opened.result.isError, true);
+          assert.ok(!JSON.stringify(opened).includes('http://127.0.0.1:'));
+        } else {
+          const read = (await request({ id: 4, tool: 'read_artifact', arguments: { artifactId } })).result.structuredContent.artifact;
+          assert.equal(read.title, 'Fictional shell example'); assert.equal(read.revision, 1);
+        }
+        child.stdin.end();
+        const [code, signal] = await exited;
+        assert.equal(code, 0); assert.equal(signal, null);
+      } finally {
+        child.kill('SIGTERM');
+      }
+    }
+  } finally { await rm(directory, { recursive: true, force: true }); }
 });

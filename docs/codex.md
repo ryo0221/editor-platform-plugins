@@ -1,6 +1,10 @@
 # Codex CLI candidate installation and acceptance
 
-Status: **preparing / NOT RUN in an authenticated actual host**. This guide is
+For the existing-session route without native MCP registration, use
+[Codex through a shell and browser](codex-shell.md). Its limited cloud evidence
+does not certify the native CLI route below.
+
+Status: **native CLI registration preparing / NOT RUN in an authenticated actual host**. This guide is
 an acceptance procedure for reviewers with a prebuilt candidate, not a public
 availability claim. There is no Release download yet. The existing
 `.mcp.codex.json` / compatibility manifest is a source-development configuration;
