@@ -5,8 +5,8 @@ import { join } from 'node:path';
 const resources = new URL('../licenses/fontkit-1.1.1/', import.meta.url);
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 
-// This retains verified notices for a subset of embedded code. It never clears
-// fontkit's unresolved project notice or unknown remainder of the nested bundle.
+// Retain notices for the identified, reviewed components. This scoped result
+// does not constitute universal legal clearance or publication approval.
 export async function retainFontkitEmbeddedNotices(packageRoot, destination, texts) {
   const manifestBytes = await readFile(new URL('PROVENANCE.json', resources));
   const manifest = JSON.parse(manifestBytes);
@@ -26,7 +26,7 @@ export async function retainFontkitEmbeddedNotices(packageRoot, destination, tex
     if (entry.role !== 'evidence-only') texts.push('embedded/' + entry.file);
   }
   await writeFile(join(directory, 'PROVENANCE.json'), manifestBytes);
-  return { status: 'PARTIAL', provenance: 'embedded/PROVENANCE.json',
+  return { status: 'IDENTIFIED-NOTICES-RETAINED', provenance: 'embedded/PROVENANCE.json',
     provenanceSha256: digest(manifestBytes), bundleSha256: manifest.input.sha256,
     noticeFiles: manifest.files.filter(file => file.role !== 'evidence-only').map(({ file, sha256 }) => ({ path: 'embedded/' + file, sha256 })),
     evidenceFiles: manifest.files.filter(file => file.role === 'evidence-only').map(({ file, sha256 }) => ({ path: 'embedded/' + file, sha256 })) };

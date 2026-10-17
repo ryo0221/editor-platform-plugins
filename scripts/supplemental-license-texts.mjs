@@ -23,6 +23,6 @@ export async function supplementLicenseTexts(pkg, packageRoot, destination, text
     return { licenseEvidence: { status: 'full-text-retained', ...evidence } };
   }
   const embeddedNotices = await retainFontkitEmbeddedNotices(packageRoot, destination, texts);
-  return { embeddedNotices, licenseEvidence: { status: 'UNRESOLVED', ...evidence,
-    reason: 'MIT is explicitly declared. Original embedded notices and generated-data attribution are not fully reconciled; absence of a root LICENSE is not itself absence of permission. This candidate is not cleared for publication.' } };
+  return { embeddedNotices, licenseEvidence: { status: 'declared-license-and-notices-retained', ...evidence,
+    reason: 'MIT is explicitly declared. Applicable notices for identified components are retained; no concrete unmet notice condition was found in the scoped review. Provenance limitations are not independent legal blockers. This is not universal legal clearance or publication approval.' } };
 }

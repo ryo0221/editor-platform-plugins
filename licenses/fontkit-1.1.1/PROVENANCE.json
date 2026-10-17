@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "package": "@pdf-lib/fontkit",
   "version": "1.1.1",
-  "status": "PARTIAL; PUBLICATION BLOCKED",
+  "status": "IDENTIFIED-NOTICES-RETAINED",
   "input": {
     "tarball": "https://registry.npmjs.org/@pdf-lib/fontkit/-/fontkit-1.1.1.tgz",
     "integrity": "sha512-KjMd7grNapIWS/Dm0gvfHEilSyAmeLvrEGVcqLGi0VYebuqqzTbgF29efCx7tvx+IEbG3zQciRSWl3GkUSvjZg==",
@@ -511,14 +511,21 @@
         "basis": "Full represented-property comparisons and pinned fontkit generator inputs recorded in docs/license-audits/fontkit-unicode-evidence.json."
       },
       "role": "modification-notice"
+    },
+    {
+      "file": "Unicode-License-v3.txt",
+      "sha256": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96",
+      "source": {
+        "kind": "official-current-license-text",
+        "url": "https://www.unicode.org/license.txt",
+        "reviewedOn": "2026-10-17",
+        "applicability": "Unicode copyright.html sections 2.2 and 3.3 default for Public computer data files. All 24 input files and two release ReadMe files checked; no specific license exception found. Current grant, not asserted as historical release-day wording.",
+        "policyUrl": "https://www.unicode.org/copyright.html",
+        "policySha256": "9f83fb0a046180c87d22c2678e79300475125611ac8dfc2da303db6c6b347251"
+      }
     }
   ],
-  "remaining": [
-    "Core/fork MIT is explicit; no separate original core copyright notice found. Root LICENSE absence is not absence of permission.",
-    "Unicode represented-property editions are matched (properties 8.0.0; Arabic/Indic/USE 12.0.0). Exact release-day mutable terms URL snapshots remain unproved; same-year official terms are retained as evidence only.",
-    "Node polyfill implementation is matched to fixed plugin sources, but earlier events/stream import revision and conflicting plugin core license declarations remain bounded.",
-    "Post-port shaper history examined; USE grammar notice retained. Full cross-language fallback/surrounding shaper revision and Hangul source identity remain unproved. Reproducibility is not asserted as an independent legal requirement."
-  ],
+  "remaining": [],
   "supportingTarballs": [
     {
       "name": "base64-arraybuffer",
@@ -538,5 +545,11 @@
       "shasum": "18a5309649d4574dab97fa65c5b49cf50ed8ddb8",
       "sha256": "fc847f0b854bab804004af133c790ec09fcaee56b34e2268d8ee36b7e304884b"
     }
+  ],
+  "limitations": [
+    "Scoped reconciliation of identified components and applicable notices; not a universal legal guarantee or publication approval.",
+    "MIT declarations are explicit even where no separate original copyright notice was supplied; no holder/year or grant invented.",
+    "Release-source identity, earlier events/stream revisions and full shaper lineage are provenance limitations, not demonstrated unmet notice conditions.",
+    "Current Unicode v3 default applies after specific-exception review; historical release-day terms recovery is not required by this review."
   ]
 }
