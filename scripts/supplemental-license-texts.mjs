@@ -24,5 +24,5 @@ export async function supplementLicenseTexts(pkg, packageRoot, destination, text
   }
   const embeddedNotices = await retainFontkitEmbeddedNotices(packageRoot, destination, texts);
   return { embeddedNotices, licenseEvidence: { status: 'UNRESOLVED', ...evidence,
-    reason: 'Official README contains only a generic MIT link, not the project-specific full notice. Prebundled third-party code also needs provenance review. This candidate is not cleared for publication.' } };
+    reason: 'MIT is explicitly declared. Original embedded notices and generated-data attribution are not fully reconciled; absence of a root LICENSE is not itself absence of permission. This candidate is not cleared for publication.' } };
 }

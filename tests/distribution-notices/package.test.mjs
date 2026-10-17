@@ -9,6 +9,10 @@ for (const kind of ['code', 'desktop']) test(`${kind} archive retains full fastd
   const zip = kind === 'desktop' ? unzipSync(await readFile('release/editor-platform-claude-0.1.3.mcpb')) : undefined;
   const bytes = path => zip ? Buffer.from(zip[path]) : execFileSync('tar', ['-xOf', 'release/editor-platform-claude-code-0.1.3-linux-x64.tar.gz', './plugins/editor-platform/' + path]);
   const notices = JSON.parse(bytes('THIRD-PARTY-NOTICES.json'));
+  const coverage = JSON.parse(await readFile('docs/license-audits/fontkit-closure-evidence.json'));
+  for (const row of coverage.existingArchiveCoverage.filter(row => row.existingArchivePaths.length)) {
+    assert.equal(createHash('sha256').update(bytes(row.existingArchivePaths[0])).digest('hex'), row.sha256);
+  }
   for (const name of ['fastdom', '@pdf-lib/fontkit']) {
     const entry = notices.find(n => n.name === name); assert.ok(entry);
     const path = `licenses/npm/${name.replaceAll('/', '__')}@${entry.version}/README.md`;
@@ -27,6 +31,10 @@ for (const kind of ['code', 'desktop']) test(`${kind} archive retains full fastd
       const provenance = bytes(base + entry.embeddedNotices.provenance);
       assert.deepEqual(provenance, await readFile('licenses/fontkit-1.1.1/PROVENANCE.json'));
       assert.equal(createHash('sha256').update(provenance).digest('hex'), entry.embeddedNotices.provenanceSha256);
+      for (const file of entry.embeddedNotices.evidenceFiles) {
+        assert.ok(!entry.texts.includes(file.path));
+        assert.equal(createHash('sha256').update(bytes(base + file.path)).digest('hex'), file.sha256);
+      }
       for (const file of entry.embeddedNotices.noticeFiles) {
         assert.ok(entry.texts.includes(file.path));
         assert.equal(createHash('sha256').update(bytes(base + file.path)).digest('hex'), file.sha256);

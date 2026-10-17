@@ -1,0 +1,597 @@
+{
+  "schemaVersion": 1,
+  "input": {
+    "tarball": "https://registry.npmjs.org/@pdf-lib/fontkit/-/fontkit-1.1.1.tgz",
+    "integrity": "sha512-KjMd7grNapIWS/Dm0gvfHEilSyAmeLvrEGVcqLGi0VYebuqqzTbgF29efCx7tvx+IEbG3zQciRSWl3GkUSvjZg==",
+    "path": "dist/fontkit.es.js",
+    "sha256": "62ad9c769e6a7a9028b0c711504908f0a231955b39619aaabd56dd4eabe800be"
+  },
+  "packages": [
+    {
+      "name": "buffer",
+      "version": "5.6.0",
+      "key": "buffer-5.6.0",
+      "license": "MIT",
+      "gitHead": "d7b15a178294ebc85368aac87b0831dc48d6fba8",
+      "tarball": "https://registry.npmjs.org/buffer/-/buffer-5.6.0.tgz",
+      "integrity": "sha512-/gDYp/UtU0eA1ys8bOs9J6a+E/KWIY+DZ+Q2WESNUA0jFRsJOc0SNUO6xJ5SGA1xueg3NL65W6s+NY5l9cunuw==",
+      "shasum": "a31749dc7d81d84db08abf937b6b8c4033f62786",
+      "sha256": "b9ec3ea5264dc312d869ff76f68bc770cab6df117de95e7ba7e196c4220e2505",
+      "notices": [
+        "package/LICENSE"
+      ]
+    },
+    {
+      "name": "base64-js",
+      "version": "1.3.1",
+      "key": "base64-js-1.3.1",
+      "license": "MIT",
+      "gitHead": "08a344d6ca13772acc42df2515312ceac75b5456",
+      "tarball": "https://registry.npmjs.org/base64-js/-/base64-js-1.3.1.tgz",
+      "integrity": "sha512-mLQ4i2QO1ytvGWFWmcngKO//JXAQueZvwEKtjgQFM4jIK0kU+ytMfplL8j+n5mspOfjHwoAg+9yhb7BwAHm36g==",
+      "shasum": "58ece8cb75dd07e71ed08c736abc5fac4dbf8df1",
+      "sha256": "e07a87b3d76297252f6284c37fc2c16929a80c17886740ba2093251b82e40368",
+      "notices": [
+        "package/LICENSE"
+      ]
+    },
+    {
+      "name": "ieee754",
+      "version": "1.1.13",
+      "key": "ieee754-1.1.13",
+      "license": "BSD-3-Clause",
+      "gitHead": "4971f0e802c2cbdfad7791bd223c53e37b4ebb85",
+      "tarball": "https://registry.npmjs.org/ieee754/-/ieee754-1.1.13.tgz",
+      "integrity": "sha512-4vf7I2LYV/HaWerSo3XmlMkp5eZ83i+/CDluXi/IGTs/O1sejBNhTtnxzmRZfvOUqj7lZjqHkeTvpgSFDlWZTg==",
+      "shasum": "ec168558e95aa181fd87d37f55c32bbcb6708b84",
+      "sha256": "603e6b4c40da1551bbaabe8aa8a4b35f62f132b0b60e99906a59f0ad04d47ae2",
+      "notices": [
+        "package/LICENSE"
+      ]
+    },
+    {
+      "name": "iconv-lite",
+      "version": "0.4.24",
+      "key": "iconv-lite-0.4.24",
+      "license": "MIT",
+      "gitHead": "efbbb0937ca8dda1c14e0b69958b9d6f20771f7a",
+      "tarball": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.24.tgz",
+      "integrity": "sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==",
+      "shasum": "2022b4b25fbddc21d2f524974a474aafe733908b",
+      "sha256": "576c64f2098ed44c3d5e48d7a9dc65512700c1d6a969a71a74d474da8e734635",
+      "notices": [
+        "package/LICENSE"
+      ]
+    },
+    {
+      "name": "safer-buffer",
+      "version": "2.1.2",
+      "key": "safer-buffer-2.1.2",
+      "license": "MIT",
+      "gitHead": "e8ac214944eda30e1e6c6b7d7e7f6a21cf7dce7c",
+      "tarball": "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz",
+      "integrity": "sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==",
+      "shasum": "44fa161b0187b9549dd84bb91802f9bd8385cd6a",
+      "sha256": "78812f65ae3b98071ce1c9bacbe0666f4220d0b2753c2a11530eb27df440a3b3",
+      "notices": [
+        "package/LICENSE"
+      ]
+    },
+    {
+      "name": "@pdf-lib/restructure",
+      "version": "0.0.1",
+      "key": "@pdf-lib_restructure-0.0.1",
+      "license": "MIT",
+      "gitHead": null,
+      "tarball": "https://registry.npmjs.org/@pdf-lib/restructure/-/restructure-0.0.1.tgz",
+      "integrity": "sha512-CgCG7w7GiYxBLo8AyjP3viIiyPyYuoZWXczNTxZQtElXWQN5Vw8A2TGcrvwstCwOrJHfT4KeNGpEvLApVYoBuA==",
+      "shasum": "e38c81b6ddaa8c982e7780620c89bddfb6c53653",
+      "sha256": "d06fee5fce6ee121ad78c5d23175f9f0507ec9dca312dedd508e9c75d1aa40c2",
+      "notices": []
+    },
+    {
+      "name": "@pdf-lib/unicode-properties",
+      "version": "0.0.1",
+      "key": "@pdf-lib_unicode-properties-0.0.1",
+      "license": "MIT",
+      "gitHead": null,
+      "tarball": "https://registry.npmjs.org/@pdf-lib/unicode-properties/-/unicode-properties-0.0.1.tgz",
+      "integrity": "sha512-zPhtCnQ4YuR2CX0h7zqBN7dPe/XN2dL71qi7Xh8JQON2IibogLdezwlEn1AIzs3m/+kjeKxXsQClN/D4U2i5NA==",
+      "shasum": "7f4a6a5ad7f9ec889449dcc51317217230b2d01f",
+      "sha256": "6703a1c2dfae72c8415f65966a6ea5c8d4c0bb695eb03a57489135960146a8e5",
+      "notices": [
+        "package/LICENSE"
+      ]
+    },
+    {
+      "name": "unicode-trie",
+      "version": "0.3.1",
+      "key": "unicode-trie-0.3.1",
+      "license": "MIT",
+      "gitHead": "0e19655c9c291c133e577bcacd2c25b7c82455f7",
+      "tarball": "https://registry.npmjs.org/unicode-trie/-/unicode-trie-0.3.1.tgz",
+      "integrity": "sha512-WgVuO0M2jDl7hVfbPgXv2LUrD81HM0bQj/bvLGiw6fJ4Zo8nNFnDrA0/hU2Te/wz6pjxCm5cxJwtLjo2eyV51Q==",
+      "shasum": "d671dddd89101a08bac37b6a5161010602052085",
+      "sha256": "d4c160af91e358f3014ff1a316f9ab3c9cd2b89f8f522af4a33488257dd2b13d",
+      "notices": []
+    },
+    {
+      "name": "tiny-inflate",
+      "version": "1.0.2",
+      "key": "tiny-inflate-1.0.2",
+      "license": "MIT",
+      "gitHead": "3ec48d93136ddabfd4829cb0312840e675b71053",
+      "tarball": "https://registry.npmjs.org/tiny-inflate/-/tiny-inflate-1.0.2.tgz",
+      "integrity": "sha512-fEndoHfuiSlXtvG0EA1gB4uAdy2dbQ3WfOtQw1/Y8NQ9rxtGbGkENwfGmN0wK7OkxDz1lgc5Ei2LQ0oxKDUcVw==",
+      "shasum": "93d9decffc8805bd57eae4310f0b745e9b6fb3a7",
+      "sha256": "9d9a0912315462c9c380544ae325a2cb4d37471c0099be8444e99589213539d8",
+      "notices": []
+    },
+    {
+      "name": "tiny-inflate",
+      "version": "1.0.3",
+      "key": "tiny-inflate-1.0.3",
+      "license": "MIT",
+      "gitHead": "f4999b9c77263a97eb3a6942be247ece85a3d457",
+      "tarball": "https://registry.npmjs.org/tiny-inflate/-/tiny-inflate-1.0.3.tgz",
+      "integrity": "sha512-pkY1fj1cKHb2seWDy0B16HeWyczlJA9/WW3u3c4z/NiWDsO3DOU5D7nhTLE9CF0yXv/QZFY7sEJmj24dK+Rrqw==",
+      "shasum": "122715494913a1805166aaf7c93467933eea26c4",
+      "sha256": "73932b339424e5ffaeaf043e6481229cab407ee277b2a01fa23938dfad6a8f4e",
+      "notices": [
+        "package/LICENSE"
+      ]
+    },
+    {
+      "name": "clone",
+      "version": "1.0.4",
+      "key": "clone-1.0.4",
+      "license": "MIT",
+      "gitHead": "3095b1b4182ea1babc453b3a46924754831b66bf",
+      "tarball": "https://registry.npmjs.org/clone/-/clone-1.0.4.tgz",
+      "integrity": "sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==",
+      "shasum": "da309cc263df15994c688ca902179ca3c7cd7c7e",
+      "sha256": "3393d5552400ded353826ad4052a7968f61c0ff59d4b515d0a502ea150588023",
+      "notices": [
+        "package/LICENSE"
+      ]
+    },
+    {
+      "name": "dfa",
+      "version": "1.2.0",
+      "key": "dfa-1.2.0",
+      "license": "MIT",
+      "gitHead": "3f5e603e5082caedabefefdf53e8a6ca3111e966",
+      "tarball": "https://registry.npmjs.org/dfa/-/dfa-1.2.0.tgz",
+      "integrity": "sha512-ED3jP8saaweFTjeGX8HQPjeC1YYyZs98jGNZx6IiBvxW7JG5v492kamAQB3m2wop07CvU/RQmzcKr6bgcC5D/Q==",
+      "shasum": "96ac3204e2d29c49ea5b57af8d92c2ae12790657",
+      "sha256": "d781eb3a307ab6aa2d97028f695b17dbeadf6fd27788c333b1fb96d18d2a23ad",
+      "notices": []
+    }
+  ],
+  "matches": [
+    {
+      "name": "buffer",
+      "version": "5.6.0",
+      "matches": [
+        {
+          "file": "index.js",
+          "fileSha256": "e1e6c70a59201231644b8e8740a1eb06c0f8fc59193df533ba8d5e7721eb08c1",
+          "sourceLine": 942,
+          "function": "utf8Slice",
+          "astSha256": "2d8748810addea50e44fdaa7a5392b6daf0a8ad0401c2b0068f84a15ad91c8df",
+          "bundleLines": [
+            1184
+          ],
+          "size": 19839
+        },
+        {
+          "file": "index.js",
+          "fileSha256": "e1e6c70a59201231644b8e8740a1eb06c0f8fc59193df533ba8d5e7721eb08c1",
+          "sourceLine": 1652,
+          "function": "utf8ToBytes",
+          "astSha256": "22c0b15ad168abf6566733bea8e0bc47e32a334630732d62a2a162567eeb1258",
+          "bundleLines": [
+            1899
+          ],
+          "size": 16662
+        }
+      ],
+      "count": 99
+    },
+    {
+      "name": "base64-js",
+      "version": "1.3.1",
+      "matches": [
+        {
+          "file": "index.js",
+          "fileSha256": "e9da5491f454b79f987264e5ce1ceb4d45b1b8893778f403d5e7bd112e0ee4d4",
+          "sourceLine": 53,
+          "function": "toByteArray",
+          "astSha256": "d5bdafa4cb1a7df346e89d8b54dae1ddbef6708b8e8622d2c675851166b0bb16",
+          "bundleLines": [
+            58
+          ],
+          "size": 13742
+        },
+        {
+          "file": "index.js",
+          "fileSha256": "e9da5491f454b79f987264e5ce1ceb4d45b1b8893778f403d5e7bd112e0ee4d4",
+          "sourceLine": 119,
+          "function": "fromByteArray",
+          "astSha256": "cba9c59cef0245770ba65d1000c3a66dd33ae229d803eead789488db0a611b81",
+          "bundleLines": [
+            106
+          ],
+          "size": 8551
+        }
+      ],
+      "count": 7
+    },
+    {
+      "name": "ieee754",
+      "version": "1.1.13",
+      "matches": [
+        {
+          "file": "index.js",
+          "fileSha256": "9698a7beea1cebe9050d67cb1016031223ee223f3670526b8520f652de4fca63",
+          "sourceLine": 34,
+          "function": "(anonymous)",
+          "astSha256": "09aa297e81025c908abeaa2ff7c20e406bc52e469d4c378b1ca99cf410e7b6ee",
+          "bundleLines": [
+            171
+          ],
+          "size": 20417
+        },
+        {
+          "file": "index.js",
+          "fileSha256": "9698a7beea1cebe9050d67cb1016031223ee223f3670526b8520f652de4fca63",
+          "sourceLine": 1,
+          "function": "(anonymous)",
+          "astSha256": "0bc621df5f1a8510f025ba2d211dcddcff9fb307d5db0fa5d72b338e9136ce96",
+          "bundleLines": [
+            137
+          ],
+          "size": 13110
+        }
+      ],
+      "count": 2
+    },
+    {
+      "name": "iconv-lite",
+      "version": "0.4.24",
+      "matches": [
+        {
+          "file": "encodings/internal.js",
+          "fileSha256": "39d9dd0568708a23c5999fcd6c417ec64f35ecbecd37205f91c7c6b59d14d773",
+          "sourceLine": 138,
+          "function": "(anonymous)",
+          "astSha256": "64ee39ab3abf1dad1e4d510e97f93a9f28b05e5afabc3343ba1e7c2015d82f8d",
+          "bundleLines": [
+            5411
+          ],
+          "size": 11792
+        },
+        {
+          "file": "encodings/dbcs-codec.js",
+          "fileSha256": "d39bc17f93fc56af631b00e36542488923378cce5ad9e7db48252ce7a1e7b1ed",
+          "sourceLine": 213,
+          "function": "(anonymous)",
+          "astSha256": "3206b1c254164f4e20297ddbe1a08ff96f87b014c3f50c26bcc889eeb20b4355",
+          "bundleLines": [
+            6789
+          ],
+          "size": 8120
+        }
+      ],
+      "count": 46
+    },
+    {
+      "name": "safer-buffer",
+      "version": "2.1.2",
+      "matches": [
+        {
+          "file": "safer.js",
+          "fileSha256": "37f9716144105051ab302f6a0c30a52ff5de7269b9e1173ac22be798fc11ccad",
+          "sourceLine": 40,
+          "function": "(anonymous)",
+          "astSha256": "fecfa785d557ac62566acfc0df8a0457947dfbdf1774d34d1bf0a9def50825b4",
+          "bundleLines": [
+            5190
+          ],
+          "size": 4484
+        },
+        {
+          "file": "safer.js",
+          "fileSha256": "37f9716144105051ab302f6a0c30a52ff5de7269b9e1173ac22be798fc11ccad",
+          "sourceLine": 28,
+          "function": "(anonymous)",
+          "astSha256": "2e9a0e0bb14658609d98804843b105b546ebb2a8774d4a367603cb4d3583175f",
+          "bundleLines": [
+            5176
+          ],
+          "size": 2337
+        }
+      ],
+      "count": 2
+    },
+    {
+      "name": "@pdf-lib/restructure",
+      "version": "0.0.1",
+      "matches": [
+        {
+          "file": "src/VersionedStruct.js",
+          "fileSha256": "4143df6571b45ed8900305cf2d4669ae3077c88768e9966cd08fb7579cf0b591",
+          "sourceLine": 9,
+          "function": "(anonymous)",
+          "astSha256": "48df191e92cb8091d7210dc9f62d4e295be2d9d731ef17962f948b8ff95dcde6",
+          "bundleLines": [
+            17370
+          ],
+          "size": 34122
+        },
+        {
+          "file": "src/Bitfield.js",
+          "fileSha256": "599f59dd780c66a1a08a0caa7cad5106ea835b6590ab7704f762ba02c0607422",
+          "sourceLine": 2,
+          "function": "(anonymous)",
+          "astSha256": "36b54437301621fc385715c1080f11c6110bcc16dd9bc13c67781ab94444432c",
+          "bundleLines": [
+            16839
+          ],
+          "size": 12318
+        }
+      ],
+      "count": 91
+    },
+    {
+      "name": "@pdf-lib/unicode-properties",
+      "version": "0.0.1",
+      "matches": [
+        {
+          "file": "es/index.js",
+          "fileSha256": "170b484086cac239b0259c1e15f73a00716132c05ad9c34cbb2f9dc9f91803ca",
+          "sourceLine": 52,
+          "function": "getNumericValue",
+          "astSha256": "a3126d8db59d5f8a550b2792945e186eb64c226d0b19689c05fb5c26e9e05d10",
+          "bundleLines": [
+            23820
+          ],
+          "size": 6967
+        },
+        {
+          "file": "lib/index.js",
+          "fileSha256": "e9ed7d2c57edd5c259472555f5385819e29c19bb2c8d0709c8ba725c5ab7f018",
+          "sourceLine": 83,
+          "function": "getNumericValue",
+          "astSha256": "a3126d8db59d5f8a550b2792945e186eb64c226d0b19689c05fb5c26e9e05d10",
+          "bundleLines": [
+            23820
+          ],
+          "size": 6967
+        }
+      ],
+      "count": 32
+    },
+    {
+      "name": "unicode-trie",
+      "version": "0.3.1",
+      "matches": [
+        {
+          "file": "index.js",
+          "fileSha256": "c3dd0c080ddcddaa6f51e4b3ae688ce17feff76d392de2740ba66ba118d63e2b",
+          "sourceLine": 6,
+          "function": "(anonymous)",
+          "astSha256": "a813cba7625b62e740877e80e721ebb3299dc42ba1aba423d97d5ad38dc111ac",
+          "bundleLines": [
+            23615
+          ],
+          "size": 25644
+        },
+        {
+          "file": "index.js",
+          "fileSha256": "c3dd0c080ddcddaa6f51e4b3ae688ce17feff76d392de2740ba66ba118d63e2b",
+          "sourceLine": 41,
+          "function": "UnicodeTrie",
+          "astSha256": "0883248abfbe58940600f02384ec4bafd94b607d5d159361ecbc149f621e4ca2",
+          "bundleLines": [
+            23634
+          ],
+          "size": 9025
+        }
+      ],
+      "count": 3
+    },
+    {
+      "name": "tiny-inflate",
+      "version": "1.0.2",
+      "matches": [
+        {
+          "file": "index.js",
+          "fileSha256": "203ccaa89e30ec4d6f9467a91758b0f55597424a817ea2107510bbadaab1b90d",
+          "sourceLine": 315,
+          "function": "tinf_uncompress",
+          "astSha256": "54622dc4ced3baf50b1ac4c78bc008eeb4311e44eb0ee572b1cee28d9813c1b1",
+          "bundleLines": [
+            23552
+          ],
+          "size": 7226
+        },
+        {
+          "file": "index.js",
+          "fileSha256": "203ccaa89e30ec4d6f9467a91758b0f55597424a817ea2107510bbadaab1b90d",
+          "sourceLine": 246,
+          "function": "tinf_inflate_block_data",
+          "astSha256": "7e32d197c0087555d7e2a2a0e7d71dae4131ef7e1c7e44e3051d740484990476",
+          "bundleLines": [
+            23483
+          ],
+          "size": 6049
+        }
+      ],
+      "count": 7
+    },
+    {
+      "name": "tiny-inflate",
+      "version": "1.0.3",
+      "matches": [
+        {
+          "file": "index.js",
+          "fileSha256": "203ccaa89e30ec4d6f9467a91758b0f55597424a817ea2107510bbadaab1b90d",
+          "sourceLine": 315,
+          "function": "tinf_uncompress",
+          "astSha256": "54622dc4ced3baf50b1ac4c78bc008eeb4311e44eb0ee572b1cee28d9813c1b1",
+          "bundleLines": [
+            23552
+          ],
+          "size": 7226
+        },
+        {
+          "file": "index.js",
+          "fileSha256": "203ccaa89e30ec4d6f9467a91758b0f55597424a817ea2107510bbadaab1b90d",
+          "sourceLine": 246,
+          "function": "tinf_inflate_block_data",
+          "astSha256": "7e32d197c0087555d7e2a2a0e7d71dae4131ef7e1c7e44e3051d740484990476",
+          "bundleLines": [
+            23483
+          ],
+          "size": 6049
+        }
+      ],
+      "count": 7
+    },
+    {
+      "name": "clone",
+      "version": "1.0.4",
+      "matches": [
+        {
+          "file": "clone.js",
+          "fileSha256": "27b2db27fafe0f8e35245d81f72ae6523132ce3fae68e4413953d888f62013a9",
+          "sourceLine": 152,
+          "function": "__getRegExpFlags",
+          "astSha256": "d55fe596853d6389b316dbc7293b6da41d3ce2fb26dbe04e2e87dd8989ad1644",
+          "bundleLines": [
+            32497
+          ],
+          "size": 1720
+        },
+        {
+          "file": "clone.js",
+          "fileSha256": "27b2db27fafe0f8e35245d81f72ae6523132ce3fae68e4413953d888f62013a9",
+          "sourceLine": 147,
+          "function": "__isRegExp",
+          "astSha256": "7f18f4efd1860e1a220b41a5972c569c9f01d4f4ae6d0eb4461f9df96bff341b",
+          "bundleLines": [
+            32492
+          ],
+          "size": 789
+        }
+      ],
+      "count": 5
+    },
+    {
+      "name": "dfa",
+      "version": "1.2.0",
+      "matches": [
+        {
+          "file": "index.js",
+          "fileSha256": "1781af74f714561763b2f405b6764d4141876acc167fb0c0aa7160374f97f5ab",
+          "sourceLine": 11,
+          "function": "(anonymous)",
+          "astSha256": "06fa76183665a8e342ae4da724971240b157172a2821b3253582f8c4d595164b",
+          "bundleLines": [
+            27456
+          ],
+          "size": 1384
+        },
+        {
+          "file": "compile.js",
+          "fileSha256": "fc1362901ed557e189957f374d1550bc771b10738d16133d7ce7fdeba9de19a2",
+          "sourceLine": 1736,
+          "function": "(anonymous)",
+          "astSha256": "06fa76183665a8e342ae4da724971240b157172a2821b3253582f8c4d595164b",
+          "bundleLines": [
+            27456
+          ],
+          "size": 1384
+        }
+      ],
+      "count": 2
+    }
+  ],
+  "existingArchiveCoverage": [
+    {
+      "name": "buffer",
+      "version": "5.6.0",
+      "notice": "package/LICENSE",
+      "sha256": "06bafa45fdad2579ba0e43b0c9b2c6290287c99c4203c300254a462b38a307f6",
+      "existingArchivePaths": []
+    },
+    {
+      "name": "base64-js",
+      "version": "1.3.1",
+      "notice": "package/LICENSE",
+      "sha256": "5b37224c080cdcc97c871ada971c224e9926370fe74f11b539aa1cf9f3b1aca1",
+      "existingArchivePaths": []
+    },
+    {
+      "name": "ieee754",
+      "version": "1.1.13",
+      "notice": "package/LICENSE",
+      "sha256": "18d45466ba3253deae04667e267a91ea8de8548f18c1125264d1c9db28194cc1",
+      "existingArchivePaths": []
+    },
+    {
+      "name": "iconv-lite",
+      "version": "0.4.24",
+      "notice": "package/LICENSE",
+      "sha256": "ac779f7314c74f232ef847ea86e714abe25cf6eeb5cc97b69451b74e2af6492d",
+      "existingArchivePaths": [
+        "licenses/npm/iconv-lite@0.4.24/LICENSE",
+        "licenses/npm/iconv-lite@0.6.3/LICENSE",
+        "licenses/npm/iconv-lite@0.7.3/LICENSE"
+      ]
+    },
+    {
+      "name": "safer-buffer",
+      "version": "2.1.2",
+      "notice": "package/LICENSE",
+      "sha256": "4bc935e71be198c67ddf3c2b5fddb195f6edc182bfc155a96a6db61b44b494b9",
+      "existingArchivePaths": [
+        "licenses/npm/safer-buffer@2.1.2/LICENSE"
+      ]
+    },
+    {
+      "name": "@pdf-lib/unicode-properties",
+      "version": "0.0.1",
+      "notice": "package/LICENSE",
+      "sha256": "43439dbd4f43837aadab215cdbe5a422cc6323a50c4ea84d8d6bbc3671666a1d",
+      "existingArchivePaths": []
+    },
+    {
+      "name": "tiny-inflate",
+      "version": "1.0.3",
+      "notice": "package/LICENSE",
+      "sha256": "c0df7f551401f8f80197ff31bf69b8cd23727d127423403282514d242a3ab132",
+      "existingArchivePaths": []
+    },
+    {
+      "name": "clone",
+      "version": "1.0.4",
+      "notice": "package/LICENSE",
+      "sha256": "3fb0857ef0133928cf72c88dfc464e931486e88778961eedec25585e2321507f",
+      "existingArchivePaths": []
+    }
+  ],
+  "harfbuzzTables": {
+    "arabicTriples": 42,
+    "arabicTableSha256": "ffe75c2288f5d37c1ed34d3a1d39d2a471e23f300a74a37e5b8e44c1959fe602",
+    "indicMatchedRows": 10,
+    "indicModifiedRow": "KHMER reph position differs",
+    "indicOmittedSourceRow": "SINHALA (not present in bundled configuration)",
+    "indicConfigSha256": "a7ce5a7ce4f3419c28c8975bf027e6a962a9d0cac2523fb99f1bf9592c90ff06",
+    "arabicSourceSha256": "af16b7eb84ec17887926a6dedbdb19372548dad7d52e24931f785cd5e43f4142",
+    "indicSourceSha256": "8fd42fde574ebb25956b57aaa9d07f336d6f7d6211d6f5265d0ce70c66ec9923",
+    "note": "Exact table matches, not a complete proof of origin for every shaper algorithm."
+  },
+  "scope": "Recorded function/table matches and original notice comparison; not a whole-bundle source map or legal clearance."
+}

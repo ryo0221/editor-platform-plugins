@@ -23,10 +23,11 @@ export async function retainFontkitEmbeddedNotices(packageRoot, destination, tex
   await mkdir(directory, { recursive: true });
   for (const { entry, bytes } of pending) {
     await writeFile(join(directory, entry.file), bytes);
-    texts.push('embedded/' + entry.file);
+    if (entry.role !== 'evidence-only') texts.push('embedded/' + entry.file);
   }
   await writeFile(join(directory, 'PROVENANCE.json'), manifestBytes);
   return { status: 'PARTIAL', provenance: 'embedded/PROVENANCE.json',
     provenanceSha256: digest(manifestBytes), bundleSha256: manifest.input.sha256,
-    noticeFiles: manifest.files.map(({ file, sha256 }) => ({ path: 'embedded/' + file, sha256 })) };
+    noticeFiles: manifest.files.filter(file => file.role !== 'evidence-only').map(({ file, sha256 }) => ({ path: 'embedded/' + file, sha256 })),
+    evidenceFiles: manifest.files.filter(file => file.role === 'evidence-only').map(({ file, sha256 }) => ({ path: 'embedded/' + file, sha256 })) };
 }
