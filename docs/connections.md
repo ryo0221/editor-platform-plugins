@@ -41,6 +41,10 @@ The extension uses Desktop's built-in runtime and keeps data outside its install
 directory. This is a Desktop extension, distinct from the Claude Code plugin
 manifest below. Actual signed-in Desktop installation/UI acceptance is pending.
 
+Codex reviewers can follow the [prebuilt CLI candidate procedure](codex.md),
+which reuses the model-only stdio/local-browser route with a separate data
+directory. Actual signed-in Codex acceptance remains NOT RUN.
+
 For source-based clients:
 
 Prepare submodules, dependencies and the UI build first. Launch the stdio server:
