@@ -21,7 +21,13 @@ Node executable and `server/code.mjs`. The existing `xdg-open` call was replaced
 only by a temporary test opener that privately captured the capability URL; the
 installed Chromium then loaded the actual packaged browser shell, Editor and
 separate-origin React preview. No source/tsx server or substitute Editor was used.
-Runtime Node/UI/browser/preview hashes were verified against build metadata.
+The harness reads the archive once, checks those bytes against the fixed SHA-256
+above, writes those same bytes into its private temporary directory and extracts
+that snapshot itself. Every launched executable, loaded HTML file and compared
+component source comes from that fresh extraction; no pre-extracted directory is
+accepted. Runtime Node/compiled server/UI/browser/preview hashes are also verified
+against the extracted build metadata. The launcher has no dedicated metadata hash;
+its bytes are covered by the fixed archive digest and explicitly recorded below.
 
 The driver reused an existing dependency tree with the unchanged lockfile; there
 was no new account, login, application installation or persistent MCP registration.
@@ -53,7 +59,7 @@ fixtures and screenshots remain in ignored `work/cloud-react/evidence/`.
 
 ZIP files: `Screen.tsx`, `Screen.css`, `manifest.json`, `composition.json`,
 `README.md`, `PluginComponents.tsx`.
-Final inspected ZIP SHA-256: `1271abd8e98f29125d442c24b7460e3b88b52d9689cebcf0a24031a3c52e6022`.
+Final inspected ZIP SHA-256: `43a62cafc5db625fb0afb126f5f04b7c9bc31a4b7d436bd5923140d6c9f64427`.
 Per-run node UUIDs make separately generated ZIP bytes differ; the candidate archive
 itself stayed fixed across the final runs. `result.json` records hashes and summary
 booleans, not artifact text or capabilities.
@@ -80,14 +86,11 @@ booleans, not artifact text or capabilities.
 Use the source commit above and existing maintainer packaging instructions to
 rebuild a candidate in a clean source checkout, or reuse this recorded archive.
 Do not rebuild from an evidence-only commit and label it the original main.
-In the checkout containing this evidence harness, place the candidate and its
-`.sha256` file in `release/`, then run with an existing toolchain and Chromium:
+In the checkout containing this evidence harness, place the exact recorded archive
+in `release/`, then run with an existing toolchain and Chromium. The fixed digest
+in the harness rejects a different rebuild even if its sidecar checksum matches:
 
 ```sh
-mkdir -p work/cloud-react/extracted-final
-# The archive contains only the approved distribution files.
-tar -xzf release/editor-platform-claude-code-0.1.3-linux-x64.tar.gz -C work/cloud-react/extracted-final
-printf '%s\n' 0c17336a125659dda85af90153c9b84e651679ae > work/cloud-react/commit
 node_modules/.bin/playwright test --config tests/acceptance/react-cloud.config.mjs
 ```
 
@@ -96,6 +99,35 @@ video capture. It is not added to general checks or CI. Chromium uses the existi
 `--no-sandbox` test launch option; browser-origin checks do not establish OS process
 sandbox acceptance. The evidence branch adds only this record and the dedicated
 harness/config; application code, shared README/package/lock and pin are untouched.
+
+## PR #32 candidate-provenance correction
+
+The original harness independently checked an existing extraction and an archive
+checksum; it did not establish that the tested files came from that archive. This
+was an evidence-binding gap, not a React runtime defect. The corrected harness
+uses the verified-byte snapshot and fresh extraction described above, eliminating
+the separately prepared directory and mutable expected-commit file.
+
+Revalidation on 2026-10-17: **PASS**, one Chromium workflow case, no retries or
+skips, zero browser/server errors; `npm run typecheck`: **PASS**. The archive SHA
+remains `0d902935e49c2d66f95060bc993be3bd061442df867d8a8b3e29ac6514ee1647`.
+The run's `result.json` records the provenance method and these actual extracted
+file digests before starting the server:
+
+| Executed/served archive file | SHA-256 |
+| --- | --- |
+| `runtime/node` | `bc17c508ffeed0ec622934f9b7fa72f8e78da65350e63c3eceb56fa688aa5e12` |
+| `node_modules/editor-platform-code-runtime/index.mjs` | `b17eb64f29d65fdfdfeca01c2a4ed17ac59d076899712d51a083ae0dd135ed4a` |
+| `ui/editor.html` | `a123cc779ea268aabd87ee477bceca3c63f1a609f71494b2441b4d84dabe079a` |
+| `ui/browser.html` | `6aaf606dfe2e32f0b6d76ab9bfe0ec95c545f21c79990d547de988a47ca7c843` |
+| `ui/react-preview.html` | `bd6507e39ef9bc121679523386e67e0c294795d81b80af51850158bc54fedd30` |
+| `server/code.mjs` | `0fc31e136f9093ca581b01e45f6d5b616bc41317be7af9b448d0ceea2f7c0fa3` |
+
+The existing 16-second demo remains the recording of the original fixed main
+`0c17336` candidate, made before this harness correction. It was not re-recorded
+and does not serve as evidence for this fresh-extraction rerun. Its explicit
+Codex/cloud-browser, no-Claude-session label remains unchanged; no video was
+uploaded externally.
 
 ## Claude-specific work still NOT RUN
 

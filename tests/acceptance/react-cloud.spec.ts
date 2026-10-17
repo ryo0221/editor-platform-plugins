@@ -7,20 +7,25 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { unzipSync, strFromU8 } from 'fflate';
 import { build } from 'esbuild';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+
+const execFileAsync = promisify(execFile);
+const expectedCommit = '0c17336a125659dda85af90153c9b84e651679ae';
+const expectedArchiveSha256 = '0d902935e49c2d66f95060bc993be3bd061442df867d8a8b3e29ac6514ee1647';
 
 const hash = (bytes: Uint8Array | string) => createHash('sha256').update(bytes).digest('hex');
 test('main 0c17336 packaged React browser acceptance from Codex shell (not Claude)', async ({ page }) => {
   test.setTimeout(120000);
   const evidence = resolve('work/cloud-react/evidence'); await mkdir(evidence, { recursive: true });
-  const plugin = resolve('work/cloud-react/extracted-final/plugins/editor-platform');
-  const info = JSON.parse(await readFile(join(plugin, 'build-info.json'), 'utf8'));
-  const expectedCommit = (await readFile('work/cloud-react/commit', 'utf8')).trim();
-  expect(info.sourceCommit).toBe(expectedCommit); expect(info.sourceDirty).toBe(false);
-  for (const [file, checksum] of [['runtime/node', info.nodeSha256], ['ui/editor.html', info.uiSha256], ['ui/browser.html', info.browserSha256], ['ui/react-preview.html', info.reactPreviewSha256]]) expect(hash(await readFile(join(plugin, file)))).toBe(checksum);
   const archive = resolve('release/editor-platform-claude-code-0.1.3-linux-x64.tar.gz');
-  const archiveSha256 = hash(await readFile(archive));
-  expect(archiveSha256).toBe((await readFile(archive + '.sha256', 'utf8')).split(' ')[0]);
+  // Hash and extract the same snapshot, never a separately prepared directory.
+  const archiveBytes = await readFile(archive);
+  const archiveSha256 = hash(archiveBytes);
+  expect(archiveSha256).toBe(expectedArchiveSha256);
   const directory = await mkdtemp(join(tmpdir(), 'cloud-react-acceptance-'));
+  const extracted = join(directory, 'candidate');
+  const plugin = join(extracted, 'plugins/editor-platform');
   const bin = join(directory, 'bin'); await mkdir(bin);
   await writeFile(join(bin, 'xdg-open'), '#!/bin/sh\numask 077\nprintf "%s" "$1" > "$EDITOR_TEST_URL_FILE"\n', { mode: 0o700 });
   let client: Client | undefined;
@@ -42,6 +47,26 @@ test('main 0c17336 packaged React browser acceptance from Codex shell (not Claud
   let previewUrl = '';
   let resultSummary: Record<string, unknown> = {};
   try {
+    const snapshot = join(directory, 'candidate.tar.gz');
+    await writeFile(snapshot, archiveBytes, { mode: 0o600 });
+    expect(hash(await readFile(snapshot))).toBe(expectedArchiveSha256);
+    await mkdir(extracted);
+    await execFileAsync('tar', ['-xzf', snapshot, '-C', extracted]);
+    const info = JSON.parse(await readFile(join(plugin, 'build-info.json'), 'utf8'));
+    expect(info.sourceCommit).toBe(expectedCommit); expect(info.sourceDirty).toBe(false);
+    const executableSha256: Record<string, string> = {};
+    for (const [file, checksum] of [
+      ['runtime/node', info.nodeSha256],
+      ['node_modules/editor-platform-code-runtime/index.mjs', info.runtimeSha256],
+      ['ui/editor.html', info.uiSha256], ['ui/browser.html', info.browserSha256],
+      ['ui/react-preview.html', info.reactPreviewSha256],
+    ]) {
+      executableSha256[file] = hash(await readFile(join(plugin, file)));
+      expect(executableSha256[file]).toBe(checksum);
+    }
+    // This launcher has no separate build-info checksum. Its bytes are bound by
+    // the fixed archive digest; record their digest explicitly alongside runtime.
+    executableSha256['server/code.mjs'] = hash(await readFile(join(plugin, 'server/code.mjs')));
     await connect();
     phase = 'assemble';
     const guide = await call('get_editor_guide', { kind: 'react-ui' });
@@ -131,7 +156,7 @@ test('main 0c17336 packaged React browser acceptance from Codex shell (not Claud
     await expect(preview.getByRole('button', { name: 'Cloud counter: 2', exact: true })).toBeVisible();
     previewUrl = page.frames().find(f => f.url().endsWith('/react-preview.html'))!.url();
     expect(browserErrors).toEqual([]); expect(stderr).toEqual([]);
-    resultSummary = { sourceCommit: info.sourceCommit, sourceDirty: info.sourceDirty, archiveSha256, exportZipSha256: hash(zip), previewSha256: info.reactPreviewSha256, uiSha256: info.uiSha256, exportedFileNames: Object.keys(files).sort(), compositionNodeCount: saved.content.nodes.length, savedRevision: saved.revision, componentStateEphemeral: true, serverRestartRetention: true, parentDomDenied: true, parentCredentialStorageDenied: true, browserErrors: 0, serverErrors: 0, result: 'PASS', execution: 'Codex shell -> bundled Node/server -> Chromium; OS opener captured; no Claude process or login' };
+    resultSummary = { sourceCommit: info.sourceCommit, sourceDirty: info.sourceDirty, archiveSha256, candidateProvenance: 'SHA-pinned archive bytes snapshotted and freshly extracted by this harness; all process/UI paths use that extraction', executableSha256, exportZipSha256: hash(zip), previewSha256: info.reactPreviewSha256, uiSha256: info.uiSha256, exportedFileNames: Object.keys(files).sort(), compositionNodeCount: saved.content.nodes.length, savedRevision: saved.revision, componentStateEphemeral: true, serverRestartRetention: true, parentDomDenied: true, parentCredentialStorageDenied: true, browserErrors: 0, serverErrors: 0, result: 'PASS', execution: 'Codex shell -> bundled Node/server -> Chromium; OS opener captured; no Claude process or login' };
   } finally {
     await page.goto('about:blank');
     await client?.close();
