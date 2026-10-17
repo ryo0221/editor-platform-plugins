@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { dirname, isAbsolute, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { unzipSync } from 'fflate';
-import { getMcpConfigForManifest } from '@anthropic-ai/mcpb/node';
+import { getMcpConfigForManifest, VERSIONED_MANIFEST_SCHEMAS, verifyMcpbFile, extractSignatureBlock } from '@anthropic-ai/mcpb/node';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { resourceUri } from '../../src/shared/contracts';
@@ -49,6 +49,34 @@ test('MCPB has every runtime file, corresponding public source and matching chec
   }
   const checksum = (await readFile(`${archive}.sha256`, 'utf8')).split('  ')[0];
   assert.equal(digest(bytes), checksum);
+});
+
+test('Desktop preview manifest and archive are valid and explicitly unsigned', async () => {
+  assert.equal(VERSIONED_MANIFEST_SCHEMAS['0.3'].safeParse(manifest).success, true);
+  assert.deepEqual(manifest.compatibility.platforms, ['win32', 'darwin']);
+  assert.equal(manifest.compatibility.runtimes.node, '>=20.19.0');
+  assert.equal(manifest.tools_generated, true);
+  assert.equal(manifest.user_config, undefined);
+  assert.equal(extractSignatureBlock(Buffer.from(bytes)).pkcs7Signature, undefined);
+  assert.deepEqual(await verifyMcpbFile(archive), { status: 'unsigned' });
+  assert.match(manifest.long_description, /unsigned integration preview/);
+  assert.match(manifest.long_description, /Animation supports schema-1 rectangles\/groups/);
+  assert.match(decode('INSTALL.md'), /SHA-256/);
+  for (const [, target] of decode('INSTALL.md').matchAll(/\]\(([^)]+)\)/g)) {
+    assert.ok(target.startsWith('https://') || files[target], `Broken packaged guide link: ${target}`);
+  }
+});
+
+test('Manifest variable expansion preserves Windows/macOS paths as one argument (not native OS acceptance)', async () => {
+  for (const [extensionPath, pathSeparator] of [
+    ['C:\\Users\\Tester\\AppData\\Local\\Claude\\日本語 extension', '\\'],
+    ['/Users/Tester/Library/Application Support/Claude/日本語 extension', '/'],
+  ]) {
+    const config = await getMcpConfigForManifest({ manifest, extensionPath, systemDirs: {}, userConfig: {}, pathSeparator });
+    assert.equal(config?.command, 'node');
+    assert.deepEqual(config?.args, [extensionPath + '/server/index.mjs']);
+    assert.equal(config?.env, undefined);
+  }
 });
 
 test('installed MCPB works offline, across relocation and restart, with no checkout or external node_modules', async () => {
