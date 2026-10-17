@@ -320,7 +320,50 @@ application behavior and all existing browser cases.
 05a9c7da5a666a90c71669b67bcb56b666843aa53c86a2db533c8e66920c3df4  editor-platform-claude-code-0.1.3-linux-x64.tar.gz
 ```
 
-These generated files remain local. Document/Design/Whiteboard destinations are
-not wired in this increment. Back up the complete data directory, including
-reference-snapshots; fixed history has no automatic cleanup. No private source,
-CI activation, performance measurement, Release or merge was performed.
+
+The files remain local under `release/`, outside Git. macOS/Windows archives were
+inspected on Linux and never executed. No supported-OS or LP availability claim
+follows from this packaging evidence. Issue #4 remains open for native acceptance.
+No automatic CI, performance measurement, private-source copying or release was
+introduced. OS browser openers and human-only model/browser boundaries are unchanged.
+
+## PR #13 review follow-up — 2026-10-17
+
+Final rebuilt candidate/test source commit:
+`13e4a348e330cc96e6fe49512dff131d3257949c`. The subsequent commit records
+evidence only and was not used to rebuild these archives. These hashes supersede
+the earlier b8136d8 candidates; included documentation changes the source closure.
+Builder: Debian 13 x64, Node 24.19.0, Chromium 151.0.7922.173.
+
+- Full check: PASS, 28 protocol/unit + 21 browser, no retries/skips.
+- Linux isolated Code package: PASS, 1 test. Desktop package: PASS, 2 tests.
+- Four-target offline inspection: PASS, 4 tests. Reproduce using
+  `EDITOR_NODE_ARCHIVE_DIR=/path/to/official-archives npm run test:platform-packages`.
+  Verifies official checksum, rejects wrong-target archives before extraction,
+  checks allowed runtime files, binary/LICENSE bytes, archive checksum, manifest,
+  target metadata and bundled source/runtime/UI hashes. No target binary executes.
+- Model-only discovery and direct-call refusal now cover all eight human-only
+  save/apply/reject/selection tools, both source stdio and installed Code package.
+- Windows explorer.exe exit semantics, native OS paths/browser/storage/update
+  retention and authenticated Codex/Claude acceptance: NOT RUN.
+
+```text
+0ca3dab1a118b576db027bd18480505583569b2ed23d311cd6ff42bb2dbf080e  editor-platform-claude-0.1.3.mcpb
+106ebdc8cd87200fd198f60777a00fe364581f23e0a5b87a9a29afbfc9d5200d  editor-platform-claude-code-0.1.3-darwin-arm64.tar.gz
+77611be4eb5660c0974e85febf698a186e736c807a34560d43749f536800551b  editor-platform-claude-code-0.1.3-darwin-x64.tar.gz
+205129a51d8a8d48d884f4c391bd5318580488d3b52f24667e67637854126d19  editor-platform-claude-code-0.1.3-linux-x64.tar.gz
+584628aac01b36ca7a23b448b32bcbc8fddd1c63b7ab979b3b340a540bc4ea3e  editor-platform-claude-code-0.1.3-win32-x64.tar.gz
+```
+
+### PR #13 source-closure review follow-up
+
+The offline inspector now reads every `source/FILES.sha256` entry, verifies its
+actual bytes and count, compares both packaged source/build upstream pins with the
+reviewed checkout pin, verifies the public export-manifest digest and every public
+file declared by that manifest. Only regular files/directories are extracted;
+foreign runtimes are never executed. Five focused tests PASS, including missing
+source, modified source, wrong expected pin, and public-source tampering even when
+the outer source manifest/hash is recomputed. All four existing 13e4a34 candidate
+archives PASS the stronger inspection. These are verifier changes; no new archive
+hash or rebuild of those candidates is claimed. The integration build will include
+the updated verifier and record its own source commit and hashes.
