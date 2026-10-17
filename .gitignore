@@ -11,3 +11,5 @@ work/
 release/
 *.mcpb
 dist-browser/
+dist-react-preview/
+dist-code-test/
