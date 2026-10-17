@@ -85,3 +85,41 @@ export function createEditorServer(store: DeckStore, htmlPath = new URL('../../d
       exports: kind === 'slide' ? ['json', 'svg'] : kind === 'document' ? ['json', 'markdown'] : kind === 'data' ? ['json', 'csv'] : ['design', 'whiteboard'].includes(kind) ? ['json', 'svg'] : ['json'] })),
       pendingPublicSource: [], unimplementedAdapters: ['video', 'gis'], sharedEditing: false,
       crossArtifactEmbedding: { sources: ['data', 'graph'], destinations: ['slide'], modes: ['fixed', 'follow'] }, sourceUpdatePropagation: 'saved-source polling; view-only until explicit Save/export', slideCharts: 'static-snapshots', customGraphProfiles: 'supply profile at creation; retained immutably with the artifact', deletion: 'recoverable-trash', upstreamTrackingIssue: 'https://github.com/ryo0221/editor-platform/issues/264' }), { readOnly: true, widget: false });
+  tool('create_artifact', 'Create a structured editable artifact', 'Create an artifact in any published Editor domain. First get_editor_guide(kind), then supply the user-specific native content: slide visuals, formatted document blocks, designed elements, connected board/graph nodes, or data rows/views. Omit content only for an explicitly empty artifact. React UI live execution is unavailable; use Design for a visible UI mockup.',
+    z.object({ kind: kindSchema, title: z.string().min(1).max(200), profile: z.unknown().optional().describe('Graph only: complete declarative GraphProfile, matching content.profile.id/version. Retained immutably with this artifact. Read the customGraph example in get_editor_guide(kind="graph"). Not executable code.'), content: z.unknown().optional().describe('Complete domain-native JSON from get_editor_guide. For Slide this accepts the full SlideContent, including shapes/charts/tables/images, instead of only a title/body template.') }).strict(),
+    async ({ kind, title, content, profile }) => {
+      if (kind !== 'graph' && profile !== undefined) throw new DomainError('INVALID', 'profile is only supported for Graph artifacts.');
+      if (kind === 'slide') return { deck: await store.create(title, undefined, content === undefined ? undefined : await references.capture(content, undefined, false)) };
+      return { artifact: await artifacts.create(kind, title, content, profile) };
+    });
+  tool('read_artifact', 'Open an artifact', 'Read saved native content, kind, revision and selected IDs. Domain models remain separate. Use the returned native JSON as the basis of a proposal.', artifactRead,
+    async ({ artifactId }) => artifactId.startsWith('deck_') ? { deck: await store.read(artifactId) } : { artifact: await artifacts.read(artifactId) }, { readOnly: true });
+  tool('propose_artifact_changes', 'Propose native artifact changes', 'Propose a complete same-domain native candidate against baseRevision, including rich SlideContent for decks. Read the saved artifact and get_editor_guide before editing. Preserve existing element IDs. This single-owner snapshot proposal does not mutate saved content or merge concurrent edits. UI review and explicit apply are required. Small Slide text/style edits may use propose_slide_changes.',
+    z.object({ ...base, summary: z.string().min(1).max(500), content: z.unknown() }).strict(),
+    async (args) => args.artifactId.startsWith('deck_')
+      ? { deck: await store.proposeNative(args.artifactId, args.baseRevision, args.summary, await references.capture(args.content, args.artifactId, false)) }
+      : { artifact: await artifacts.propose(args.artifactId, args.baseRevision, args.summary, args.content) });
+  tool('export_artifact', 'Export an artifact', 'Return saved native JSON, and a domain-specific Markdown/CSV/SVG export where supported. No external service calls.', artifactRead,
+    async ({ artifactId }) => artifactId.startsWith('deck_') ? await references.exported(await store.read(artifactId)) : await artifacts.export(artifactId), { readOnly: true, widget: false });
+  tool('list_artifacts', 'List saved artifacts and trash', 'Discover saved artifacts across conversations, with stable IDs, current revisions and titles. Content is not included. state=active excludes deleted artifacts; state=deleted lists recoverable trash. Use read_artifact before editing or deleting. Follow nextCursor if returned.',
+    z.object({ state: z.enum(['active', 'deleted', 'all']).default('active'), limit: z.number().int().min(1).max(100).default(50), cursor: artifactId.optional() }).strict(),
+    async ({ state, limit, cursor }) => {
+      const records = (await Promise.all([inventory(store.directory, 'deck_', state, cursor ?? '', limit + 1), inventory(join(store.directory, 'artifacts'), 'artifact_', state, cursor ?? '', limit + 1)])).flat().sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+      return { artifacts: records.slice(0, limit), ...(records.length > limit ? { nextCursor: records[limit - 1].id } : {}) };
+    }, { readOnly: true, widget: false });
+  for (const deleted of [true, false]) tool(deleted ? 'delete_artifact' : 'restore_artifact', deleted ? 'Move an artifact to trash' : 'Restore an artifact',
+    deleted ? 'Move only the explicitly user-requested artifact to recoverable trash at its exact baseRevision. Supports deck_ and artifact_ IDs. Native content, Profile and pending proposals are retained; old proposals become stale. Never delete artifacts merely because they appear unused. No permanent deletion.' : 'Restore a trashed artifact at its exact current baseRevision. Content and Profile are retained. Read the new revision before making proposals.',
+    z.object(base).strict(), async ({ artifactId, baseRevision }) => artifactId.startsWith('deck_')
+      ? { deck: await store.setDeleted(artifactId, baseRevision, deleted) }
+      : { artifact: await artifacts.setDeleted(artifactId, baseRevision, deleted) }, { destructive: deleted });
+  tool('save_artifact_draft', 'Save native manual edits', 'UI-only native draft save with exact revision checking.', z.object({ ...base, content: z.unknown() }).strict(),
+    async (args) => ({ artifact: await artifacts.save(args.artifactId, args.baseRevision, args.content) }), { appOnly: true });
+  tool('apply_artifact_proposal', 'Apply reviewed native proposal', 'UI-only proposal acceptance with stale revision rejection.', artifactDecision,
+    async (args) => ({ artifact: await artifacts.decide(args.artifactId, args.proposalId, true) }), { appOnly: true });
+  tool('reject_artifact_proposal', 'Reject native proposal', 'UI-only rejection without changing saved content.', artifactDecision,
+    async (args) => ({ artifact: await artifacts.decide(args.artifactId, args.proposalId, false) }), { appOnly: true });
+  tool('set_artifact_selection', 'Share native selection', 'UI-only sharing of saved native element IDs.', z.object({ ...base, ids: z.array(artifactId).max(100) }).strict(),
+    async (args) => ({ artifact: await artifacts.select(args.artifactId, args.baseRevision, args.ids) }), { appOnly: true, widget: false });
+  return server;
+}
+const sharedArtifacts = new WeakMap<DeckStore, ArtifactStore>();

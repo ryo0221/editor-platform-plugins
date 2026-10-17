@@ -227,3 +227,13 @@ function Editor() {
           <EditorExportGuardContext.Provider value={flush}>
             <EditorOfficeCapabilitiesContext.Provider value={{ pptx: false, docx: false, reason: 'この接続ではJSONとSVGを利用してください。' }}>
               <NativeSurface key={`${record!.id}:${proposal ? 'preview-'+proposal.id : 'edit'}`} kind={record!.kind ?? 'slide'} content={content} execute={execute} select={(ids) => setSelected(Array.isArray(ids) ? ids : [ids])} selected={selected} readOnly={busy || !!proposal} artifactId={record!.id} profile={record!.profile} references={references} session={session.current!} history={history} />
+            </EditorOfficeCapabilitiesContext.Provider>
+          </EditorExportGuardContext.Provider>
+        </EditorHistoryContext.Provider>
+      </EditorInputsContext.Provider>
+    </section> : <section className="empty"><p>{record?.deletedAt ? 'この成果物はゴミ箱にあります。復元すると再び編集できます。' : 'ChatGPT / Claude + Open Editor'}</p><h2>作る。触る。会話で直す。</h2><p>AIの変更は、プレビューしてから適用できます。</p></section>}
+    <footer>手編集のUndoは直近の読込・保存以降が対象です。保存先はこのMCPサーバーです。<a href="https://github.com/ryo0221/editor-platform-plugins" target="_blank" rel="noreferrer">ソース</a></footer>
+  </main>;
+}
+
+createRoot(document.getElementById('root')!).render(<Editor />);
