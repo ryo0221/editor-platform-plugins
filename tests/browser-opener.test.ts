@@ -5,7 +5,7 @@ import { spawn, type ChildProcess } from 'node:child_process';
 import { mkdtemp, writeFile, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { isWsl, launchBrowser } from '../src/claude-code/browser-opener';
+import { isWsl, launchBrowser, browserHandoffReport } from '../src/claude-code/browser-opener';
 
 const url = 'http://127.0.0.1:49152/browser#' + 'a'.repeat(64);
 const linux = { platform: 'linux' as const, kernel: '6.1-linux', env: {} };
@@ -39,7 +39,7 @@ test('WSL detection handles kernel and environment signals only on Linux', () =>
 test('native Linux/macOS/Windows keep their opener and one opaque URL argument', async () => {
   for (const [platform, command] of [['linux', 'xdg-open'], ['darwin', 'open'], ['win32', 'explorer.exe']] as const) {
     const h = harness([0]);
-    await launchBrowser(url, { environment: { ...linux, platform, env: { BROWSER: 'malicious --command' } }, launch: h.launch });
+    assert.equal(await launchBrowser(url, { environment: { ...linux, platform, env: { BROWSER: 'malicious --command' } }, launch: h.launch }), 'handoff_requested');
     assert.deepEqual(h.calls, [{ command, args: [url], options: { shell: false, stdio: 'ignore' } }]);
   }
 });
@@ -70,9 +70,9 @@ test('opener failure, signal, permission and timeout never leak URL or retry aft
     });
     assert.equal(h.calls.length, 1); assert.equal(h.killed(), outcome === 'timeout' ? 1 : 0);
   }
-  // Explorer status 1 is not silently called success; native semantics stay conservative.
+  // Other exit codes remain errors, including native Explorer status 2.
   for (const platform of ['linux', 'darwin', 'win32'] as const) {
-    const h = harness([1]); await assert.rejects(launchBrowser(url, { environment: { ...linux, platform }, launch: h.launch }), /did not report successful handoff/);
+    const h = harness([2]); await assert.rejects(launchBrowser(url, { environment: { ...linux, platform }, launch: h.launch }), /did not report successful handoff/);
   }
 });
 
@@ -92,4 +92,19 @@ test('Linux subprocess fixture verifies WSL opener argv; this is not real WSL ac
     await launchBrowser(url, { environment: wsl, launch: (command, args, options) => spawn(join(dir, command), args, { ...options, env: { ...process.env, OPENER_CAPTURE: capture } }) });
     assert.equal(await readFile(capture, 'utf8'), '1\n' + url + '\n');
   } finally { await rm(dir, { recursive: true, force: true }); }
+});
+
+test('Explorer exit 1 is unconfirmed on native Windows and WSL, not browser success', async () => {
+  for (const environment of [wsl, { ...linux, platform: 'win32' as const }]) {
+    const h = harness(environment.platform === 'linux' ? ['ENOENT', 1] : [1]);
+    const result = await launchBrowser(url, { environment, launch: h.launch });
+    assert.equal(result, 'unconfirmed');
+    const report = browserHandoffReport(result);
+    assert.equal(report.status, 'launch_unconfirmed'); assert.equal(report.browserVerified, false);
+    assert.match(report.message, /Do not automatically retry/);
+    assert.ok(!JSON.stringify(report).includes(url));
+    assert.equal(h.calls.filter(c => c.command === 'explorer.exe').length, 1);
+  }
+  const report = browserHandoffReport('handoff_requested');
+  assert.equal(report.status, 'launch_requested'); assert.equal(report.browserVerified, false);
 });

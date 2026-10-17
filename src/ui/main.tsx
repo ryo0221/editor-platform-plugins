@@ -108,7 +108,9 @@ function Editor() {
   useEffect(() => {
     void connection.then(() => {
       setCanShareContext(!!bridge.getHostCapabilities()?.updateModelContext);
-      setMessage('図・表・レイアウトを含む成果物はチャットから依頼できます。空の成果物は下のボタンで作成できます。');
+      const initialInventory = new URLSearchParams(location.search).get('initial') === 'inventory';
+      setMessage(initialInventory ? '保存済みの成果物から対象を選んで開いてください。新規作成の種類は、保存済み成果物の選択ではありません。' : '図・表・レイアウトを含む成果物はチャットから依頼できます。空の成果物は下のボタンで作成できます。');
+      if (initialInventory && !recordRef.current) void action(() => refreshInventory());
     }).catch((e: Error) => setMessage(e.message));
   }, []);
   useEffect(() => {
@@ -172,7 +174,7 @@ function Editor() {
     <header><div><span className="eyebrow">OPEN EDITOR</span><h1>{record?.title ?? '会話から、編集できる成果物へ。'}</h1></div>
       <span className="save-state">{record ? `${domainLabels[record.kind ?? 'slide']} · v${record.revision} · ${record.deletedAt ? 'ゴミ箱' : dirty || pending.dirty ? '未保存' : '保存済み'}` : 'EDITORS'}</span></header>
     <nav aria-label="成果物の操作">
-      <select aria-label="Editorの種類" disabled={busy} value={newKind} onChange={(e) => setNewKind(e.target.value as ArtifactKind)}>{artifactKinds.map((kind) => <option key={kind} value={kind}>{domainLabels[kind]}</option>)}</select>
+      <span>新規作成の種類：</span><select aria-label="Editorの種類" disabled={busy} value={newKind} onChange={(e) => setNewKind(e.target.value as ArtifactKind)}>{artifactKinds.map((kind) => <option key={kind} value={kind}>{domainLabels[kind]}</option>)}</select>
       <button disabled={busy || pending.dirty > 0 || pending.composing > 0 || dirty} onClick={() => void action(async () => {
         await call('create_artifact', { kind: newKind, title: `新しい${domainLabels[newKind]}` }); setMessage('成果物を編集できます。');
       })}>成果物を作成</button>
@@ -211,7 +213,7 @@ function Editor() {
       <select aria-label="一覧の対象" disabled={busy} value={listState} onChange={(event) => { const state = event.target.value as 'active' | 'deleted'; setListState(state); void action(() => refreshInventory(state)); }}><option value="active">保存済み</option><option value="deleted">ゴミ箱</option></select>
       <button onClick={() => setInventoryOpen(false)}>一覧を閉じる</button>
       {!items.length && <p>成果物はありません。</p>}
-      {items.map((item) => <div className="proposal" key={item.id}><span>{item.title} · {domainLabels[item.kind as ArtifactKind]} · v{item.revision}</span><button disabled={busy || dirty || pending.dirty > 0 || pending.composing > 0} onClick={() => void action(async () => { await call('read_artifact', { artifactId: item.id }); })}>開く</button></div>)}
+      {items.map((item) => <div className="proposal artifact-row" role="group" aria-labelledby={`artifact-label-${item.id}`} key={item.id}><span id={`artifact-label-${item.id}`}>{item.title} · {domainLabels[item.kind as ArtifactKind]} · v{item.revision}</span><button aria-describedby={`artifact-label-${item.id}`} disabled={busy || dirty || pending.dirty > 0 || pending.composing > 0} onClick={() => void action(async () => { await call('read_artifact', { artifactId: item.id }); })}>開く</button></div>)}
       {nextCursor && <button disabled={busy} onClick={() => void action(() => refreshInventory(listState, nextCursor))}>続きを表示</button>}
     </aside>}
     <p className="status" role="status">{message}</p>

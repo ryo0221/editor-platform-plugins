@@ -79,6 +79,8 @@ test('Code archive: standalone runtime/UI, human-only channel, relocation and re
           await writeFile(join(bin, 'xdg-open'), '#!/bin/sh\nprintf \"%s\" \"$1\" > \"$EDITOR_TEST_URL_FILE\"\n', { mode: 0o700 });
         }
         const opened = await call('open_editor', {});
+        assert.equal(opened.status, 'launch_requested');
+        assert.equal(opened.browserVerified, false);
         assert.ok(!JSON.stringify(opened).includes('http://'));
         const url = new URL(await readFile(join(temp, 'url'), 'utf8'));
         const token = url.hash.slice(1);

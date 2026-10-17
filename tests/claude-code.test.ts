@@ -29,7 +29,7 @@ test('Code stdio omits human-only tools; isolated browser auth, saved revisions 
   const browser = new Client({ name: 'code-browser-test', version: '1' });
   const transport = new StdioClientTransport({ command: process.execPath,
     args: ['--import', 'tsx', join(root, 'tests/code-host.mjs')], cwd: root,
-    env: { ...process.env, EDITOR_DATA_DIR: directory, EDITOR_TEST_URL_FILE: urlFile } as Record<string, string>, stderr: 'pipe' });
+    env: { ...process.env, EDITOR_DATA_DIR: directory, EDITOR_TEST_URL_FILE: urlFile, EDITOR_TEST_HANDOFF: 'unconfirmed' } as Record<string, string>, stderr: 'pipe' });
   let url: URL | undefined;
   try {
     await client.connect(transport);
@@ -40,7 +40,13 @@ test('Code stdio omits human-only tools; isolated browser auth, saved revisions 
       const denied = await client.callTool({ name, arguments: {} });
       assert.equal(denied.isError, true);
     }
-    assert.ok(!(await client.callTool({ name: 'open_editor', arguments: {} })).isError);
+    const opening = await client.callTool({ name: 'open_editor', arguments: {} });
+    assert.ok(!opening.isError);
+    const openingReport = opening.structuredContent as Record<string, unknown>;
+    assert.equal(openingReport.status, 'launch_unconfirmed');
+    assert.equal(openingReport.browserVerified, false);
+    assert.ok(!JSON.stringify(opening).includes('http://'));
+    assert.match(JSON.stringify(opening), /Do not automatically retry/);
     url = new URL(await readFile(urlFile, 'utf8'));
     const token = url.hash.slice(1); assert.match(token, /^[a-f0-9]{64}$/);
     const mcp = new URL('/mcp', url);

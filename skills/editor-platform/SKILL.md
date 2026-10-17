@@ -18,7 +18,9 @@ still apply.
    artifact: do not substitute an HTML mock, screenshot or generated image for
    the actual Editor.
 4. Call `open_editor` to open the real Editor in the local graphical browser.
-   Tell the user to choose the artifact from Saved artifacts. The browser offers
+   Treat launch_requested/launch_unconfirmed as handoff status, not proof of browser
+   connection or visible content. Ask the user to check the existing window; do not
+   automatically retry. Tell the user to choose the artifact from Saved artifacts. The browser offers
    direct native editing, Undo/Redo, explicit Save and proposal preview/review.
    For remote/headless Claude Code sessions, explain that local graphical browser
    opening is required; do not claim the CLI displays an embedded Editor.

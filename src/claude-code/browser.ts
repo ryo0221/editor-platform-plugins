@@ -25,7 +25,7 @@ async function connect() {
     document.querySelector('#status')!.textContent = 'Claude Codeに接続中のローカルEditor。保存済みの成果物から開いてください。変更案の確認はEditorの再読込ボタンで行えます。';
   };
   await bridge.connect(new PostMessageTransport(frame.contentWindow!, frame.contentWindow!));
-  frame.src = '/editor.html';
+  frame.src = '/editor.html?initial=inventory';
 }
 void connect().catch(() => {
   document.querySelector('#status')!.textContent = '接続できません。Claude Codeを起動し、open_editor を再実行してください。終了後のブラウザURLは再利用できません。';

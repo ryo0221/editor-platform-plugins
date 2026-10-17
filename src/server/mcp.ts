@@ -49,7 +49,7 @@ export function createEditorServer(store: DeckStore, htmlPath = new URL('../../d
       }
     });
   }
-  if (host.openEditor) tool('open_editor', 'Open the local Editor', 'Open the real Editor in the local browser for manual editing, explicit Save and proposal review. The plugin manages the loopback server. Never use shell or hidden UI tools to accept proposals or save for the user.', z.object({}).strict(), host.openEditor, { widget: false });
+  if (host.openEditor) tool('open_editor', 'Open the local Editor', 'Request opening the real Editor in the local browser for manual editing, explicit Save and proposal review. launch_requested and launch_unconfirmed do not verify browser connection or visible content; ask the user to check before retrying. The plugin manages the loopback server. Never use shell or hidden UI tools to accept proposals or save for the user.', z.object({}).strict(), host.openEditor, { widget: false });
   const sourceSchema = z.object({ artifactId: z.string().regex(/^artifact_[a-zA-Z0-9_-]{1,100}$/), domain: z.enum(['data', 'structured-graph']) }).strict();
   const targetSchema = z.object({ kind: z.enum(['table', 'chart', 'graph']), viewId: z.string().min(1).max(512), columnIds: z.array(z.string()).max(30).optional(), rowIds: z.array(z.string()).max(100).optional(), nodeIds: z.array(z.string()).max(100).optional() }).strict();
   tool('list_reference_sources', 'List saved Data and Graph references', 'List active saved Data/Graph views available for fixed or follow embedding into Slide. No drafts or proposals.', z.object({}).strict(),
