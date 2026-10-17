@@ -129,9 +129,10 @@ edits are not included until explicit Save. The plugin calls no AI service itsel
 ## Features and release gates
 
 The public pin supports Slide, Document, Design, Whiteboard, Data, Graph, Review,
-File and React UI native artifacts. See README for the actual export formats and
+File, React UI and Animation native artifacts. See README for the actual export formats and
 limits. No Office export, live executable React preview, cross-artifact sync,
-Animation/Video/GIS or collaborative shared Undo is claimed. Undo/Redo resets at
+Video/GIS adapters or collaborative shared Undo is claimed. Animation is limited to
+schema-1 rectangles/groups and native JSON export. Undo/Redo resets at
 load/save/accepted-proposal boundaries.
 
 Before publishing: record OS, architecture, Claude Code version, plugin version,

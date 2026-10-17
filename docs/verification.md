@@ -274,3 +274,30 @@ acceptance: NOT RUN. This base change does not enable Animation or references.
 The public snapshot contains AnimationControlledSurface, rectangle Player v1 and
 Data/Graph ReferenceResolver adapters; Host adapters remain separate work.
 No performance measurement, automatic Actions, Release or merge was performed.
+
+## Animation adapter — issue #6 (2026-10-17)
+
+Depends on the public-sync base (PR #14), not packaging PR #13 or Codex PR #12.
+Uses only public AnimationControlledSurface, schema-1 validation, commands and
+rectangle Player. Plugin Host owns the existing session, pending-input flush,
+revision-checked toolbar save and proposal review; internal Surface save is
+disabled. Player preparation is generation-checked and disposed on scope teardown.
+External assets, nested compositions, prototype migration and movie/GIF export
+are rejected or unavailable. Native JSON remains the export contract.
+
+Debian 13 x64, Node 24.19.0, Chromium 151.0.7922.173: full check PASS
+(29 protocol/unit, 23 browser). New checks include native create/save/propose/
+reject/apply/export/restart, unsupported schema/assets rejection, real Player
+play/pause, buffered manual edit followed immediately by Save, Undo/Redo, preview/
+reject/apply and reload. The actual Animation screenshot was visually inspected.
+These are local harness checks. Signed-in host acceptance, native Windows/macOS,
+mobile, Release and demo recording remain NOT RUN. No performance measurement.
+
+Animation package checkpoint: source commit `d6308b4` (subsequent evidence-only
+commit not rebuilt). Linux Code isolated package PASS (1), Desktop MCPB PASS (2),
+Node 24.19.0 on Debian 13 x64. Generated files remain outside Git:
+
+```text
+5b4b85b5cb78f2bd9f6dadc22687900d8db783b37d023e8879b9b795ff40d82f  editor-platform-claude-0.1.3.mcpb
+61c05d29e4ab72f33adac7be0b38c11c37f63c83995d0f34fe7a11407587542c  editor-platform-claude-code-0.1.3-linux-x64.tar.gz
+```

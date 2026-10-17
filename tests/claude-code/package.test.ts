@@ -45,7 +45,7 @@ test('Code archive: standalone runtime/UI, human-only channel, relocation and re
           assert.equal((await client.callTool({ name, arguments: {} })).isError, true, name);
         }
         if (!restart) {
-          for (const kind of ['slide', 'document', 'design', 'whiteboard', 'data', 'graph', 'review', 'file', 'react-ui']) {
+          for (const kind of ['slide', 'document', 'design', 'whiteboard', 'data', 'graph', 'review', 'file', 'react-ui', 'animation']) {
             const guide = await call('get_editor_guide', { kind });
             const made = await call('create_artifact', { kind, title: `Standalone ${kind}`, content: guide.exampleContent });
             const record = made.deck ?? made.artifact;
@@ -54,7 +54,7 @@ test('Code archive: standalone runtime/UI, human-only channel, relocation and re
             if (kind === 'slide') id = record.id;
           }
         } else {
-          const listed = await call('list_artifacts', {}); assert.equal(listed.artifacts.length, 9);
+          const listed = await call('list_artifacts', {}); assert.equal(listed.artifacts.length, 10);
           const saved = await call('read_deck', { deckId: id }); assert.equal(saved.deck.revision, 2);
         }
         if (restart) {

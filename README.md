@@ -9,7 +9,7 @@ ChatGPT/Claude production-host acceptance is claimed. See [verification](docs/ve
 
 ## What works
 
-- Create and open Slide, Document, Design, Whiteboard, Data, Graph, Review, File and React UI native artifacts.
+- Create and open Slide, Document, Design, Whiteboard, Data, Graph, Review, File, React UI and Animation native artifacts.
 - Author native visual/structured content through `get_editor_guide` and the
   `content` input, including Slide shapes, charts, tables, images and rich text.
 - Mount their upstream editing/viewing controls with local Undo/Redo and explicit saving.
@@ -34,8 +34,9 @@ they are not arbitrary binary document editors. Graph uses the public relation P
 Slide charts are static snapshots. Cross-artifact embedding and automatic source-update
 propagation are not supported; upstream work is tracked in [#264](https://github.com/ryo0221/editor-platform/issues/264).
 
-Animation, Video and GIS are not in the pinned public upstream. Their plugin
-adapters require an approved public-source export and are not claimed complete.
+Animation uses the public schema-1 rectangle/group Surface and Player, with native
+JSON export. External assets, nested compositions, prototype migration and video/GIF
+export are not supported. Video and GIS adapters remain unimplemented.
 
 ## Set up
 
