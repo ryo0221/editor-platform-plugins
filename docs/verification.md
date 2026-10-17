@@ -322,3 +322,14 @@ These generated files remain local. Document/Design/Whiteboard destinations are
 not wired in this increment. Back up the complete data directory, including
 reference-snapshots; fixed history has no automatic cleanup. No private source,
 CI activation, performance measurement, Release or merge was performed.
+
+### PR #18 listing/SDK review follow-up
+
+Reference source discovery now internally pages the existing inventory contract,
+including pages containing no Data/Graph sources. Regression checks PASS with an
+empty workspace, a full 1000-item non-source page, a Data source after that page,
+and termination at the final empty page. No source-count truncation is applied.
+An actual SDK 1.x client also passes a complete ReferenceSource (including target)
+to read_reference_source successfully: schema.shape normalization strips the extra
+field before the strict handler. The reported target/strict-schema candidate is
+not an unresolved bug; no runtime workaround was added.

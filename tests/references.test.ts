@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, rm, mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
@@ -26,6 +26,9 @@ test('Data/Graph fixed/follow closures, explicit capture, provenance, deletion a
     const source = (await call('create_artifact', { kind: 'data', title: 'Data source', content: data })).artifact;
     const spec = { artifactId: source.id, domain: 'data', target: { kind: 'table', viewId: 'default' } };
     await Promise.all([call('read_reference_source', { artifactId: source.id, domain: 'data' }), call('read_reference_source', { artifactId: source.id, domain: 'data' })]);
+    // SDK 1.x normalizes schema.shape and strips undeclared target before the strict handler.
+    const extra = await call('read_reference_source', spec);
+    assert.equal(extra.snapshot.artifactId, source.id);
     const fixed = await call('create_reference', { source: spec, mode: 'fixed' });
     const follow = await call('create_reference', { source: spec, mode: 'follow' });
     const deck = (await call('create_deck', { title: 'Reference destination' })).deck;
@@ -61,4 +64,25 @@ test('Data/Graph fixed/follow closures, explicit capture, provenance, deletion a
     await call('delete_artifact', { artifactId: source.id, baseRevision: 2 });
     await call('export_deck', { deckId: deck.id }, true); // No silent stale snapshot export.
   } finally { await client.close(); await server.close(); await rm(directory, { recursive: true, force: true }); }
+});
+
+
+test('reference listing crosses an empty filtered 1000-item page and terminates on empty inventory', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'reference-pages-'));
+  const root = join(directory, 'artifacts');
+  const service = referenceService(directory, new ArtifactStore(root));
+  try {
+    assert.deepEqual(await service.host.list(), []);
+    await mkdir(root, { recursive: true });
+    for (let start = 0; start < 1000; start += 100) await Promise.all(Array.from({ length: 100 }, (_, offset) => {
+      const id = `artifact_0000${String(start + offset).padStart(6, '0')}`;
+      return writeFile(join(root, `${id}.json`), JSON.stringify({ id, kind: 'document', title: 'Not a reference source', revision: 1, updatedAt: '2026-10-17' }));
+    }));
+    assert.deepEqual(await service.host.list(), []); // Full non-source page followed by empty page.
+    const id = 'artifact_zzzz';
+    await writeFile(join(root, `${id}.json`), JSON.stringify({ id, kind: 'data', title: 'Beyond page one', revision: 1, updatedAt: '2026-10-17', content: { schemaVersion: 2, columns: [], rows: [] } }));
+    const listed = await service.host.list();
+    assert.equal(listed.length, 2); // Default table and chart, exactly once.
+    assert.ok(listed.every((option) => option.source.artifactId === id));
+  } finally { await rm(directory, { recursive: true, force: true }); }
 });
