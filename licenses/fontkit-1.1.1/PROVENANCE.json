@@ -88,12 +88,300 @@
         "version": "2.0, January 2004",
         "association": "License version expressly identified by the retained Google header; appendix is unchanged."
       }
+    },
+    {
+      "file": "buffer-5.6.0-LICENSE.txt",
+      "sha256": "06bafa45fdad2579ba0e43b0c9b2c6290287c99c4203c300254a462b38a307f6",
+      "source": {
+        "kind": "official-npm-file",
+        "name": "buffer",
+        "version": "5.6.0",
+        "key": "buffer-5.6.0",
+        "license": "MIT",
+        "gitHead": "d7b15a178294ebc85368aac87b0831dc48d6fba8",
+        "tarball": "https://registry.npmjs.org/buffer/-/buffer-5.6.0.tgz",
+        "integrity": "sha512-/gDYp/UtU0eA1ys8bOs9J6a+E/KWIY+DZ+Q2WESNUA0jFRsJOc0SNUO6xJ5SGA1xueg3NL65W6s+NY5l9cunuw==",
+        "shasum": "a31749dc7d81d84db08abf937b6b8c4033f62786",
+        "sha256": "b9ec3ea5264dc312d869ff76f68bc770cab6df117de95e7ba7e196c4220e2505",
+        "notices": [
+          "package/LICENSE"
+        ],
+        "path": "package/LICENSE",
+        "association": "Lockfile candidate with matching function bodies in the exact fontkit input; see closure audit. Not a unique release-build identity proof."
+      }
+    },
+    {
+      "file": "base64-js-1.3.1-LICENSE.txt",
+      "sha256": "5b37224c080cdcc97c871ada971c224e9926370fe74f11b539aa1cf9f3b1aca1",
+      "source": {
+        "kind": "official-npm-file",
+        "name": "base64-js",
+        "version": "1.3.1",
+        "key": "base64-js-1.3.1",
+        "license": "MIT",
+        "gitHead": "08a344d6ca13772acc42df2515312ceac75b5456",
+        "tarball": "https://registry.npmjs.org/base64-js/-/base64-js-1.3.1.tgz",
+        "integrity": "sha512-mLQ4i2QO1ytvGWFWmcngKO//JXAQueZvwEKtjgQFM4jIK0kU+ytMfplL8j+n5mspOfjHwoAg+9yhb7BwAHm36g==",
+        "shasum": "58ece8cb75dd07e71ed08c736abc5fac4dbf8df1",
+        "sha256": "e07a87b3d76297252f6284c37fc2c16929a80c17886740ba2093251b82e40368",
+        "notices": [
+          "package/LICENSE"
+        ],
+        "path": "package/LICENSE",
+        "association": "Lockfile candidate with matching function bodies in the exact fontkit input; see closure audit. Not a unique release-build identity proof."
+      }
+    },
+    {
+      "file": "ieee754-1.1.13-LICENSE.txt",
+      "sha256": "18d45466ba3253deae04667e267a91ea8de8548f18c1125264d1c9db28194cc1",
+      "source": {
+        "kind": "official-npm-file",
+        "name": "ieee754",
+        "version": "1.1.13",
+        "key": "ieee754-1.1.13",
+        "license": "BSD-3-Clause",
+        "gitHead": "4971f0e802c2cbdfad7791bd223c53e37b4ebb85",
+        "tarball": "https://registry.npmjs.org/ieee754/-/ieee754-1.1.13.tgz",
+        "integrity": "sha512-4vf7I2LYV/HaWerSo3XmlMkp5eZ83i+/CDluXi/IGTs/O1sejBNhTtnxzmRZfvOUqj7lZjqHkeTvpgSFDlWZTg==",
+        "shasum": "ec168558e95aa181fd87d37f55c32bbcb6708b84",
+        "sha256": "603e6b4c40da1551bbaabe8aa8a4b35f62f132b0b60e99906a59f0ad04d47ae2",
+        "notices": [
+          "package/LICENSE"
+        ],
+        "path": "package/LICENSE",
+        "association": "Lockfile candidate with matching function bodies in the exact fontkit input; see closure audit. Not a unique release-build identity proof."
+      }
+    },
+    {
+      "file": "pdf-lib-unicode-properties-0.0.1-LICENSE.txt",
+      "sha256": "43439dbd4f43837aadab215cdbe5a422cc6323a50c4ea84d8d6bbc3671666a1d",
+      "source": {
+        "kind": "official-npm-file",
+        "name": "@pdf-lib/unicode-properties",
+        "version": "0.0.1",
+        "key": "@pdf-lib_unicode-properties-0.0.1",
+        "license": "MIT",
+        "gitHead": null,
+        "tarball": "https://registry.npmjs.org/@pdf-lib/unicode-properties/-/unicode-properties-0.0.1.tgz",
+        "integrity": "sha512-zPhtCnQ4YuR2CX0h7zqBN7dPe/XN2dL71qi7Xh8JQON2IibogLdezwlEn1AIzs3m/+kjeKxXsQClN/D4U2i5NA==",
+        "shasum": "7f4a6a5ad7f9ec889449dcc51317217230b2d01f",
+        "sha256": "6703a1c2dfae72c8415f65966a6ea5c8d4c0bb695eb03a57489135960146a8e5",
+        "notices": [
+          "package/LICENSE"
+        ],
+        "path": "package/LICENSE",
+        "association": "Lockfile candidate with matching function bodies in the exact fontkit input; see closure audit. Not a unique release-build identity proof."
+      }
+    },
+    {
+      "file": "tiny-inflate-1.0.3-LICENSE.txt",
+      "sha256": "c0df7f551401f8f80197ff31bf69b8cd23727d127423403282514d242a3ab132",
+      "source": {
+        "kind": "official-npm-file",
+        "name": "tiny-inflate",
+        "version": "1.0.3",
+        "key": "tiny-inflate-1.0.3",
+        "license": "MIT",
+        "gitHead": "f4999b9c77263a97eb3a6942be247ece85a3d457",
+        "tarball": "https://registry.npmjs.org/tiny-inflate/-/tiny-inflate-1.0.3.tgz",
+        "integrity": "sha512-pkY1fj1cKHb2seWDy0B16HeWyczlJA9/WW3u3c4z/NiWDsO3DOU5D7nhTLE9CF0yXv/QZFY7sEJmj24dK+Rrqw==",
+        "shasum": "122715494913a1805166aaf7c93467933eea26c4",
+        "sha256": "73932b339424e5ffaeaf043e6481229cab407ee277b2a01fa23938dfad6a8f4e",
+        "notices": [
+          "package/LICENSE"
+        ],
+        "path": "package/LICENSE",
+        "association": "Lockfile candidate with matching function bodies in the exact fontkit input; see closure audit. Not a unique release-build identity proof."
+      }
+    },
+    {
+      "file": "clone-1.0.4-LICENSE.txt",
+      "sha256": "3fb0857ef0133928cf72c88dfc464e931486e88778961eedec25585e2321507f",
+      "source": {
+        "kind": "official-npm-file",
+        "name": "clone",
+        "version": "1.0.4",
+        "key": "clone-1.0.4",
+        "license": "MIT",
+        "gitHead": "3095b1b4182ea1babc453b3a46924754831b66bf",
+        "tarball": "https://registry.npmjs.org/clone/-/clone-1.0.4.tgz",
+        "integrity": "sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==",
+        "shasum": "da309cc263df15994c688ca902179ca3c7cd7c7e",
+        "sha256": "3393d5552400ded353826ad4052a7968f61c0ff59d4b515d0a502ea150588023",
+        "notices": [
+          "package/LICENSE"
+        ],
+        "path": "package/LICENSE",
+        "association": "Lockfile candidate with matching function bodies in the exact fontkit input; see closure audit. Not a unique release-build identity proof."
+      }
+    },
+    {
+      "file": "harfbuzz-arabic-NOTICE.txt",
+      "sha256": "14e468ee783b5bc97680ae833c80d5f278e46687ce17a31f64e346bdb36271f1",
+      "source": {
+        "kind": "historical-upstream-file-header",
+        "repository": "https://github.com/harfbuzz/harfbuzz",
+        "commit": "9daf2dfb6bd5683fd951bdf166c8b87938257e52",
+        "path": "src/hb-ot-shape-complex-arabic.cc",
+        "fileSha256": "af16b7eb84ec17887926a6dedbdb19372548dad7d52e24931f785cd5e43f4142",
+        "association": "42/42 state-table triples match the shipped bundle."
+      }
+    },
+    {
+      "file": "harfbuzz-indic-NOTICE.txt",
+      "sha256": "bb5cd066d777fcf974a299c1e6ff77b1f42e95691e0eb0d7dc1188e499566485",
+      "source": {
+        "kind": "historical-upstream-file-header",
+        "repository": "https://github.com/harfbuzz/harfbuzz",
+        "commit": "85630996b8afa699f7b5d19346cdf5c72fcd6e2d",
+        "path": "src/hb-ot-shape-complex-indic.cc",
+        "fileSha256": "8fd42fde574ebb25956b57aaa9d07f336d6f7d6211d6f5265d0ce70c66ec9923",
+        "association": "10 configuration rows match; Khmer field differs and Sinhala is omitted."
+      }
+    },
+    {
+      "file": "harfbuzz-fallback-NOTICE.txt",
+      "sha256": "bb5cd066d777fcf974a299c1e6ff77b1f42e95691e0eb0d7dc1188e499566485",
+      "source": {
+        "kind": "historical-upstream-file-header",
+        "repository": "https://github.com/harfbuzz/harfbuzz",
+        "commit": "365576d246949f9d587e90cf0539dc0381e4d0a3",
+        "path": "src/hb-ot-shape-fallback.cc",
+        "fileSha256": "49f5541c4cffca3a15982082610365f645eeef01922bddae4704584f80b1c969",
+        "association": "Exact file explicitly credited by bundled UnicodeLayoutEngine; last public file revision before initial port. Complete algorithm identity not claimed."
+      }
+    },
+    {
+      "file": "pdf-lib-restructure-0.0.1-declaration.txt",
+      "role": "evidence-only",
+      "sha256": "daf005969aac8cb4283b3777361f0244f4cce898b9a983a60b7f0d9e96f559bf",
+      "source": {
+        "kind": "official-npm-license-declaration",
+        "name": "@pdf-lib/restructure",
+        "version": "0.0.1",
+        "key": "@pdf-lib_restructure-0.0.1",
+        "license": "MIT",
+        "gitHead": null,
+        "tarball": "https://registry.npmjs.org/@pdf-lib/restructure/-/restructure-0.0.1.tgz",
+        "integrity": "sha512-CgCG7w7GiYxBLo8AyjP3viIiyPyYuoZWXczNTxZQtElXWQN5Vw8A2TGcrvwstCwOrJHfT4KeNGpEvLApVYoBuA==",
+        "shasum": "e38c81b6ddaa8c982e7780620c89bddfb6c53653",
+        "sha256": "d06fee5fce6ee121ad78c5d23175f9f0507ec9dca312dedd508e9c75d1aa40c2",
+        "notices": [],
+        "path": "package/README.md",
+        "excerpt": "License section through EOF",
+        "limitation": "MIT declaration is explicit; no separate full notice in this package. Not labeled a missing permission or a complete license text."
+      }
+    },
+    {
+      "file": "pdf-lib-restructure-0.0.1-metadata.txt",
+      "role": "evidence-only",
+      "sha256": "35e17c90e928719bd3817cab87a5feda8f8299551d9895e9a9ed86c85cad36f2",
+      "source": {
+        "kind": "official-npm-license-declaration",
+        "name": "@pdf-lib/restructure",
+        "version": "0.0.1",
+        "key": "@pdf-lib_restructure-0.0.1",
+        "license": "MIT",
+        "gitHead": null,
+        "tarball": "https://registry.npmjs.org/@pdf-lib/restructure/-/restructure-0.0.1.tgz",
+        "integrity": "sha512-CgCG7w7GiYxBLo8AyjP3viIiyPyYuoZWXczNTxZQtElXWQN5Vw8A2TGcrvwstCwOrJHfT4KeNGpEvLApVYoBuA==",
+        "shasum": "e38c81b6ddaa8c982e7780620c89bddfb6c53653",
+        "sha256": "d06fee5fce6ee121ad78c5d23175f9f0507ec9dca312dedd508e9c75d1aa40c2",
+        "notices": [],
+        "path": "package/package.json",
+        "excerpt": "complete file",
+        "limitation": "MIT declaration is explicit; no separate full notice in this package. Not labeled a missing permission or a complete license text."
+      }
+    },
+    {
+      "file": "unicode-trie-0.3.1-declaration.txt",
+      "role": "evidence-only",
+      "sha256": "daf005969aac8cb4283b3777361f0244f4cce898b9a983a60b7f0d9e96f559bf",
+      "source": {
+        "kind": "official-npm-license-declaration",
+        "name": "unicode-trie",
+        "version": "0.3.1",
+        "key": "unicode-trie-0.3.1",
+        "license": "MIT",
+        "gitHead": "0e19655c9c291c133e577bcacd2c25b7c82455f7",
+        "tarball": "https://registry.npmjs.org/unicode-trie/-/unicode-trie-0.3.1.tgz",
+        "integrity": "sha512-WgVuO0M2jDl7hVfbPgXv2LUrD81HM0bQj/bvLGiw6fJ4Zo8nNFnDrA0/hU2Te/wz6pjxCm5cxJwtLjo2eyV51Q==",
+        "shasum": "d671dddd89101a08bac37b6a5161010602052085",
+        "sha256": "d4c160af91e358f3014ff1a316f9ab3c9cd2b89f8f522af4a33488257dd2b13d",
+        "notices": [],
+        "path": "package/README.md",
+        "excerpt": "License section through EOF",
+        "limitation": "MIT declaration is explicit; no separate full notice in this package. Not labeled a missing permission or a complete license text."
+      }
+    },
+    {
+      "file": "unicode-trie-0.3.1-metadata.txt",
+      "role": "evidence-only",
+      "sha256": "747e5ba3f918891b30c01e9f0589846860187949905d00bdea2c2dbd1f179c97",
+      "source": {
+        "kind": "official-npm-license-declaration",
+        "name": "unicode-trie",
+        "version": "0.3.1",
+        "key": "unicode-trie-0.3.1",
+        "license": "MIT",
+        "gitHead": "0e19655c9c291c133e577bcacd2c25b7c82455f7",
+        "tarball": "https://registry.npmjs.org/unicode-trie/-/unicode-trie-0.3.1.tgz",
+        "integrity": "sha512-WgVuO0M2jDl7hVfbPgXv2LUrD81HM0bQj/bvLGiw6fJ4Zo8nNFnDrA0/hU2Te/wz6pjxCm5cxJwtLjo2eyV51Q==",
+        "shasum": "d671dddd89101a08bac37b6a5161010602052085",
+        "sha256": "d4c160af91e358f3014ff1a316f9ab3c9cd2b89f8f522af4a33488257dd2b13d",
+        "notices": [],
+        "path": "package/package.json",
+        "excerpt": "complete file",
+        "limitation": "MIT declaration is explicit; no separate full notice in this package. Not labeled a missing permission or a complete license text."
+      }
+    },
+    {
+      "file": "dfa-1.2.0-declaration.txt",
+      "role": "evidence-only",
+      "sha256": "daf005969aac8cb4283b3777361f0244f4cce898b9a983a60b7f0d9e96f559bf",
+      "source": {
+        "kind": "official-npm-license-declaration",
+        "name": "dfa",
+        "version": "1.2.0",
+        "key": "dfa-1.2.0",
+        "license": "MIT",
+        "gitHead": "3f5e603e5082caedabefefdf53e8a6ca3111e966",
+        "tarball": "https://registry.npmjs.org/dfa/-/dfa-1.2.0.tgz",
+        "integrity": "sha512-ED3jP8saaweFTjeGX8HQPjeC1YYyZs98jGNZx6IiBvxW7JG5v492kamAQB3m2wop07CvU/RQmzcKr6bgcC5D/Q==",
+        "shasum": "96ac3204e2d29c49ea5b57af8d92c2ae12790657",
+        "sha256": "d781eb3a307ab6aa2d97028f695b17dbeadf6fd27788c333b1fb96d18d2a23ad",
+        "notices": [],
+        "path": "package/README.md",
+        "excerpt": "License section through EOF",
+        "limitation": "MIT declaration is explicit; no separate full notice in this package. Not labeled a missing permission or a complete license text."
+      }
+    },
+    {
+      "file": "dfa-1.2.0-metadata.txt",
+      "role": "evidence-only",
+      "sha256": "96c0ce3cc17b34aabd58fd442157766d9e244cba735e54ee4fe10d7841f0460c",
+      "source": {
+        "kind": "official-npm-license-declaration",
+        "name": "dfa",
+        "version": "1.2.0",
+        "key": "dfa-1.2.0",
+        "license": "MIT",
+        "gitHead": "3f5e603e5082caedabefefdf53e8a6ca3111e966",
+        "tarball": "https://registry.npmjs.org/dfa/-/dfa-1.2.0.tgz",
+        "integrity": "sha512-ED3jP8saaweFTjeGX8HQPjeC1YYyZs98jGNZx6IiBvxW7JG5v492kamAQB3m2wop07CvU/RQmzcKr6bgcC5D/Q==",
+        "shasum": "96ac3204e2d29c49ea5b57af8d92c2ae12790657",
+        "sha256": "d781eb3a307ab6aa2d97028f695b17dbeadf6fd27788c333b1fb96d18d2a23ad",
+        "notices": [],
+        "path": "package/package.json",
+        "excerpt": "complete file",
+        "limitation": "MIT declaration is explicit; no separate full notice in this package. Not labeled a missing permission or a complete license text."
+      }
     }
   ],
   "remaining": [
-    "Version 1.1.1 authoritative release source commit/build lock/module map is absent",
-    "Fontkit fork/core copyright-specific full notice not found",
-    "Complete embedded module attribution remains unverified; partial headers do not clear the full bundle"
+    "Core/fork MIT declaration is established; public history has no separate core copyright notice. Do not manufacture one or treat root LICENSE absence as absence of permission.",
+    "Generated Unicode dataset version/terms have not been uniquely matched to the shipped compressed data. The later codepoints 1.3.0 lock alone is insufficient.",
+    "Some polyfill/generator and HarfBuzz-derived algorithm attribution beyond the recorded matches remains unverified. See bounded code-range audit; build reproducibility is not asserted as an independent legal requirement."
   ],
   "supportingTarballs": [
     {

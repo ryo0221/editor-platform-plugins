@@ -1,5 +1,9 @@
 # Partial embedded notice retention for fontkit 1.1.1
 
+Historical PR #34 report. See [the follow-up reconciliation](fontkit-closure.md)
+for added notices, bounded unknowns, and the correction separating source
+reproducibility from notice obligations.
+
 This follow-up retains identified original notices from the exact shipped
 `@pdf-lib/fontkit@1.1.1` input. **It does not resolve fontkit's project-specific
 full notice, release-source identity or complete embedded attribution. Publication

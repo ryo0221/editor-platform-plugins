@@ -12,7 +12,11 @@ test('fontkit partial notices preserve exact source bytes; changed bundled code 
     const texts = [];
     const metadata = await retainFontkitEmbeddedNotices('node_modules/@pdf-lib/fontkit', temp, texts);
     assert.equal(metadata.status, 'PARTIAL');
-    assert.equal(texts.length, 4);
+    assert.equal(texts.length, 13);
+    assert.equal(metadata.evidenceFiles.length, 6);
+    assert.ok(metadata.evidenceFiles.every(file => !texts.includes(file.path)));
+    assert.ok(texts.includes('embedded/buffer-5.6.0-LICENSE.txt'));
+    assert.ok(texts.includes('embedded/harfbuzz-arabic-NOTICE.txt'));
     const manifest = JSON.parse(await readFile(join(temp, metadata.provenance)));
     const bundle = await readFile('node_modules/@pdf-lib/fontkit/dist/fontkit.es.js', 'utf8');
     for (const file of manifest.files) {
