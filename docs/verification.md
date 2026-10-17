@@ -257,3 +257,19 @@ provenance/hashes and retain the standalone relocation/restart workflow.
 Rebuilt Code archive: PASS (1 isolated package test). Existing Desktop MCPB:
 PASS (2 isolated package tests). Together with the 27 unit/protocol and 21 browser
 cases, all 51 tests passed. Real signed-in host acceptance remains NOT RUN.
+
+## Public upstream synchronization — 2026-10-17
+
+Pinned public commit `97ea905745101b3814d14febcc0c31b157023c71`. All 1,749
+export-manifest file SHA-256 entries matched the public checkout. The submodule
+is unmodified; no private source was used. `upstream.json` records tree and manifest
+hash. The workspace lockfile was updated for the new public packages; `npm ci`
+succeeded using only this checkout and public npm dependencies.
+
+Debian 13 x64 / Node 24.19.0 / Chromium 151.0.7922.173:
+`PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run check` PASS
+(27 protocol/unit + 21 browser cases). Native macOS/Windows and all signed-in host
+acceptance: NOT RUN. This base change does not enable Animation or references.
+The public snapshot contains AnimationControlledSurface, rectangle Player v1 and
+Data/Graph ReferenceResolver adapters; Host adapters remain separate work.
+No performance measurement, automatic Actions, Release or merge was performed.
