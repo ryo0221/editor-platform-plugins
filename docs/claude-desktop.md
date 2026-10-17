@@ -1,20 +1,22 @@
 # Claude Desktop 拡張のインストール
 
-実機検証の担当者は [Windows / macOS 受入表](claude-desktop-acceptance.md)を使用してください。
+実機検証の担当者は [Windows / macOS 受入表](https://github.com/ryo0221/editor-platform-plugins/blob/main/docs/claude-desktop-acceptance.md)を使用してください。
 実機受入と署名・正式提供の判断が完了するまでは、未署名プレビューを維持します。
 
 配布ファイル: `editor-platform-claude-0.1.3.mcpb`
 
 ## インストール
 
-1. 最新の Claude Desktop を開きます（Windows / macOS）。
-2. **設定 → Extensions → Advanced settings → Install Extension…** を選びます。
-3. ダウンロードした `.mcpb` ファイルを選び、内容を確認してインストールします。
-4. 新しい会話で Editor Platform を有効にします。
+1. 提供された候補の SHA-256 が同梱チェックサムと一致することを確認します。チェックサムは破損検出用で、発行者の署名や安全性の保証ではありません。
+2. 最新の Claude Desktop を開きます（Windows / macOS）。
+3. **設定 → Extensions → Advanced settings → Install Extension…** を選びます。
+4. ダウンロードした `.mcpb` ファイルを選び、内容を確認してインストールします。
+5. 新しい会話で Editor Platform を有効にします。
 
 Git・npm・Node.js の別途インストール、API キー、公開サーバーの準備は不要です。
-Claude Desktop 内蔵の Node.js 20.19 以上を使用します。対応していない場合は
-Claude Desktop を更新してください。拡張の処理は Desktop が起動・終了します。
+manifest は Node.js 20.19 以上を要求します。Desktop が実際に選んだ内蔵 Node の版は
+実機受入時に確認してください。公式案内は内蔵 Node の提供を説明していますが、この候補の
+受入済み Desktop 最低版はまだありません。起動できない場合は Desktop の版とログを記録します。拡張の処理は Desktop が起動・終了します。
 このファイルは Claude Desktop 専用で、ChatGPT 用インストーラーではありません。
 
 ## 最初の動作確認
@@ -78,6 +80,25 @@ Desktop では起動しません。Office 出力と Video / GIS アダプター�
 拡張ではありません。ビルドと展開後の stdio 検証は実施しますが、ログイン済みの
 Claude Desktop でのインストール・UI 表示が確認済みであるとは主張していません。
 会社の管理ポリシーによりカスタム拡張が制限されている場合もあります。
+
+## 更新・導入できない場合
+
+この私的配布候補は自動更新を前提にしません。更新前に保存先をバックアップし、
+提供者から受け取った新しい `.mcpb` の版・commit・SHA-256 を確認して、同じ導入経路で
+更新してください。再起動後の新しい会話で、以前の成果物 ID と保存内容を確認します。
+同じ `0.1.3` 表示でも候補のバイト列が異なり得るため、ファイル名だけで区別しないでください。
+この手順の実 Desktop 更新受入は未実施です。
+
+Extensions の項目がない、または未署名・組織ポリシーで拒否された場合は、その表示と
+OS／Desktop 版を記録し、管理者・提供者へ確認してください。署名警告を消すための
+自己署名証明書の信頼追加や、管理ポリシー変更はこの導入手順に含みません。
+API キー・署名証明書・追加サービス契約は要求しません。
+
+署名調査とローカル検証の範囲は [Desktop パッケージ検証](https://github.com/ryo0221/editor-platform-plugins/blob/main/docs/claude-desktop-package-verification.md)、
+実機操作は [受入表](https://github.com/ryo0221/editor-platform-plugins/blob/main/docs/claude-desktop-acceptance.md)を参照してください。
+
+同梱文書の正確な版は、展開したパッケージの `source/editor-platform-plugins/docs/`
+にも保存されています。Web 上の文書は後の版へ更新される場合があります。
 
 ## 開発者による再作成
 

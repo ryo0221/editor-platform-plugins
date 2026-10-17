@@ -4,7 +4,7 @@
   "display_name": "Editor Platform",
   "version": "0.1.3",
   "description": "Create, edit and review documents, slides, designs and other native Editor Platform artifacts in Claude Desktop.",
-  "long_description": "Nine public Editor domains: Slide, Document, Design, Whiteboard, Data, Graph, Review, File and React UI. Includes the editing interface, local saving, reviewed AI proposals and native exports. No API key, npm install or public server is required. Claude Desktop provides the Node.js runtime. Artifacts remain in a separate local data directory across extension updates. React UI executable preview, Office exports, Animation, Video and GIS are not included. This is an unsigned integration preview; actual Claude Desktop installation and UI acceptance still need to be checked.",
+  "long_description": "Ten public Editor domains: Slide, Document, Design, Whiteboard, Data, Graph, Review, File, React UI and Animation. Includes the editing interface, local saving, reviewed AI proposals and native exports. Animation supports schema-1 rectangles/groups and native JSON export. No API key, npm install or public server is required. Claude Desktop provides the Node.js runtime. Artifacts remain in a separate local data directory across extension updates. React UI executable preview, Office exports, Video and GIS are not included in this Desktop bundle. This is an unsigned integration preview; actual Claude Desktop installation and UI acceptance on Windows/macOS remain unverified.",
   "author": {
     "name": "Open Editor Platform maintainers"
   },
