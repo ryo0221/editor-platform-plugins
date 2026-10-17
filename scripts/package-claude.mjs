@@ -1,4 +1,5 @@
 import { build } from 'esbuild';
+import { writeAcceptanceTemplate } from './acceptance-record.mjs';
 import { installNodeDistribution, verifyNodeDistribution, selectNodeDistribution } from './claude-code-node.mjs';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
@@ -28,6 +29,13 @@ function gitFiles(directory) {
   if (result.status !== 0) throw Error('A public-source checkout with Git and the initialized submodule is required.');
   return [...new Set(result.stdout.split('\0').filter(Boolean))].sort();
 }
+function sourceProvenance() {
+  const commit = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' });
+  const status = spawnSync('git', ['status', '--porcelain=v1', '--untracked-files=normal'], { cwd: root, encoding: 'utf8' });
+  if (commit.status !== 0 || status.status !== 0 || !/^[a-f0-9]{40}$/.test(commit.stdout.trim())) throw Error('Cannot record source provenance.');
+  return { sourceCommit: commit.stdout.trim(), sourceDirty: status.stdout.trim().length > 0 };
+}
+const provenance = sourceProvenance();
 async function copyFile(source, destination) {
   await mkdir(dirname(destination), { recursive: true });
   await cp(source, destination);
@@ -143,7 +151,7 @@ await writeFile(join(stage, 'SOURCE.md'), [
 ].join('\n'));
 const upstream = JSON.parse(await readFile(join(root, 'upstream.json'), 'utf8'));
 await writeFile(join(stage, 'build-info.json'), JSON.stringify({
-  version: manifest.version, upstream,
+  version: manifest.version, upstream, ...provenance,
   sourceManifestSha256: digest(await readFile(join(stage, 'source', 'FILES.sha256'))),
   uiSha256: digest(await readFile(join(stage, 'ui', 'editor.html'))),
   runtimeSha256: digest(await readFile(join(runtimeDirectory, 'index.mjs'))),
@@ -192,4 +200,5 @@ if (code) {
   run(process.execPath, [cli, 'pack', stage, output]);
 }
 await writeFile(`${output}.sha256`, `${digest(await readFile(output))}  ${relative(outputDirectory, output)}\n`);
+if (code) await writeAcceptanceTemplate(output, JSON.parse(await readFile(join(stage, 'build-info.json'), 'utf8')));
 console.log(`Created ${output}`);

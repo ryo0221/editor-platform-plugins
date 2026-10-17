@@ -48,6 +48,14 @@ for (const target of Object.keys(pins)) {
       const bytes = (path) => execFileSync('tar', ['-xOf', archive, root + path], { maxBuffer: 150 * 1024 * 1024 });
       const info = JSON.parse(bytes('build-info.json'));
       assert.deepEqual(info.nodeDistribution, pin);
+      const record = JSON.parse(await readFile(`${archive}.acceptance-template.json`, 'utf8'));
+      assert.equal(record.package.sha256, digest(await readFile(archive)));
+      assert.equal(record.package.sourceCommit, info.sourceCommit);
+      assert.equal(record.package.sourceDirty, info.sourceDirty);
+      assert.equal(record.package.sourceManifestSha256, info.sourceManifestSha256);
+      assert.equal(record.package.target, target);
+      assert.ok([...record.scenarios, ...record.additionalChecks].every(row => row.result === 'NOT RUN'));
+      assert.ok(Object.values(record.environment).every(value => value === null));
       assert.equal(`${info.platform}-${info.arch}`, target);
       if (info.reactPreviewSha256) assert.equal(digest(bytes('ui/react-preview.html')), info.reactPreviewSha256);
       const config = JSON.parse(bytes('.mcp.json')).mcpServers['editor-platform'];
