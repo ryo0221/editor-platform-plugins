@@ -1,6 +1,6 @@
 # Claude Desktop 拡張のインストール
 
-実機検証の担当者は [Windows / macOS 受入表](claude-desktop-acceptance.md)を使用してください。
+実機検証の担当者は [Windows / macOS 受入表](https://github.com/ryo0221/editor-platform-plugins/blob/main/docs/claude-desktop-acceptance.md)を使用してください。
 実機受入と署名・正式提供の判断が完了するまでは、未署名プレビューを維持します。
 
 配布ファイル: `editor-platform-claude-0.1.3.mcpb`
@@ -94,8 +94,11 @@ OS／Desktop 版を記録し、管理者・提供者へ確認してください�
 自己署名証明書の信頼追加や、管理ポリシー変更はこの導入手順に含みません。
 API キー・署名証明書・追加サービス契約は要求しません。
 
-署名調査とローカル検証の範囲は [Desktop パッケージ検証](claude-desktop-package-verification.md)、
-実機操作は [受入表](claude-desktop-acceptance.md)を参照してください。
+署名調査とローカル検証の範囲は [Desktop パッケージ検証](https://github.com/ryo0221/editor-platform-plugins/blob/main/docs/claude-desktop-package-verification.md)、
+実機操作は [受入表](https://github.com/ryo0221/editor-platform-plugins/blob/main/docs/claude-desktop-acceptance.md)を参照してください。
+
+同梱文書の正確な版は、展開したパッケージの `source/editor-platform-plugins/docs/`
+にも保存されています。Web 上の文書は後の版へ更新される場合があります。
 
 ## 開発者による再作成
 

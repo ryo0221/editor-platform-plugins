@@ -62,6 +62,9 @@ test('Desktop preview manifest and archive are valid and explicitly unsigned', a
   assert.match(manifest.long_description, /unsigned integration preview/);
   assert.match(manifest.long_description, /Animation supports schema-1 rectangles\/groups/);
   assert.match(decode('INSTALL.md'), /SHA-256/);
+  for (const [, target] of decode('INSTALL.md').matchAll(/\]\(([^)]+)\)/g)) {
+    assert.ok(target.startsWith('https://') || files[target], `Broken packaged guide link: ${target}`);
+  }
 });
 
 test('Manifest variable expansion preserves Windows/macOS paths as one argument (not native OS acceptance)', async () => {
