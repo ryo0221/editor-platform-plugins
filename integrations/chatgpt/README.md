@@ -92,7 +92,7 @@ on choices that have not been approved. No cost-free hosting promise is made.
 
 | Gate | Result |
 | --- | --- |
-| Local config, JOSE negative tests, metadata/challenge, header isolation, bounded body | PASS (3 tests) |
+| Local config, JOSE negative tests, metadata/challenge, header isolation, bounded body | PASS (8 tests after review fixes) |
 | Real IdP authorization-code/PKCE, callback, consent, resource and refresh policy | NOT RUN; provider/registration approval required |
 | Real TLS routing, backend isolation, rate limits, rotation/revocation | NOT RUN; no public infrastructure approved |
 | Signed-in ChatGPT create → real Editor display → native edit → save → reread | NOT RUN; approved endpoint and test account required |
@@ -121,3 +121,40 @@ Additional local verification on Linux / Node 24.19.0: real backend MCP smoke
 because Playwright's managed browser was absent. Re-running the browser stage with
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run test:e2e` passed all 21
 cases, with no retries. These remain local checks, not ChatGPT acceptance.
+
+## Review follow-up: tool-level linking is not implemented
+
+The adapter enforces transport authorization with HTTP 401/403 and RFC 9728
+metadata. It does **not** implement ChatGPT's tool-level linking/relinking UI.
+The [official authentication guide](https://developers.openai.com/plugins/build/auth)
+requires per-tool `securitySchemes` and runtime error results with
+`_meta["mcp/www_authenticate"]`, including error and error_description. The shared
+server currently emits neither. Transport rejection alone does not establish
+that tool-level login/reconnect works. No such host acceptance is claimed.
+
+Proposed shared-file scope for parent coordination, **not implemented in this PR**:
+
+- `src/server/mcp.ts`: optional host-specific OAuth metadata in the common tool
+  registration helper, plus a trusted per-call authorization hook that can return
+  an auth error before parsing/executing an operation. Preserve ordinary stdio
+  behavior and UI visibility; never treat model arguments as credentials.
+- `src/server/main.ts`: pass validated request authorization context to that hook.
+  The current adapter replaces the token with an internal credential, so this
+  needs an explicit trusted transport contract, not blindly forwarded headers.
+- Dedicated auth/MCP tests: discovery metadata, missing/expired/insufficient token
+  errors, no side effects on rejection, reconnect and unaffected local stdio.
+
+The parent must coordinate those files with concurrent server work and review how
+unauthenticated discovery/challenges should be exposed. Do not make protected
+operations anonymous just to trigger linking. Real ChatGPT initial login, token
+expiry, scope changes and reconnect remain NOT RUN pending that integration and
+approved IdP/TLS setup.
+
+Review regression evidence: scope now requires a string before regex validation;
+omitted, undefined, null and numeric values reject configuration. Eight local
+adapter tests cover missing required claims, future nbf/iat, algorithm allowlists,
+ES256 success, JWKS network/HTTP/JSON/empty-key failures and key rotation. JWKS
+fixtures use JOSE's customFetch hook without any external network. Rotation tests
+retain the default cooldown, explicitly refresh the fixture cache, and establish
+that removed keys remain accepted while cached but fail after refresh. They do not
+claim instant revocation, elapsed-time cache expiration or a real IdP rotation.

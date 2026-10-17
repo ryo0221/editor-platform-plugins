@@ -12,7 +12,7 @@ export function configuration(input) {
     if (u.protocol !== 'https:' || u.username || u.password || u.search || u.hash) throw Error(`Invalid ${name}`);
     if (name === 'resource' && u.pathname !== '/mcp') throw Error('Resource must end in /mcp');
   }
-  if (!c.subject || !c.clientId || !/^[\w:.-]+$/.test(c.scope)) throw Error('Owner, client and scope required');
+  if (!c.subject || !c.clientId || typeof c.scope !== 'string' || !/^[\w:.-]+$/.test(c.scope)) throw Error('Owner, client and scope required');
   if (!['RS256', 'ES256'].includes(c.algorithm)) throw Error('Unsupported algorithm');
   const u = new URL(c.upstream);
   if (u.protocol !== 'http:' || u.hostname !== '127.0.0.1' || u.pathname !== '/mcp' || u.username || u.password || u.search || u.hash) throw Error('Upstream must be fixed loopback /mcp');
