@@ -168,3 +168,30 @@ Official references checked 2026-10-16:
 
 - https://code.claude.com/docs/en/plugins/manifest-reference
 - https://code.claude.com/docs/en/plugins/install
+
+## Cross-packaging candidates (issue #4)
+
+Maintainers can build on Linux with an explicit target, without executing the
+foreign runtime. The default remains `linux-x64`. Review the official version and
+SHA-256 pins in `scripts/claude-code-node-targets.json`; the original Linux pin is
+retained for compatibility. Official checksums were retrieved from
+https://nodejs.org/dist/v24.19.0/SHASUMS256.txt on 2026-10-17.
+
+```sh
+EDITOR_PACKAGE_TARGET=darwin-arm64 EDITOR_NODE_ARCHIVE=/absolute/path/to/node-v24.19.0-darwin-arm64.tar.gz npm run package:claude-code
+EDITOR_PACKAGE_TARGET=darwin-x64 EDITOR_NODE_ARCHIVE=/absolute/path/to/node-v24.19.0-darwin-x64.tar.gz npm run package:claude-code
+EDITOR_PACKAGE_TARGET=win32-x64 EDITOR_NODE_ARCHIVE=/absolute/path/to/node-v24.19.0-win-x64.zip npm run package:claude-code
+```
+
+All outputs are `.tar.gz` marketplace candidates plus `.sha256` sidecars. Windows
+candidates contain `runtime/node.exe` and a matching MCP command. The Windows
+Node ZIP is verified before extracting only `node.exe` and `LICENSE`; no npm or
+foreign executable runs during extraction. Builds share staging directories:
+run packaging commands sequentially, not concurrently.
+
+These targets are **not accepted OS support**. Native macOS arm64/x64, Windows x64
+and WSL installation, executable permissions, plugin path expansion, OS browser
+opener, default storage location and the full signed-in scenario remain NOT RUN.
+The existing runtime selects `open`, `explorer.exe` or `xdg-open`; cross-packaging
+cannot verify that these actually open the user's graphical browser. Keep the LP
+supported-environment list empty until actual-host evidence exists per target.
