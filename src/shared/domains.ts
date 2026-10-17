@@ -1,3 +1,4 @@
+import { createAnimation, validAnimation } from './animation';
 import { z } from 'zod';
 import { createDocument, isDocument, exportMarkdown, type DocumentContent } from '@editor-platform/document/model';
 import { createDesign, isDesign, exportDesignSvg, type DesignContent } from '@editor-platform/design/model';
@@ -7,11 +8,11 @@ import { createReview, isReview, createFile, isFile } from '@editor-platform/rev
 import { createRelationGraph, relationProfile, assertGraph, type GraphProfile } from '@editor-platform/structured-graph/model';
 import { isReactUiDocument } from '@editor-platform/react-ui-core';
 
-export const artifactKinds = ['slide', 'document', 'design', 'whiteboard', 'data', 'graph', 'review', 'file', 'react-ui'] as const;
+export const artifactKinds = ['slide', 'document', 'design', 'whiteboard', 'data', 'graph', 'review', 'file', 'react-ui', 'animation'] as const;
 export type ArtifactKind = typeof artifactKinds[number];
 export type ExtraKind = Exclude<ArtifactKind, 'slide'>;
 export const kindSchema = z.enum(artifactKinds);
-export const domainLabels: Record<ArtifactKind, string> = { slide: 'Slide', document: 'Document', design: 'Design', whiteboard: 'Whiteboard', data: 'Data', graph: 'Graph', review: 'Review', file: 'File', 'react-ui': 'React UI' };
+export const domainLabels: Record<ArtifactKind, string> = { slide: 'Slide', document: 'Document', design: 'Design', whiteboard: 'Whiteboard', data: 'Data', graph: 'Graph', review: 'Review', file: 'File', 'react-ui': 'React UI', animation: 'Animation' };
 
 export { previewEnvironment as reactEnvironment } from '../react-preview/catalog';
 import { createPreviewDocument } from '../react-preview/catalog';
@@ -23,6 +24,7 @@ interface NativeAdapter {
 // Only adapter envelopes are shared. Every retained document is the upstream native
 // model and is validated by its own domain, never converted into a universal node tree.
 export const nativeAdapters: Record<ExtraKind, NativeAdapter> = {
+  animation: { create: createAnimation, valid: validAnimation },
   document: { create: createDocument, valid: isDocument, export: (d) => [{ filename: 'document.md', mime: 'text/markdown', text: exportMarkdown(d as DocumentContent) }] },
   design: { create: createDesign, valid: isDesign, export: (d) => [{ filename: 'design.svg', mime: 'image/svg+xml', text: exportDesignSvg(d as DesignContent) }] },
   whiteboard: { create: createWhiteboard, valid: isWhiteboard, export: (d) => [{ filename: 'whiteboard.svg', mime: 'image/svg+xml', text: exportWhiteboardSvg(d as WhiteboardContent) }] },

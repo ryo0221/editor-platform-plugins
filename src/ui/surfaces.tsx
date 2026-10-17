@@ -1,3 +1,6 @@
+import { AnimationSurface } from './animation-surface';
+import { EditorSession } from '@editor-platform/editor-core';
+import type { ReferenceResolver } from '@editor-platform/artifact-references';
 import { SlideSurface } from '@editor-platform/slide';
 import type { SlideContent } from '@editor-platform/slide/model';
 import { DocumentSurface, type DocumentContent } from '@editor-platform/document';
@@ -15,13 +18,14 @@ import type { ArtifactKind } from '../shared/domains';
 
 import { previewAdapter } from '../react-preview/adapter';
 import { createPreviewDocument } from '../react-preview/catalog';
-export function NativeSurface({ kind, content, execute, select, selected, readOnly, artifactId, profile: ownedProfile }: {
+export function NativeSurface({ kind, content, execute, select, selected, readOnly, artifactId, profile: ownedProfile, references, session, history }: {
   kind: ArtifactKind; content: unknown; execute(command: EditorCommand<unknown>): boolean;
-  select(ids: string | string[]): void; selected: string[]; readOnly: boolean; artifactId: string; profile?: GraphProfile;
+  select(ids: string | string[]): void; selected: string[]; readOnly: boolean; artifactId: string; profile?: GraphProfile; references?: ReferenceResolver; session: EditorSession<unknown>; history(direction: 'undo' | 'redo'): void;
 }) {
   const cmd = <T,>(command: EditorCommand<T>) => execute(command as EditorCommand<unknown>);
   const layout = { viewKey: artifactId, defaultPanels: { left: true, right: true, rightWidth: 250, tab: 'properties' as const, focus: false } };
-  if (kind === 'slide') return <SlideSurface content={content as SlideContent} execute={cmd} select={select} readOnly={readOnly} layout={layout} />;
+  if (kind === 'animation') return <AnimationSurface artifactId={artifactId} content={content} session={session} execute={execute} readOnly={readOnly} history={history} />;
+  if (kind === 'slide') return <SlideSurface references={references} content={content as SlideContent} execute={cmd} select={select} readOnly={readOnly} layout={layout} />;
   if (kind === 'document') return <DocumentSurface content={content as DocumentContent} execute={cmd} select={select} selectedId={selected[0]} readOnly={readOnly} layout={layout} />;
   if (kind === 'design') return <DesignSurface content={content as DesignContent} execute={cmd} select={select} readOnly={readOnly} layout={layout} />;
   if (kind === 'whiteboard') return <WhiteboardSurface content={content as WhiteboardContent} execute={cmd} select={select} readOnly={readOnly} layout={layout} />;

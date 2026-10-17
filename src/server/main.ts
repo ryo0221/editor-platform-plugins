@@ -17,20 +17,37 @@ function authenticated(req: IncomingMessage, token: string) {
   const expected = Buffer.from(`Bearer ${token}`);
   return received.length === expected.length && timingSafeEqual(received, expected);
 }
+export type HttpOAuth = {
+  resource: string; issuer: string; scope: string;
+  // Trusted application callback; validates signature/issuer/audience/owner/client.
+  // true = authorized, false = insufficient scope, throw = invalid token.
+  verifyAccessToken: (token: string) => Promise<boolean>;
+};
 export function startHttp(options: {
   host: string; port: number; token?: string; demo?: boolean;
-  store: DeckStore; html?: URL; allowedHost?: string; browserHtml?: URL; reactPreviewUrl?: string;
+  store: DeckStore; html?: URL; allowedHost?: string; browserHtml?: URL; oauth?: HttpOAuth; reactPreviewUrl?: string;
 }) {
   const local = ['127.0.0.1', '::1', 'localhost'].includes(options.host);
   if (!local && (!options.token || options.token.length < 32)) throw Error('Remote binding requires EDITOR_ACCESS_TOKEN of at least 32 characters.');
   if (options.demo && !local) throw Error('The demo harness is loopback-only.');
   if (options.browserHtml && (!local || !options.token)) throw Error('The browser host requires loopback and an access token.');
+  const oauth = options.oauth;
+  if (oauth) {
+    if (!local || options.token || options.demo || options.browserHtml) throw Error('OAuth candidate requires exclusive loopback HTTP mode.');
+    for (const value of [oauth.resource, oauth.issuer]) {
+      const url = new URL(value);
+      if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash) throw Error('OAuth URLs require HTTPS.');
+    }
+    if (new URL(oauth.resource).pathname !== '/mcp' || typeof oauth.scope !== 'string' || !/^[\w:.-]+$/.test(oauth.scope)) throw Error('Invalid OAuth resource or scope.');
+  }
+  const metadata = oauth ? `${new URL(oauth.resource).origin}/.well-known/oauth-protected-resource/mcp` : undefined;
   const htmlFile = options.html ?? html;
   const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
     try {
       const hostname = (req.headers.host ?? '').replace(/:\d+$/, '');
       const allowed = new Set(['127.0.0.1', 'localhost', '[::1]', options.allowedHost].filter(Boolean));
       if (!allowed.has(hostname)) { res.writeHead(403).end('Host not allowed'); return; }
+      if (oauth && req.headers.host !== new URL(oauth.resource).host) { res.writeHead(403).end('Host not allowed'); return; }
       const path = new URL(req.url ?? '/', 'http://localhost').pathname;
       if (req.method === 'GET' && path === '/favicon.ico') { res.writeHead(204).end(); return; }
       if (req.method === 'GET' && path === '/health') { res.writeHead(200, { 'Content-Type': 'application/json' }).end('{"status":"ok"}'); return; }
@@ -41,6 +58,25 @@ export function startHttp(options: {
           'Referrer-Policy': 'no-referrer', 'X-Content-Type-Options': 'nosniff',
           'Content-Security-Policy': "frame-ancestors 'self'" }).end((await readFile(path === '/browser' ? options.browserHtml : htmlFile, 'utf8')).replace('<head>', path === '/editor.html' && options.reactPreviewUrl ? `<head><meta name="editor-react-preview" content="${options.reactPreviewUrl}">` : '<head>')); return;
       }
+      if (oauth && req.method === 'GET' && ['/.well-known/oauth-protected-resource/mcp', '/.well-known/oauth-protected-resource'].includes(req.url ?? '')) {
+        res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }).end(JSON.stringify({ resource: oauth.resource, authorization_servers: [oauth.issuer], scopes_supported: [oauth.scope], bearer_methods_supported: ['header'] })); return;
+      }
+      // Capture only the actual Authorization header, never forwarded identity,
+      // RPC _meta or tool arguments. Revalidate inside the tool handler as well.
+      const authorize = async (): Promise<string | undefined> => {
+        let error = 'invalid_token';
+        try {
+          const match = /^Bearer ([^\s]+)$/i.exec(req.headers.authorization ?? '');
+          if (match && oauth) {
+            if (await oauth.verifyAccessToken(match[1]) === true) return undefined;
+            error = 'insufficient_scope';
+          }
+        } catch { /* Do not reveal verifier errors, credentials or owner identity. */ }
+        return `Bearer resource_metadata="${metadata}", scope="${oauth?.scope}", error="${error}", error_description="Reconnect to authorize this workspace"`;
+      };
+      const denied = oauth ? await authorize() : undefined;
+      const rejectOAuth = () => { res.writeHead(denied?.includes('error="insufficient_scope"') ? 403 : 401, { 'WWW-Authenticate': denied!, 'Cache-Control': 'no-store' }).end('Authentication required'); };
+      if (oauth && (req.url !== '/mcp' || req.method !== 'POST') && denied) { rejectOAuth(); return; }
       if (options.token && !authenticated(req, options.token)) {
         res.writeHead(401, { 'WWW-Authenticate': 'Bearer', 'Cache-Control': 'no-store' }).end('Unauthorized'); return;
       }
@@ -75,7 +111,10 @@ export function startHttp(options: {
       let body: unknown;
       try { body = JSON.parse(Buffer.concat(chunks).toString('utf8')); }
       catch { res.writeHead(400).end('Invalid JSON'); return; }
-      const mcp = createEditorServer(options.store, htmlFile);
+      // Only tools/call may reach an auth-error handler without a valid token.
+      // Discovery/resources/unknown methods and batches stay transport-protected.
+      if (denied && (!body || typeof body !== 'object' || Array.isArray(body) || !('method' in body) || body.method !== 'tools/call')) { rejectOAuth(); return; }
+      const mcp = createEditorServer(options.store, htmlFile, oauth ? { oauth: { scope: oauth.scope, authorize } } : {});
       const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true });
       res.on('close', () => { void transport.close(); void mcp.close(); });
       res.setHeader('Cache-Control', 'no-store');

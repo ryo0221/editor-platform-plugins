@@ -1,5 +1,5 @@
 import { build } from 'esbuild';
-import { installNodeDistribution, verifyNodeDistribution, nodeDistribution } from './claude-code-node.mjs';
+import { installNodeDistribution, verifyNodeDistribution, selectNodeDistribution } from './claude-code-node.mjs';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { createRequire, isBuiltin } from 'node:module';
@@ -10,10 +10,12 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const require = createRequire(import.meta.url);
 const code = process.argv.includes('--code');
+const nodeDistribution = selectNodeDistribution(process.env.EDITOR_PACKAGE_TARGET);
+const nodeExecutable = nodeDistribution.platform === 'win32' ? 'node.exe' : 'node';
 const stage = join(root, 'work', code ? 'claude-code-bundle/plugins/editor-platform' : 'claude-desktop-bundle');
 const outputDirectory = join(root, 'release');
 const manifest = JSON.parse(await readFile(join(root, 'desktop', 'manifest.json'), 'utf8'));
-const output = join(outputDirectory, code ? `editor-platform-claude-code-${manifest.version}-${process.platform}-${process.arch}.tar.gz` : `editor-platform-claude-${manifest.version}.mcpb`);
+const output = join(outputDirectory, code ? `editor-platform-claude-code-${manifest.version}-${nodeDistribution.platform}-${nodeDistribution.arch}.tar.gz` : `editor-platform-claude-${manifest.version}.mcpb`);
 const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
 function run(command, args, cwd = root) {
@@ -33,8 +35,7 @@ async function copyFile(source, destination) {
 
 // Only the maintainer runs npm. Installation and startup never use npm or Git.
 if (code) {
-  if (process.platform !== nodeDistribution.platform || process.arch !== nodeDistribution.arch) throw Error('Only Linux x64 candidate packaging is currently implemented.');
-  await verifyNodeDistribution(process.env.EDITOR_NODE_ARCHIVE);
+  await verifyNodeDistribution(process.env.EDITOR_NODE_ARCHIVE, nodeDistribution);
 }
 if (!process.env.npm_execpath) throw Error('Run this packager using npm run package:claude.');
 run(process.execPath, [process.env.npm_execpath, 'run', 'build']);
@@ -155,11 +156,11 @@ if (code) {
   run(process.execPath, [process.env.npm_execpath, 'run', 'build:browser']);
   await copyFile(join(root, 'dist-browser', 'browser.html'), join(stage, 'ui', 'browser.html'));
   await copyFile(join(root, 'dist-react-preview', 'react-preview.html'), join(stage, 'ui', 'react-preview.html'));
-  await installNodeDistribution(process.env.EDITOR_NODE_ARCHIVE, join(stage, 'runtime'));
+  await installNodeDistribution(process.env.EDITOR_NODE_ARCHIVE, join(stage, 'runtime'), nodeDistribution);
   await copyFile(join(root, '.claude-plugin', 'plugin.json'), join(stage, '.claude-plugin', 'plugin.json'));
   await cp(join(root, 'skills'), join(stage, 'skills'), { recursive: true });
   await writeFile(join(stage, '.mcp.json'), JSON.stringify({ mcpServers: { 'editor-platform': {
-    command: '${CLAUDE_PLUGIN_ROOT}/runtime/node', args: ['${CLAUDE_PLUGIN_ROOT}/server/code.mjs'],
+    command: '${CLAUDE_PLUGIN_ROOT}/runtime/' + nodeExecutable, args: ['${CLAUDE_PLUGIN_ROOT}/server/code.mjs'],
   } } }, null, 2) + '\n');
   await mkdir(join(stage, 'server'), { recursive: true });
   await writeFile(join(stage, 'server', 'code.mjs'), [
@@ -170,11 +171,11 @@ if (code) {
   const infoPath = join(stage, 'build-info.json');
   const info = JSON.parse(await readFile(infoPath, 'utf8'));
   info.nodeDistribution = nodeDistribution;
-  info.nodeSha256 = digest(await readFile(join(stage, 'runtime', 'node')));
+  info.nodeSha256 = digest(await readFile(join(stage, 'runtime', nodeExecutable)));
   info.nodeLicenseSha256 = digest(await readFile(join(stage, 'runtime', 'LICENSE')));
   info.reactPreviewSha256 = digest(await readFile(join(stage, 'ui', 'react-preview.html')));
   info.browserSha256 = digest(await readFile(join(stage, 'ui', 'browser.html')));
-  info.platform = process.platform; info.arch = process.arch;
+  info.platform = nodeDistribution.platform; info.arch = nodeDistribution.arch;
   await writeFile(infoPath, JSON.stringify(info, null, 2) + '\n');
   const marketplace = join(stage, '..', '..');
   await mkdir(join(marketplace, '.claude-plugin'), { recursive: true });

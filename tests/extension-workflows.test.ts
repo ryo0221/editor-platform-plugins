@@ -28,7 +28,7 @@ async function harness(run: (call: (name: string, args: Record<string, unknown>,
 
 test('discovered Slide contract and all published edit examples work; full-content proposals handle chart/table changes', async () => harness(async (call, client) => {
   const guide = await call('get_editor_guide', { kind: 'slide' });
-  assert.equal(guide.capabilities.crossArtifactEmbedding, false);
+  assert.deepEqual(guide.capabilities.crossArtifactEmbedding.destinations, ['slide']);
   assert.match(client.getInstructions()!, /static snapshots/);
   const tools = (await client.listTools()).tools;
   const schema = tools.find((t) => t.name === 'propose_slide_changes')!.inputSchema;
@@ -105,7 +105,7 @@ test('all nine domains have paginated discovery and revision-safe recoverable de
     collected.push(...page.artifacts.map((a: any) => a.id)); cursor = page.nextCursor;
     assert.ok(page.artifacts.every((a: any) => !('content' in a)));
   } while (cursor);
-  assert.equal(new Set(collected).size, 9); assert.equal(collected.length, 9);
+  assert.equal(new Set(collected).size, 10); assert.equal(collected.length, 10);
   for (const record of created) {
     await call('propose_artifact_changes', { artifactId: record.id, baseRevision: 1, summary: 'Pending before delete', content: record.content });
     await call('delete_artifact', { artifactId: record.id, baseRevision: 999 }, true);
@@ -126,5 +126,5 @@ test('all nine domains have paginated discovery and revision-safe recoverable de
     await call('delete_artifact', { artifactId: record.id, baseRevision: 3 });
   }
   assert.equal((await call('list_artifacts', { state: 'active' })).artifacts.length, 0);
-  assert.equal((await call('list_artifacts', { state: 'deleted' })).artifacts.length, 9);
+  assert.equal((await call('list_artifacts', { state: 'deleted' })).artifacts.length, 10);
 }));

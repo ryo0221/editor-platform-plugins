@@ -11,6 +11,7 @@ import { addRow, type StructuredData } from '@editor-platform/structured-data/mo
 
 function changed(kind: ExtraKind, input: unknown): unknown {
   const value = structuredClone(input) as any;
+  if (kind === 'animation') value.compositions[0].layers[0].transform.y = 150;
   if (kind === 'document') value.blocks[0].text = 'Edited document';
   if (kind === 'design') return insertElement('text').apply(value as DesignContent);
   if (kind === 'whiteboard') return insertNode('sticky').apply(value as WhiteboardContent);
@@ -53,3 +54,13 @@ for (const kind of Object.keys(nativeAdapters) as ExtraKind[]) {
     } finally { await rm(dir, { recursive: true, force: true }); }
   });
 }
+
+test('Animation refuses prototype, external assets and unsupported nested compositions', () => {
+  const original: any = nativeAdapters.animation.create();
+  for (const update of [
+    (d: any) => { d.schemaVersion = 'animation-prototype-0'; },
+    (d: any) => { d.assets = [{ id: 'external', contentHash: '0'.repeat(64), byteLength: 1, mediaType: 'image/png' }]; },
+    (d: any) => { d.compositions[0].layers[0].type = 'composition'; },
+    (d: any) => { d.ticksPerSecond = 1000; },
+  ]) { const value = structuredClone(original); update(value); assert.equal(nativeAdapters.animation.valid(value), false); }
+});

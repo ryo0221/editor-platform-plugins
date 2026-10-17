@@ -258,6 +258,89 @@ Rebuilt Code archive: PASS (1 isolated package test). Existing Desktop MCPB:
 PASS (2 isolated package tests). Together with the 27 unit/protocol and 21 browser
 cases, all 51 tests passed. Real signed-in host acceptance remains NOT RUN.
 
+## Issue #4 — cross-packaging evidence (2026-10-17)
+
+Candidate source commit: `b8136d8583b407d4da3f3e1923aa8c15d333ec7b`.
+Plugin: 0.1.3 candidate. Public pin remains
+`a9e708331ff9b78886a02d3c30dca67bfafdf2e8` (unchanged).
+Builder: Debian GNU/Linux 13 x64, Node 24.19.0, Chromium 151.0.7922.173.
+The following documentation-only evidence commit is not a rebuilt candidate.
+
+| Check | Result |
+| --- | --- |
+| Full `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run check` | PASS: 28 unit/protocol + 21 browser cases |
+| Linux standalone Code archive | PASS: 1 isolated package test |
+| Existing Desktop MCPB | PASS: 2 isolated package tests (builder Node 24.19.0) |
+| Four official Node archives / extracted binary and LICENSE / packaged UI hashes / target metadata and MCP command | PASS: static inspection |
+| Wrong-target official archive rejected | PASS: Linux archive against Windows pin |
+| Signed-in Claude Code, Codex, ChatGPT and Claude Desktop acceptance | NOT RUN |
+| Native macOS arm64/x64, Windows x64, WSL installation/browser/storage acceptance | NOT RUN |
+| Release and demo video | NOT RUN |
+
+Initial full check: 28 protocol PASS; browser 20 PASS / 1 FAIL while package builds
+were also replacing generated output. The failing case timed out waiting for the
+harness to connect, before editing assertions. After all packaging completed,
+the unchanged full check passed 28 + 21 with no retries or skips. Concurrent
+build/output replacement is a possible cause, not a proven diagnosis. Do not run
+packaging concurrently with browser checks or another package build.
+
+Archive SHA-256 (all generated from the candidate source commit above):
+
+```text
+b0255b78a9b4d3aaab5947df1832ae1dc2071098967510c21ee8a9ae280b3dd8  editor-platform-claude-0.1.3.mcpb
+0102190badb7e77e30e32f696bde00a67d9e60047020054a282032042f04627a  editor-platform-claude-code-0.1.3-darwin-arm64.tar.gz
+eef22ef90991f4d8f80e199feece2ba88af9a8d0eaf9149c3cbffa5ef17da740  editor-platform-claude-code-0.1.3-darwin-x64.tar.gz
+e3c1addf748d32c984f751e894a20bb965d5fb6a01894e3f9a5438a8b74b1607  editor-platform-claude-code-0.1.3-linux-x64.tar.gz
+cc1b5bf2bfd9f3af893a7cd40e6cd119e43bb1292509002fbfce756dfe8dbcd2  editor-platform-claude-code-0.1.3-win32-x64.tar.gz
+```
+
+The files remain local under `release/`, outside Git. macOS/Windows archives were
+inspected on Linux and never executed. No supported-OS or LP availability claim
+follows from this packaging evidence. Issue #4 remains open for native acceptance.
+No automatic CI, performance measurement, private-source copying or release was
+introduced. OS browser openers and human-only model/browser boundaries are unchanged.
+
+## PR #13 review follow-up — 2026-10-17
+
+Final rebuilt candidate/test source commit:
+`13e4a348e330cc96e6fe49512dff131d3257949c`. The subsequent commit records
+evidence only and was not used to rebuild these archives. These hashes supersede
+the earlier b8136d8 candidates; included documentation changes the source closure.
+Builder: Debian 13 x64, Node 24.19.0, Chromium 151.0.7922.173.
+
+- Full check: PASS, 28 protocol/unit + 21 browser, no retries/skips.
+- Linux isolated Code package: PASS, 1 test. Desktop package: PASS, 2 tests.
+- Four-target offline inspection: PASS, 4 tests. Reproduce using
+  `EDITOR_NODE_ARCHIVE_DIR=/path/to/official-archives npm run test:platform-packages`.
+  Verifies official checksum, rejects wrong-target archives before extraction,
+  checks allowed runtime files, binary/LICENSE bytes, archive checksum, manifest,
+  target metadata and bundled source/runtime/UI hashes. No target binary executes.
+- Model-only discovery and direct-call refusal now cover all eight human-only
+  save/apply/reject/selection tools, both source stdio and installed Code package.
+- Windows explorer.exe exit semantics, native OS paths/browser/storage/update
+  retention and authenticated Codex/Claude acceptance: NOT RUN.
+
+```text
+0ca3dab1a118b576db027bd18480505583569b2ed23d311cd6ff42bb2dbf080e  editor-platform-claude-0.1.3.mcpb
+106ebdc8cd87200fd198f60777a00fe364581f23e0a5b87a9a29afbfc9d5200d  editor-platform-claude-code-0.1.3-darwin-arm64.tar.gz
+77611be4eb5660c0974e85febf698a186e736c807a34560d43749f536800551b  editor-platform-claude-code-0.1.3-darwin-x64.tar.gz
+205129a51d8a8d48d884f4c391bd5318580488d3b52f24667e67637854126d19  editor-platform-claude-code-0.1.3-linux-x64.tar.gz
+584628aac01b36ca7a23b448b32bcbc8fddd1c63b7ab979b3b340a540bc4ea3e  editor-platform-claude-code-0.1.3-win32-x64.tar.gz
+```
+
+### PR #13 source-closure review follow-up
+
+The offline inspector now reads every `source/FILES.sha256` entry, verifies its
+actual bytes and count, compares both packaged source/build upstream pins with the
+reviewed checkout pin, verifies the public export-manifest digest and every public
+file declared by that manifest. Only regular files/directories are extracted;
+foreign runtimes are never executed. Five focused tests PASS, including missing
+source, modified source, wrong expected pin, and public-source tampering even when
+the outer source manifest/hash is recomputed. All four existing 13e4a34 candidate
+archives PASS the stronger inspection. These are verifier changes; no new archive
+hash or rebuild of those candidates is claimed. The integration build will include
+the updated verifier and record its own source commit and hashes.
+
 ## Public upstream synchronization — 2026-10-17
 
 Pinned public commit `97ea905745101b3814d14febcc0c31b157023c71`. All 1,749
@@ -273,3 +356,90 @@ acceptance: NOT RUN. This base change does not enable Animation or references.
 The public snapshot contains AnimationControlledSurface, rectangle Player v1 and
 Data/Graph ReferenceResolver adapters; Host adapters remain separate work.
 No performance measurement, automatic Actions, Release or merge was performed.
+
+## Animation adapter — issue #6 (2026-10-17)
+
+Depends on the public-sync base (PR #14), not packaging PR #13 or Codex PR #12.
+Uses only public AnimationControlledSurface, schema-1 validation, commands and
+rectangle Player. Plugin Host owns the existing session, pending-input flush,
+revision-checked toolbar save and proposal review; internal Surface save is
+disabled. Player preparation is generation-checked and disposed on scope teardown.
+External assets, nested compositions, prototype migration and movie/GIF export
+are rejected or unavailable. Native JSON remains the export contract.
+
+Debian 13 x64, Node 24.19.0, Chromium 151.0.7922.173: full check PASS
+(29 protocol/unit, 23 browser). New checks include native create/save/propose/
+reject/apply/export/restart, unsupported schema/assets rejection, real Player
+play/pause, buffered manual edit followed immediately by Save, Undo/Redo, preview/
+reject/apply and reload. The actual Animation screenshot was visually inspected.
+These are local harness checks. Signed-in host acceptance, native Windows/macOS,
+mobile, Release and demo recording remain NOT RUN. No performance measurement.
+
+Animation package checkpoint: source commit `d6308b4` (subsequent evidence-only
+commit not rebuilt). Linux Code isolated package PASS (1), Desktop MCPB PASS (2),
+Node 24.19.0 on Debian 13 x64. Generated files remain outside Git:
+
+```text
+5b4b85b5cb78f2bd9f6dadc22687900d8db783b37d023e8879b9b795ff40d82f  editor-platform-claude-0.1.3.mcpb
+61c05d29e4ab72f33adac7be0b38c11c37f63c83995d0f34fe7a11407587542c  editor-platform-claude-code-0.1.3-linux-x64.tar.gz
+```
+
+## Data/Graph → Slide references — issue #7 (2026-10-17)
+
+Depends only on the public-sync base PR #14. This sibling of Animation PR #17
+does not enable Animation; combine both capability declarations when integrating.
+Shared MCP registration changes preserve the single-owner authentication and
+model-only human-tool boundary. OAuth authorization hooks are separate work and
+must be retained during integration.
+
+Candidate source and package-test commit:
+`dd9c8d6aba1887b0ea42c953d0275ef68275f5bd`. Public pin:
+`97ea905745101b3814d14febcc0c31b157023c71`. Debian 13 x64, Node 24.19.0,
+Chromium 151.0.7922.173. Subsequent screenshot-wait/evidence changes do not change
+runtime code and were not used to rebuild the archives below.
+
+| Check | Result |
+| --- | --- |
+| Public pin, strict types, Editor/browser/harness builds | PASS |
+| Unit/protocol | PASS, 28 tests |
+| Full Chromium browser run | PASS, 22 cases, no retries/skips |
+| Linux isolated Code package | PASS, 1 test, including Data/Graph snapshot creation |
+| Existing Desktop MCPB | PASS, 2 tests, including a reviewed embedded Data image |
+| Updated screenshot-wait reference browser case | PASS, 1 additional run; rendered table inspected |
+| Signed-in hosts; native macOS/Windows; mobile; Release | NOT RUN |
+
+Protocol checks cover fixed/follow capture, no implicit destination writes, pending
+source proposals excluded, issued-version tamper rejection even with recomputed
+hash, concurrent issuance, restart retention, Graph Profile dependency and missing
+target/source refusal. The browser edits saved Data, observes the real Slide
+projection update, verifies the destination stayed at its old saved revision,
+explicitly saves the captured source revision and observes deletion diagnostics.
+
+Initial browser checks found a real export bug: EditorSession.content returns a
+caller-owned copy, so object-identity comparison falsely rejected unchanged draft
+exports. The Host now uses public sameLocalRevision. An interrupted runner left
+a test listener; it was stopped before rerunning. A subsequent reference assertion
+expected grouped digits, while the native table correctly displayed raw 987654;
+the assertion now matches native output. The final full check passed unchanged
+application behavior and all existing browser cases.
+
+```text
+7225aaa2d538b27ba288ab441d88d359edb8cc935e355c5bc2b78e386eb7de76  editor-platform-claude-0.1.3.mcpb
+05a9c7da5a666a90c71669b67bcb56b666843aa53c86a2db533c8e66920c3df4  editor-platform-claude-code-0.1.3-linux-x64.tar.gz
+```
+
+These generated files remain local. Document/Design/Whiteboard destinations are
+not wired in this increment. Back up the complete data directory, including
+reference-snapshots; fixed history has no automatic cleanup. No private source,
+CI activation, performance measurement, Release or merge was performed.
+
+### PR #18 listing/SDK review follow-up
+
+Reference source discovery now internally pages the existing inventory contract,
+including pages containing no Data/Graph sources. Regression checks PASS with an
+empty workspace, a full 1000-item non-source page, a Data source after that page,
+and termination at the final empty page. No source-count truncation is applied.
+An actual SDK 1.x client also passes a complete ReferenceSource (including target)
+to read_reference_source successfully: schema.shape normalization strips the extra
+field before the strict handler. The reported target/strict-schema candidate is
+not an unresolved bug; no runtime workaround was added.

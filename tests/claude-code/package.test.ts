@@ -42,18 +42,25 @@ test('Code archive: standalone runtime/UI, human-only channel, relocation and re
       };
       try {
         const names = (await client.listTools()).tools.map((tool) => tool.name);
-        assert.ok(!names.includes('apply_slide_proposal'));
+        for (const name of ['save_slide_draft', 'apply_slide_proposal', 'reject_slide_proposal', 'set_slide_selection', 'save_artifact_draft', 'apply_artifact_proposal', 'reject_artifact_proposal', 'set_artifact_selection']) {
+          assert.ok(!names.includes(name), name);
+          assert.equal((await client.callTool({ name, arguments: {} })).isError, true, name);
+        }
         if (!restart) {
-          for (const kind of ['slide', 'document', 'design', 'whiteboard', 'data', 'graph', 'review', 'file', 'react-ui']) {
+          for (const kind of ['slide', 'document', 'design', 'whiteboard', 'data', 'graph', 'review', 'file', 'react-ui', 'animation']) {
             const guide = await call('get_editor_guide', { kind });
             const made = await call('create_artifact', { kind, title: `Standalone ${kind}`, content: guide.exampleContent });
             const record = made.deck ?? made.artifact;
             assert.deepEqual(record.content, guide.exampleContent);
             await call('export_artifact', { artifactId: record.id });
+            if (kind === 'data' || kind === 'graph') {
+              const prepared = await call('create_reference', { source: { artifactId: record.id, domain: kind === 'graph' ? 'structured-graph' : 'data', target: { kind: kind === 'graph' ? 'graph' : 'table', viewId: kind === 'graph' ? record.content.id : 'default' } }, mode: 'fixed' });
+              assert.deepEqual(prepared.reference.snapshot.content, record.content);
+            }
             if (kind === 'slide') id = record.id;
           }
         } else {
-          const listed = await call('list_artifacts', {}); assert.equal(listed.artifacts.length, 9);
+          const listed = await call('list_artifacts', {}); assert.equal(listed.artifacts.length, 10);
           const saved = await call('read_deck', { deckId: id }); assert.equal(saved.deck.revision, 2);
         }
         if (restart) {
