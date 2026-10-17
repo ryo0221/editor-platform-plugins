@@ -1,4 +1,5 @@
 import { build } from 'esbuild';
+import { supplementLicenseTexts } from './supplemental-license-texts.mjs';
 import { writeAcceptanceTemplate } from './acceptance-record.mjs';
 import { installNodeDistribution, verifyNodeDistribution, selectNodeDistribution } from './claude-code-node.mjs';
 import { createHash } from 'node:crypto';
@@ -130,7 +131,8 @@ for (const location of Object.keys(lock.packages).sort()) {
     await copyFile(source, join(licenseDirectory, filename));
     texts.push(filename);
   }
-  const metadata = { name: pkg.name, version: pkg.version, license: pkg.license ?? pkg.licenses ?? null,
+  const supplemental = await supplementLicenseTexts(pkg, packageRoot, licenseDirectory, texts);
+  const metadata = { ...supplemental, name: pkg.name, version: pkg.version, license: pkg.license ?? pkg.licenses ?? null,
     repository: pkg.repository ?? null, texts };
   await writeFile(join(licenseDirectory, 'package.json'), JSON.stringify(metadata, null, 2) + '\n');
   licenses.push(metadata);

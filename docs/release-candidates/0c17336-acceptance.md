@@ -68,6 +68,10 @@ Logs for this run are under `work/distribution-acceptance/`: `build-*.log`,
 are not committed. The retained test and inventory allow a reviewer to repeat the
 checks; the hashes are an inventory, not a signature or reproducible-build promise.
 
+Follow-up: the [21-entry input and notice audit](../license-audits/0c17336-notices.md)
+classifies the historical omissions and identifies the fontkit publication blocker.
+Its fastdom fix requires new archives; it does not change these historical hashes.
+
 ## Bundled dependencies and guides
 
 The packager enforces no unbundled non-builtin server imports. Runtime use needs
