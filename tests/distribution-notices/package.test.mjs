@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -21,6 +22,15 @@ for (const kind of ['code', 'desktop']) test(`${kind} archive retains full fastd
       assert.ok(!entry.texts.includes('README.md'));
       assert.equal(entry.licenseEvidence.status, 'UNRESOLVED');
       assert.match(entry.licenseEvidence.reason, /not cleared for publication/);
+      assert.equal(entry.embeddedNotices.status, 'PARTIAL');
+      const base = `licenses/npm/${name.replaceAll('/', '__')}@${entry.version}/`;
+      const provenance = bytes(base + entry.embeddedNotices.provenance);
+      assert.deepEqual(provenance, await readFile('licenses/fontkit-1.1.1/PROVENANCE.json'));
+      assert.equal(createHash('sha256').update(provenance).digest('hex'), entry.embeddedNotices.provenanceSha256);
+      for (const file of entry.embeddedNotices.noticeFiles) {
+        assert.ok(entry.texts.includes(file.path));
+        assert.equal(createHash('sha256').update(bytes(base + file.path)).digest('hex'), file.sha256);
+      }
     }
   }
 });

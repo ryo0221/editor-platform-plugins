@@ -1,3 +1,4 @@
+import { retainFontkitEmbeddedNotices } from './fontkit-embedded-notices.mjs';
 import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -21,6 +22,7 @@ export async function supplementLicenseTexts(pkg, packageRoot, destination, text
     texts.push('README.md');
     return { licenseEvidence: { status: 'full-text-retained', ...evidence } };
   }
-  return { licenseEvidence: { status: 'UNRESOLVED', ...evidence,
+  const embeddedNotices = await retainFontkitEmbeddedNotices(packageRoot, destination, texts);
+  return { embeddedNotices, licenseEvidence: { status: 'UNRESOLVED', ...evidence,
     reason: 'Official README contains only a generic MIT link, not the project-specific full notice. Prebundled third-party code also needs provenance review. This candidate is not cleared for publication.' } };
 }

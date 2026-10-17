@@ -101,6 +101,9 @@ them. Their absence from this project's runtime lockfile does not establish
 absence from the distribution. Existing bundler comment preservation alone has
 not been audited for complete nested attribution.
 
+Follow-up: [partial embedded notice retention](fontkit-1.1.1-embedded-notices.md)
+preserves identified originals without clearing the fontkit publication blocker.
+
 ## Publication gate and next decision
 
 The fastdom omission is repaired. The fontkit omission is **not** cleared by
