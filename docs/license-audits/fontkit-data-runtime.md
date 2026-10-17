@@ -1,5 +1,8 @@
 # Unicode data, polyfills and shaper follow-up
 
+See [final scoped coverage](fontkit-final-coverage.md) for current applicability,
+archive containment, and the correction of historical-provenance blocker language.
+
 This completes the three requested bounded investigations following PR #35.
 It adds four confirmed original notices (process, HarfBuzz USE, UCD8 and UCD12
 ReadMe), one separately authored data-transformation disclosure, and four

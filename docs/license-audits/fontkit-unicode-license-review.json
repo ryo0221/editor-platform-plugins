@@ -1,0 +1,458 @@
+{
+  "sourcePolicy": "https://www.unicode.org/copyright.html",
+  "policySha256": "9f83fb0a046180c87d22c2678e79300475125611ac8dfc2da303db6c6b347251",
+  "licenseSource": "https://www.unicode.org/license.txt",
+  "licenseSha256": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96",
+  "files": [
+    {
+      "edition": "8.0.0",
+      "path": "ArabicShaping.txt",
+      "sha256": "ae98bec7e4f0564758eed81eca5015481ba32581f8a735a825b71b3bba714450",
+      "header": "# ArabicShaping-8.0.0.txt\n# Date: 2015-02-17, 23:33:00 GMT [RP]\n#\n# This file is a normative contributory data file in the\n# Unicode Character Database.\n#\n# Copyright (c) 1991-2014 Unicode, Inc.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# This file defines the Joining_Type and Joining_Group property\n# values for Arabic, Syriac, N'Ko, Mandaic, and Manichaean positional\n# shaping, repeating in machine readable form the information\n# exemplified in Tables 9-3, 9-8, 9-9, 9-10, 9-14, 9-15, 9-16, 9-19,\n# 9-20, 10-4, 10-5, 10-6, 10-7, and 19-5 of The Unicode Standard core\n# specification. This file also defines Joining_Type values for\n# Mongolian, Phags-pa, and Psalter Pahlavi positional shaping, which\n# are not listed in tables in the standard.\n#\n# See Sections 9.2, 9.3, 9.5, 10.5, 10.6, 13.4, 14.3, 19.4 of\n# The Unicode Standard core specification for more information.\n#\n# Each line contains four fields, separated by a semicolon.\n#\n# Field 0: the code point, in 4-digit hexadecimal\n#   form, of an Arabic, Syriac, N'Ko, Mandaic, Mongolian,\n#   Phags-pa, Manichaean, Psalter Pahlavi, or other character.\n#\n# Field 1: gives a short schematic name for that character.\n#   The schematic name is descriptive of the shape, based as\n#   consistently as possible on a name for the skeleton and\n#   then the diacritic marks applied to the skeleton, if any.\n#   Note that this schematic name is considered a comment,\n#   and does not constitute a formal property value.\n#\n# Field 2: defines the joining type (property name: Joining_Type)\n#   R Right_Joining\n#   L Left_Joining\n#   D Dual_Joining\n#   C Join_Causing\n#   U Non_Joining\n#   T Transparent\n#\n# See Section 9.2, Arabic for more information on these joining types.\n# Note that for cursive joining scripts which are typically rendered\n# top-to-bottom, rather than right-to-left, Joining_Type=L conventionally\n# refers to bottom joining, and Joining_Type=R conventionally refers\n# to top joining. See Section 14.3, Phags-pa for more information on the\n# interpretation of joining types in vertical layout.\n#\n# Field 3: defines the joining group (property name: Joining_Group)\n#\n# The values of the joining group are based schematically on character\n# names. Where a schematic character name consists of two or more parts separated\n# by spaces, the formal Joining_Group property value, as specified in\n# PropertyValueAliases.txt, consists of the same name parts joined by\n# underscores. Hence, the entry:\n#\n#   0629; TEH MARBUTA; R; TEH MARBUTA\n#\n# corresponds to [Joining_Group = Teh_Marbuta].\n#\n# Note: The property value now designated [Joining_Group = Teh_Marbuta_Goal]\n#   used to apply to both of the following characters\n#   in earlier versions of the standard:\n#\n#   U+06C2 ARABIC LETTER HEH GOAL WITH HAMZA ABOVE\n#   U+06C3 ARABIC LETTER TEH MARBUTA GOAL\n#\n#   However, it currently applies only to U+06C3, and *not* to U+06C2.\n#   To avoid destabilizing existing Joining_Group property aliases, the\n#   prior Joining_Group value for U+06C3 (Hamza_On_Heh_Goal) has been\n#   retained as a property value alias, despite the fact that it\n#   no longer applies to its namesake character, U+06C2.\n#   See PropertyValueAliases.txt.\n#\n# When other cursive scripts are added to the Unicode Standard in the\n# future, the joining group value of all its letters will default to\n# jg=No_Joining_Group in this data file. Other, more specific\n# joining group values will be defined only if an explicit proposal\n# to define those values exactly has been approved by the UTC. This\n# is the convention exemplified by the N'Ko, Mandaic, Mongolian,\n# Phags-pa, and Psalter Pahlavi scripts. Only the Arabic,\n# Manichaean, and Syriac scripts currently have explicit joining\n# group values defined.\n#\n# Note: Code points that are not explicitly listed in this file are\n# either of joining type T or U:\n#\n# - Those that not explicitly listed that are of General Category Mn, Me, or Cf\n#   have joining type T.\n# - All others not explicitly listed have joining type U.\n#\n# For an explicit listing of characters of joining type T, see\n# the derived property file DerivedJoiningType.txt.\n#\n# #############################################################\n\n# Unicode; Schematic Name; Joining Type; Joining Group\n\n# Arabic Characters\n",
+      "legalMatches": [
+        {
+          "line": 7,
+          "text": "# Copyright (c) 1991-2014 Unicode, Inc."
+        },
+        {
+          "line": 8,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "8.0.0",
+      "path": "Blocks.txt",
+      "sha256": "288fc7b85c76bda296e296c8465f1f4baeb456cb814430dfaa0f546bfbe86b4a",
+      "header": "# Blocks-8.0.0.txt\n# Date: 2014-11-10, 23:04:00 GMT [KW]\n#\n# Unicode Character Database\n# Copyright (c) 1991-2014 Unicode, Inc.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n# For documentation, see http://www.unicode.org/reports/tr44/\n#\n# Format:\n# Start Code..End Code; Block Name\n\n# ================================================\n\n# Note:   When comparing block names, casing, whitespace, hyphens,\n#         and underbars are ignored.\n#         For example, \"Latin Extended-A\" and \"latin extended a\" are equivalent.\n#         For more information on the comparison of property values, \n#            see UAX #44: http://www.unicode.org/reports/tr44/\n#\n#  All block ranges start with a value where (cp MOD 16) = 0,\n#  and end with a value where (cp MOD 16) = 15. In other words,\n#  the last hexadecimal digit of the start of range is ...0 \n#  and the last hexadecimal digit of the end of range is ...F.\n#  This constraint on block ranges guarantees that allocations\n#  are done in terms of whole columns, and that code chart display\n#  never involves splitting columns in the charts.\n#\n#  All code points not explicitly listed for Block\n#  have the value No_Block.\n\n# Property:\tBlock\n#\n# @missing: 0000..10FFFF; No_Block\n",
+      "legalMatches": [
+        {
+          "line": 5,
+          "text": "# Copyright (c) 1991-2014 Unicode, Inc."
+        },
+        {
+          "line": 6,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "8.0.0",
+      "path": "CaseFolding.txt",
+      "sha256": "86e075f2ede997b3fa5965516c75190b5a88bb82d302272d9c3179b7a57af03f",
+      "header": "# CaseFolding-8.0.0.txt\n# Date: 2015-01-13, 18:16:36 GMT [MD]\n#\n# Unicode Character Database\n# Copyright (c) 1991-2015 Unicode, Inc.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n# For documentation, see http://www.unicode.org/reports/tr44/\n#\n# Case Folding Properties\n#\n# This file is a supplement to the UnicodeData file.\n# It provides a case folding mapping generated from the Unicode Character Database.\n# If all characters are mapped according to the full mapping below, then\n# case differences (according to UnicodeData.txt and SpecialCasing.txt)\n# are eliminated.\n#\n# The data supports both implementations that require simple case foldings\n# (where string lengths don't change), and implementations that allow full case folding\n# (where string lengths may grow). Note that where they can be supported, the\n# full case foldings are superior: for example, they allow \"MASSE\" and \"Ma\u00dfe\" to match.\n#\n# All code points not listed in this file map to themselves.\n#\n# NOTE: case folding does not preserve normalization formats!\n#\n# For information on case folding, including how to have case folding \n# preserve normalization formats, see Section 3.13 Default Case Algorithms in\n# The Unicode Standard.\n#\n# ================================================================================\n# Format\n# ================================================================================\n# The entries in this file are in the following machine-readable format:\n#\n# <code>; <status>; <mapping>; # <name>\n#\n# The status field is:\n# C: common case folding, common mappings shared by both simple and full mappings.\n# F: full case folding, mappings that cause strings to grow in length. Multiple characters are separated by spaces.\n# S: simple case folding, mappings to single characters where different from F.\n# T: special case for uppercase I and dotted uppercase I\n#    - For non-Turkic languages, this mapping is normally not used.\n#    - For Turkic languages (tr, az), this mapping can be used instead of the normal mapping for these characters.\n#      Note that the Turkic mappings do not maintain canonical equivalence without additional processing.\n#      See the discussions of case mapping in the Unicode Standard for more information.\n#\n# Usage:\n#  A. To do a simple case folding, use the mappings with status C + S.\n#  B. To do a full case folding, use the mappings with status C + F.\n#\n#    The mappings with status T can be used or omitted depending on the desired case-folding\n#    behavior. (The default option is to exclude them.)\n#\n# =================================================================\n\n# Property: Case_Folding\n\n#  All code points not explicitly listed for Case_Folding\n#  have the value C for the status field, and the code point itself for the mapping field.\n\n# =================================================================",
+      "legalMatches": [
+        {
+          "line": 5,
+          "text": "# Copyright (c) 1991-2015 Unicode, Inc."
+        },
+        {
+          "line": 6,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "8.0.0",
+      "path": "CompositionExclusions.txt",
+      "sha256": "2fafee5be73bf2817ee669c53c504a6c4aa02ac7344194af18511aea2e05d750",
+      "header": "# CompositionExclusions-8.0.0.txt\n# Date: 2015-02-19, 00:30:00 GMT [KW, LI]\n#\n# This file lists the characters for the Composition Exclusion Table\n# defined in UAX #15, Unicode Normalization Forms.\n#\n# This file is a normative contributory data file in the\n# Unicode Character Database.\n#\n# Copyright (c) 1991-2015 Unicode, Inc.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# For more information, see\n# http://www.unicode.org/unicode/reports/tr15/#Primary_Exclusion_List_Table\n#\n# For a full derivation of composition exclusions, see the derived property\n# Full_Composition_Exclusion in DerivedNormalizationProps.txt\n#\n\n# ================================================\n# (1) Script Specifics\n#\n# This list of characters cannot be derived from the UnicodeData.txt file.\n# ================================================\n",
+      "legalMatches": [
+        {
+          "line": 10,
+          "text": "# Copyright (c) 1991-2015 Unicode, Inc."
+        },
+        {
+          "line": 11,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "8.0.0",
+      "path": "DerivedNormalizationProps.txt",
+      "sha256": "6cc76100d402d7dd12bd769ac61158b91e71aad58c8333abb848f1b9c9fdde2d",
+      "header": "# DerivedNormalizationProps-8.0.0.txt\n# Date: 2015-02-13, 13:30:23 GMT [MD]\n#\n# Unicode Character Database\n# Copyright (c) 1991-2015 Unicode, Inc.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n# For documentation, see http://www.unicode.org/reports/tr44/\n\n# ================================================\n\n# Derived Property: FC_NFKC_Closure  (DEPRECATED as of Unicode 6.0.0)\n#  Generated from computing: b = NFKC(Fold(a)); c = NFKC(Fold(b));\n#  Then if (c != b) add the mapping from a to c to the set of\n#  mappings that constitute the FC_NFKC_Closure list\n#  Uses the full case folding from CaseFolding.txt, without the T option.\n",
+      "legalMatches": [
+        {
+          "line": 5,
+          "text": "# Copyright (c) 1991-2015 Unicode, Inc."
+        },
+        {
+          "line": 6,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "8.0.0",
+      "path": "EastAsianWidth.txt",
+      "sha256": "ccc571829b384b8a2c24b7a62f8aa6a891a6e8c48f08513ef84fd6da26dba4bb",
+      "header": "# EastAsianWidth-8.0.0.txt\n# Date: 2015-02-10, 21:00:00 GMT [KW, LI]\n#\n# East_Asian_Width Property\n#\n# This file is an informative contributory data file in the\n# Unicode Character Database.\n#\n# Copyright (c) 1991-2015 Unicode, Inc.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# The format is two fields separated by a semicolon.\n# Field 0: Unicode code point value or range of code point values\n# Field 1: East_Asian_Width property, consisting of one of the following values:\n#         \"N\", \"A\", \"H\", \"W\", \"F\", \"Na\"\n#  - All code points, assigned or unassigned, that are not listed\n#         explicitly are given the value \"N\".\n# The unassigned code points that default to \"W\" include ranges in the\n# following blocks:\n#     CJK Unified Ideographs Extension A:       U+3400..U+4DBF\n#     CJK Unified Ideographs:                   U+4E00..U+9FFF\n#     CJK Compatibility Ideographs:             U+F900..U+FAFF\n#     CJK Unified Ideographs Extension B:      U+20000..U+2A6DF\n#     CJK Unified Ideographs Extension C:      U+2A700..U+2B73F\n#     CJK Unified Ideographs Extension D:      U+2B740..U+2B81F\n#     CJK Unified Ideographs Extension E:      U+2B820..U+2CEAF\n#     CJK Compatibility Ideographs Supplement: U+2F800..U+2FA1F\n#     and any other reserved code points on\n#         Planes 2 and 3:                      U+20000..U+2FFFD\n#                                              U+30000..U+3FFFD\n#  - Character ranges are specified as for other property files in\n#         the Unicode Character Database.\n#\n# For legacy reasons, there are no spaces before or after the semicolon\n# which separates the two fields. The comments following the number sign\n# \"#\" list the General_Category property value or the L& alias of the\n# derived value LC, the Unicode character name or names, and, in lines\n# with ranges of code points, the code point count in square brackets.\n#\n# For more information, see UAX #11: East Asian Width,\n# at http://www.unicode.org/reports/tr11/\n#\n# @missing: 0000..10FFFF; N",
+      "legalMatches": [
+        {
+          "line": 9,
+          "text": "# Copyright (c) 1991-2015 Unicode, Inc."
+        },
+        {
+          "line": 10,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "8.0.0",
+      "path": "PropertyValueAliases.txt",
+      "sha256": "03a440f2a4b9151043a6bb53d4a4e528b73238079f9d686dc2a5846e6895588a",
+      "header": "# PropertyValueAliases-8.0.0.txt\n# Date: 2015-03-11, 22:29:33 GMT [MD]\n#\n# Unicode Character Database\n# Copyright (c) 1991-2015 Unicode, Inc.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n# For documentation, see http://www.unicode.org/reports/tr44/\n#\n# This file contains aliases for property values used in the UCD.\n# These names can be used for XML formats of UCD data, for regular-expression\n# property tests, and other programmatic textual descriptions of Unicode data.\n#\n# The names may be translated in appropriate environments, and additional\n# aliases may be useful.\n#\n# FORMAT\n#\n# Each line describes a property value name.\n# This consists of three or more fields, separated by semicolons.\n#\n# First Field: The first field describes the property for which that\n# property value name is used.\n#\n# Second Field: The second field is an abbreviated name.\n#\n# Third Field: The third field is a long name.\n#\n# In the case of ccc, there are 4 fields. The second field is numeric, third\n# is abbreviated, and fourth is long.\n#\n# The above are the preferred aliases. Other aliases may be listed in additional fields.\n#\n# Loose matching should be applied to all property names and property values, with\n# the exception of String Property values. With loose matching of property names and\n# values, the case distinctions, whitespace, hyphens, and '_' are ignored.\n# For Numeric Property values, numeric equivalence is applied: thus \"01.00\"\n# is equivalent to \"1\".\n#\n# NOTE: Property value names are NOT unique across properties. For example:\n#\n#   AL means Arabic Letter for the Bidi_Class property, and\n#   AL means Above_Left for the Canonical_Combining_Class property, and\n#   AL means Alphabetic for the Line_Break property.\n#\n# In addition, some property names may be the same as some property value names.\n# For example:\n#\n#   sc means the Script property, and\n#   Sc means the General_Category property value Currency_Symbol (Sc)\n#\n# The combination of property value and property name is, however, unique.\n#\n# For more information, see UTS #18: Unicode Regular Expressions\n# ================================================\n\n\n# ASCII_Hex_Digit (AHex)\n",
+      "legalMatches": [
+        {
+          "line": 5,
+          "text": "# Copyright (c) 1991-2015 Unicode, Inc."
+        },
+        {
+          "line": 6,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "8.0.0",
+      "path": "Scripts.txt",
+      "sha256": "79fbd73ad82c30fdb67d36a349d12667bd58d3e9da6a8ce7dd26383b637ba85f",
+      "header": "# Scripts-8.0.0.txt\n# Date: 2015-03-11, 22:29:42 GMT [MD]\n#\n# Unicode Character Database\n# Copyright (c) 1991-2015 Unicode, Inc.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n# For documentation, see http://www.unicode.org/reports/tr44/\n# For more information, see:\n#   UAX #24, Unicode Script Property: http://www.unicode.org/reports/tr24/\n#     Especially the sections:\n#       http://www.unicode.org/reports/tr24/#Assignment_Script_Values\n#       http://www.unicode.org/reports/tr24/#Assignment_ScriptX_Values\n#\n\n# ================================================\n\n# Property:\tScript\n\n#  All code points not explicitly listed for Script\n#  have the value Unknown (Zzzz).\n\n# @missing: 0000..10FFFF; Unknown\n\n# ================================================\n",
+      "legalMatches": [
+        {
+          "line": 5,
+          "text": "# Copyright (c) 1991-2015 Unicode, Inc."
+        },
+        {
+          "line": 6,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "8.0.0",
+      "path": "SpecialCasing.txt",
+      "sha256": "fb2025dae3b9b17649b6e379c1cdbddf50641267ca6d2446caeccf4a141fe167",
+      "header": "# SpecialCasing-8.0.0.txt\n# Date: 2014-12-16, 23:08:04 GMT [MD]\n#\n# Unicode Character Database\n# Copyright (c) 1991-2014 Unicode, Inc.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n# For documentation, see http://www.unicode.org/reports/tr44/\n#\n# Special Casing\n#\n# This file is a supplement to the UnicodeData.txt file. It does not define any\n# properties, but rather provides additional information about the casing of\n# Unicode characters, for situations when casing incurs a change in string length\n# or is dependent on context or locale. For compatibility, the UnicodeData.txt\n# file only contains simple case mappings for characters where they are one-to-one\n# and independent of context and language. The data in this file, combined with\n# the simple case mappings in UnicodeData.txt, defines the full case mappings\n# Lowercase_Mapping (lc), Titlecase_Mapping (tc), and Uppercase_Mapping (uc).\n#\n# Note that the preferred mechanism for defining tailored casing operations is\n# the Unicode Common Locale Data Repository (CLDR). For more information, see the\n# discussion of case mappings and case algorithms in the Unicode Standard.\n#\n# All code points not listed in this file that do not have a simple case mappings\n# in UnicodeData.txt map to themselves.\n# ================================================================================\n# Format\n# ================================================================================\n# The entries in this file are in the following machine-readable format:\n#\n# <code>; <lower>; <title>; <upper>; (<condition_list>;)? # <comment>\n#\n# <code>, <lower>, <title>, and <upper> provide the respective full case mappings\n# of <code>, expressed as character values in hex. If there is more than one character,\n# they are separated by spaces. Other than as used to separate elements, spaces are\n# to be ignored.\n#\n# The <condition_list> is optional. Where present, it consists of one or more language IDs\n# or casing contexts, separated by spaces. In these conditions:\n# - A condition list overrides the normal behavior if all of the listed conditions are true.\n# - The casing context is always the context of the characters in the original string,\n#   NOT in the resulting string.\n# - Case distinctions in the condition list are not significant.\n# - Conditions preceded by \"Not_\" represent the negation of the condition.\n# The condition list is not represented in the UCD as a formal property.\n#\n# A language ID is defined by BCP 47, with '-' and '_' treated equivalently.\n#\n# A casing context for a character is defined by Section 3.13 Default Case Algorithms\n# of The Unicode Standard.\n#\n# Parsers of this file must be prepared to deal with future additions to this format:\n#  * Additional contexts\n#  * Additional fields\n# ================================================================================\n\n# ================================================================================\n# Unconditional mappings\n# ================================================================================\n\n# The German es-zed is special--the normal mapping is to SS.\n# Note: the titlecase should never occur in practice. It is equal to titlecase(uppercase(<es-zed>))\n",
+      "legalMatches": [
+        {
+          "line": 5,
+          "text": "# Copyright (c) 1991-2014 Unicode, Inc."
+        },
+        {
+          "line": 6,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "8.0.0",
+      "path": "UnicodeData.txt",
+      "sha256": "38b17e1118206489a7e0ab5d29d7932212d38838df7d3ec025ecb58e8798ec20",
+      "header": "",
+      "legalMatches": [],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "8.0.0",
+      "path": "extracted/DerivedNumericValues.txt",
+      "sha256": "a18d502bad39d527ac5586d7bc93e29f565859e3bcc24ada627eff606d6f5fed",
+      "header": "# DerivedNumericValues-8.0.0.txt\n# Date: 2015-02-13, 13:47:13 GMT [MD]\n#\n# Unicode Character Database\n# Copyright (c) 1991-2015 Unicode, Inc.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n# For documentation, see http://www.unicode.org/reports/tr44/\n\n# ================================================\n\n# Derived Property:   Numeric_Value\n#  Field 1:\n#    The values are based on field 8 of UnicodeData.txt, plus the fields\n#    kAccountingNumeric, kOtherNumeric, kPrimaryNumeric in the Unicode Han Database (Unihan).\n#    The derivations for these values are as follows.\n#      Numeric_Value = the value of kAccountingNumeric, kOtherNumeric, or kPrimaryNumeric, if they exist; otherwise\n#      Numeric_Value = the value of field 8, if it exists; otherwise\n#      Numeric_Value = NaN\n#  Field 2:\n#    This field is empty; it used to be a copy of the numeric type.\n#\n#  Field 3:\n#    This field was added to this extracted data as of Unicode 5.1.0,\n#    expressing the same numeric value either as a whole integer\n#    where possible, or as a rational fraction such as \"1/6\".\n#\n# WARNING: Certain values, such as 0.16666667, are repeating fractions.\n# Although they are only printed with a limited number of decimal places\n# in this file, they should be expressed to the limits of the precision\n# available when used.\n#\n\n# ================================================\n",
+      "legalMatches": [
+        {
+          "line": 5,
+          "text": "# Copyright (c) 1991-2015 Unicode, Inc."
+        },
+        {
+          "line": 6,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "8.0.0",
+      "path": "ReadMe.txt",
+      "sha256": "e4dc6045cb89ddaca938ff7ffffc2c2aafc5d4fc85023fffb9b36d4aee47986b",
+      "header": "# Date: 2015-06-16, 20:24:00 GMT [KW]\n#\n# Unicode Character Database\n# Copyright (c) 1991-2015 Unicode, Inc.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# For documentation, see the following:\n# NamesList.html\n# UAX #38, \"Unicode Han Database (Unihan)\"\n# UAX #44, \"Unicode Character Database.\"\n#\n# The UAXes can be accessed at http://www.unicode.org/versions/Unicode8.0.0/\n",
+      "legalMatches": [
+        {
+          "line": 4,
+          "text": "# Copyright (c) 1991-2015 Unicode, Inc."
+        },
+        {
+          "line": 5,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "12.0.0",
+      "path": "ArabicShaping.txt",
+      "sha256": "fdc543859433c4578ec7991d8c3238a3638d59962eb0db446d0228cccb7a48da",
+      "header": "# ArabicShaping-12.0.0.txt\n# Date: 2018-09-22, 23:54:00 GMT [KW, RP]\n# \u00a9 2018 Unicode\u00ae, Inc.\n# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# This file is a normative contributory data file in the\n# Unicode Character Database.\n#\n# This file defines the Joining_Type and Joining_Group property\n# values for Arabic, Syriac, N'Ko, Mandaic, Manichaean,\n# Hanifi Rohingya, and Sogdian positional\n# shaping, repeating in machine readable form the information\n# exemplified in Tables 9-3, 9-8, 9-9, 9-10, 9-14, 9-15, 9-16, 9-19,\n# 9-20, 10-4, 10-5, 10-6, 10-7, 14-10, 16-16, and 19-5 of The Unicode Standard core\n# specification. This file also defines Joining_Type values for\n# Mongolian, Phags-pa, Psalter Pahlavi, and Adlam positional shaping,\n# which are not listed in tables in the standard.\n#\n# See Sections 9.2, 9.3, 9.5, 10.5, 10.6, 13.4, 14.3, 14.10, 16.13, 19.4, and 19.9\n# of The Unicode Standard core specification for more information.\n#\n# Each line contains four fields, separated by a semicolon.\n#\n# Field 0: the code point, in 4-digit hexadecimal\n#   form, of an Arabic, Syriac, N'Ko, Mandaic, Mongolian,\n#   Phags-pa, Manichaean, Psalter Pahlavi, Hanifi Rohingya, Sogdian,\n#   or other character.\n#\n# Field 1: gives a short schematic name for that character.\n#   The schematic name is descriptive of the shape, based as\n#   consistently as possible on a name for the skeleton and\n#   then the diacritic marks applied to the skeleton, if any.\n#   Note that this schematic name is considered a comment,\n#   and does not constitute a formal property value.\n#\n# Field 2: defines the joining type (property name: Joining_Type)\n#   R Right_Joining\n#   L Left_Joining\n#   D Dual_Joining\n#   C Join_Causing\n#   U Non_Joining\n#   T Transparent\n#\n# See Section 9.2, Arabic for more information on these joining types.\n# Note that for cursive joining scripts which are typically rendered\n# top-to-bottom, rather than right-to-left, Joining_Type=L conventionally\n# refers to bottom joining, and Joining_Type=R conventionally refers\n# to top joining. See Section 14.3, Phags-pa for more information on the\n# interpretation of joining types in vertical layout.\n#\n# Field 3: defines the joining group (property name: Joining_Group)\n#\n# The values of the joining group are based schematically on character\n# names. Where a schematic character name consists of two or more parts\n# separated by spaces, the formal Joining_Group property value, as specified in\n# PropertyValueAliases.txt, consists of the same name parts joined by\n# underscores. Hence, the entry:\n#\n#   0629; TEH MARBUTA; R; TEH MARBUTA\n#\n# corresponds to [Joining_Group = Teh_Marbuta].\n#\n# Note: The property value now designated [Joining_Group = Teh_Marbuta_Goal]\n#   used to apply to both of the following characters\n#   in earlier versions of the standard:\n#\n#   U+06C2 ARABIC LETTER HEH GOAL WITH HAMZA ABOVE\n#   U+06C3 ARABIC LETTER TEH MARBUTA GOAL\n#\n#   However, it currently applies only to U+06C3, and *not* to U+06C2.\n#   To avoid destabilizing existing Joining_Group property aliases, the\n#   prior Joining_Group value for U+06C3 (Hamza_On_Heh_Goal) has been\n#   retained as a property value alias, despite the fact that it\n#   no longer applies to its namesake character, U+06C2.\n#   See PropertyValueAliases.txt.\n#\n# When other cursive scripts are added to the Unicode Standard in the\n# future, the joining group value of all its letters will default to\n# jg=No_Joining_Group in this data file. Other, more specific\n# joining group values will be defined only if an explicit proposal\n# to define those values exactly has been approved by the UTC. This\n# is the convention exemplified by the N'Ko, Mandaic, Mongolian,\n# Phags-pa, Psalter Pahlavi, and Sogdian scripts.\n# Only the Arabic, Manichaean, and Syriac scripts currently have\n# explicit joining group values defined for all characters, including\n# those which have only a single character in a particular Joining_Group\n# class. Hanifi Rohingya has explicit Joining_Group values assigned only for\n# the few characters which share a particular Joining_Group class, but\n# assigns jg=No_Joining_Group to all the singletons.\n#\n# Note: Code points that are not explicitly listed in this file are\n# either of joining type T or U:\n#\n# - Those that are not explicitly listed and that are of General Category Mn, Me, or Cf\n#   have joining type T.\n# - All others not explicitly listed have joining type U.\n#\n# For an explicit listing of all characters of joining type T, see\n# the derived property file DerivedJoiningType.txt.\n#\n# #############################################################\n\n# Unicode; Schematic Name; Joining Type; Joining Group\n\n# Arabic Characters\n",
+      "legalMatches": [
+        {
+          "line": 3,
+          "text": "# \u00a9 2018 Unicode\u00ae, Inc."
+        },
+        {
+          "line": 5,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "12.0.0",
+      "path": "Blocks.txt",
+      "sha256": "a1a3ca4381eb91f7b65afe7cb7df615cdcf67993fef4b486585f66b349993a10",
+      "header": "# Blocks-12.0.0.txt\n# Date: 2018-07-30, 19:40:00 GMT [KW]\n# \u00a9 2018 Unicode\u00ae, Inc.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# Unicode Character Database\n# For documentation, see http://www.unicode.org/reports/tr44/\n#\n# Format:\n# Start Code..End Code; Block Name\n\n# ================================================\n\n# Note:   When comparing block names, casing, whitespace, hyphens,\n#         and underbars are ignored.\n#         For example, \"Latin Extended-A\" and \"latin extended a\" are equivalent.\n#         For more information on the comparison of property values,\n#            see UAX #44: http://www.unicode.org/reports/tr44/\n#\n#  All block ranges start with a value where (cp MOD 16) = 0,\n#  and end with a value where (cp MOD 16) = 15. In other words,\n#  the last hexadecimal digit of the start of range is ...0\n#  and the last hexadecimal digit of the end of range is ...F.\n#  This constraint on block ranges guarantees that allocations\n#  are done in terms of whole columns, and that code chart display\n#  never involves splitting columns in the charts.\n#\n#  All code points not explicitly listed for Block\n#  have the value No_Block.\n\n# Property:\tBlock\n#\n# @missing: 0000..10FFFF; No_Block\n",
+      "legalMatches": [
+        {
+          "line": 3,
+          "text": "# \u00a9 2018 Unicode\u00ae, Inc."
+        },
+        {
+          "line": 4,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "12.0.0",
+      "path": "CaseFolding.txt",
+      "sha256": "d6caa458afc9a76d86bc2ef26a5423f4e663981904de450c97dd53ee0ab5c125",
+      "header": "# CaseFolding-12.0.0.txt\n# Date: 2019-01-22, 08:18:22 GMT\n# \u00a9 2019 Unicode\u00ae, Inc.\n# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# Unicode Character Database\n#   For documentation, see http://www.unicode.org/reports/tr44/\n#\n# Case Folding Properties\n#\n# This file is a supplement to the UnicodeData file.\n# It provides a case folding mapping generated from the Unicode Character Database.\n# If all characters are mapped according to the full mapping below, then\n# case differences (according to UnicodeData.txt and SpecialCasing.txt)\n# are eliminated.\n#\n# The data supports both implementations that require simple case foldings\n# (where string lengths don't change), and implementations that allow full case folding\n# (where string lengths may grow). Note that where they can be supported, the\n# full case foldings are superior: for example, they allow \"MASSE\" and \"Ma\u00dfe\" to match.\n#\n# All code points not listed in this file map to themselves.\n#\n# NOTE: case folding does not preserve normalization formats!\n#\n# For information on case folding, including how to have case folding\n# preserve normalization formats, see Section 3.13 Default Case Algorithms in\n# The Unicode Standard.\n#\n# ================================================================================\n# Format\n# ================================================================================\n# The entries in this file are in the following machine-readable format:\n#\n# <code>; <status>; <mapping>; # <name>\n#\n# The status field is:\n# C: common case folding, common mappings shared by both simple and full mappings.\n# F: full case folding, mappings that cause strings to grow in length. Multiple characters are separated by spaces.\n# S: simple case folding, mappings to single characters where different from F.\n# T: special case for uppercase I and dotted uppercase I\n#    - For non-Turkic languages, this mapping is normally not used.\n#    - For Turkic languages (tr, az), this mapping can be used instead of the normal mapping for these characters.\n#      Note that the Turkic mappings do not maintain canonical equivalence without additional processing.\n#      See the discussions of case mapping in the Unicode Standard for more information.\n#\n# Usage:\n#  A. To do a simple case folding, use the mappings with status C + S.\n#  B. To do a full case folding, use the mappings with status C + F.\n#\n#    The mappings with status T can be used or omitted depending on the desired case-folding\n#    behavior. (The default option is to exclude them.)\n#\n# =================================================================\n\n# Property: Case_Folding\n\n#  All code points not explicitly listed for Case_Folding\n#  have the value C for the status field, and the code point itself for the mapping field.\n\n# =================================================================",
+      "legalMatches": [
+        {
+          "line": 3,
+          "text": "# \u00a9 2019 Unicode\u00ae, Inc."
+        },
+        {
+          "line": 5,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "12.0.0",
+      "path": "CompositionExclusions.txt",
+      "sha256": "08a52bd7f893f5c9a34a6d4cc3a0b2d7a44293ee45fb15d581e729b9f8584dfa",
+      "header": "# CompositionExclusions-12.0.0.txt\n# Date: 2018-08-03, 00:00:00 GMT [KW, LI]\n# \u00a9 2018 Unicode\u00ae, Inc.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# Unicode Character Database\n# For documentation, see http://www.unicode.org/reports/tr44/\n#\n# This file lists the characters for the Composition Exclusion Table\n# defined in UAX #15, Unicode Normalization Forms.\n#\n# This file is a normative contributory data file in the\n# Unicode Character Database.\n#\n# For more information, see\n# http://www.unicode.org/unicode/reports/tr15/#Primary_Exclusion_List_Table\n#\n# For a full derivation of composition exclusions, see the derived property\n# Full_Composition_Exclusion in DerivedNormalizationProps.txt\n#\n\n# ================================================\n# (1) Script Specifics\n#\n# This list of characters cannot be derived from the UnicodeData.txt file.\n# ================================================\n",
+      "legalMatches": [
+        {
+          "line": 3,
+          "text": "# \u00a9 2018 Unicode\u00ae, Inc."
+        },
+        {
+          "line": 4,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "12.0.0",
+      "path": "DerivedNormalizationProps.txt",
+      "sha256": "8b4210273920c013e736332434222b73786e6c468a360710f6799eeace9b3d38",
+      "header": "# DerivedNormalizationProps-12.0.0.txt\n# Date: 2019-01-22, 08:18:29 GMT\n# \u00a9 2019 Unicode\u00ae, Inc.\n# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# Unicode Character Database\n#   For documentation, see http://www.unicode.org/reports/tr44/\n\n# ================================================\n\n# Derived Property: FC_NFKC_Closure  (DEPRECATED as of Unicode 6.0.0)\n#  Generated from computing: b = NFKC(Fold(a)); c = NFKC(Fold(b));\n#  Then if (c != b) add the mapping from a to c to the set of\n#  mappings that constitute the FC_NFKC_Closure list\n#  Uses the full case folding from CaseFolding.txt, without the T option.\n",
+      "legalMatches": [
+        {
+          "line": 3,
+          "text": "# \u00a9 2019 Unicode\u00ae, Inc."
+        },
+        {
+          "line": 5,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "12.0.0",
+      "path": "EastAsianWidth.txt",
+      "sha256": "f7e61d7cd168d4496c6019148579af3adfd6e0dac8fa7cd98d8617bcd8732b28",
+      "header": "# EastAsianWidth-12.0.0.txt\n# Date: 2019-01-21, 14:12:58 GMT [KW, LI]\n# \u00a9 2019 Unicode\u00ae, Inc.\n# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# Unicode Character Database\n# For documentation, see http://www.unicode.org/reports/tr44/\n#\n# East_Asian_Width Property\n#\n# This file is an informative contributory data file in the\n# Unicode Character Database.\n#\n# The format is two fields separated by a semicolon.\n# Field 0: Unicode code point value or range of code point values\n# Field 1: East_Asian_Width property, consisting of one of the following values:\n#         \"A\", \"F\", \"H\", \"N\", \"Na\", \"W\"\n#  - All code points, assigned or unassigned, that are not listed\n#      explicitly are given the value \"N\".\n#  - The unassigned code points in the following blocks default to \"W\":\n#         CJK Unified Ideographs Extension A: U+3400..U+4DBF\n#         CJK Unified Ideographs:             U+4E00..U+9FFF\n#         CJK Compatibility Ideographs:       U+F900..U+FAFF\n#  - All undesignated code points in Planes 2 and 3, whether inside or\n#      outside of allocated blocks, default to \"W\":\n#         Plane 2:                            U+20000..U+2FFFD\n#         Plane 3:                            U+30000..U+3FFFD\n#\n# Character ranges are specified as for other property files in the\n# Unicode Character Database.\n#\n# For legacy reasons, there are no spaces before or after the semicolon\n# which separates the two fields. The comments following the number sign\n# \"#\" list the General_Category property value or the L& alias of the\n# derived value LC, the Unicode character name or names, and, in lines\n# with ranges of code points, the code point count in square brackets.\n#\n# For more information, see UAX #11: East Asian Width,\n# at http://www.unicode.org/reports/tr11/\n#\n# @missing: 0000..10FFFF; N",
+      "legalMatches": [
+        {
+          "line": 3,
+          "text": "# \u00a9 2019 Unicode\u00ae, Inc."
+        },
+        {
+          "line": 5,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "12.0.0",
+      "path": "IndicPositionalCategory.txt",
+      "sha256": "1df3666ef987e492b4323a9cd907738e41656e6428752f4b1f6fd95f9bfc8adb",
+      "header": "# IndicPositionalCategory-12.0.0.txt\n# Date: 2019-01-31, 02:26:00 GMT [KW, RP]\n# \u00a9 2019 Unicode\u00ae, Inc.\n# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# For documentation, see UAX #44: Unicode Character Database,\n# at http://www.unicode.org/reports/tr44/\n#\n# This file defines the following property:\n#\n#    Indic_Positional_Category     enumerated property\n#\n# Scope: This property is aimed at the problem of\n# the specification of syllabic structure for Indic scripts.\n# Because dependent vowels (matras), visible viramas, and other\n# characters are placed in notional slots around the consonant (or\n# consonant cluster) core of an Indic syllable, there may be\n# cooccurrence constraints or other interactions. Also, it may be\n# desirable, in cases where more than one such character may occur in\n# sequence, as for example, in a top slot and a bottom slot, to\n# specify preferred orders for spelling. As such, this property\n# is designed primarily to supplement the Indic_Syllabic_Category\n# property.\n#\n# Note that this property is *not* intended as\n# a prescriptive property regarding display or font design,\n# for a number of reasons. Good font design requires information\n# that is outside the context of a character encoding standard,\n# and is best handled in other venues. For Indic dependent\n# vowels and similar characters, in particular:\n#\n#   1. Matra placement may vary somewhat based on typeface design.\n#   2. Matra placement, even within a single script, may vary\n#      somewhat according to historic period or local conventions.\n#   3. Matra placement may be changed by explicit orthographic reform\n#      decisions.\n#   4. Matras may ligate in various ways with a consonant (or even\n#      other elements of a syllable) instead of occurring in a\n#      discrete location.\n#   5. Matra display may be contextually determined. This is\n#      notable, for example, in the Tamil script, where the shape\n#      and placement of -u and -uu vowels depends strongly on\n#      which consonant they adjoin.\n#\n# Format:\n#    Field 0  Unicode code point value or range of code point values\n#    Field 1  Indic_Positional_Category property value\n#\n# Field 1 is followed by a comment field, starting with the number sign '#',\n# which shows the General_Category property value, the Unicode character name\n# or names, and, in lines with ranges of code points, the code point count in\n# square brackets.\n#\n# The scripts assessed as containing dependent vowels or similar characters\n# in the structural sense used for the Indic_Positional_Category are the\n# following:\n#\n# Ahom, Balinese, Batak, Bengali, Bhaiksuki, Brahmi, Buginese, Buhid,\n# Chakma, Cham, Devanagari, Dogra, Grantha, Gujarati, Gunjala Gondi,\n# Gurmukhi, Hanunoo, Javanese, Kaithi, Kannada, Kharoshthi, Khmer,\n# Khojki, Khudawadi, Lao, Lepcha, Limbu, Makasar, Malayalam, Marchen,\n# Masaram Gondi, Meetei Mayek, Modi, Myanmar, Nandinagari, Newa,\n# New Tai Lue, Oriya, Rejang, Saurashtra, Sharada, Siddham, Sinhala,\n# Soyombo, Sundanese, Syloti Nagri, Tagalog, Tagbanwa, Tai Tham, Tai\n# Viet, Takri, Tamil, Telugu, Thai, Tibetan, Tirhuta, and Zanabazar\n# Square.\n#\n# All characters for all other scripts not in that list\n# take the default value for this property.\n#\n# See IndicSyllabicCategory.txt for a slightly more extended\n# list of Indic scripts, including those which do not have\n# positional characters. Currently, those additional\n# Indic scripts without positional characters are\n# Kayah Li, Mahajani, Multani, Phags-pa, and Tai Le.\n#\n# Notes:\n#\n# 1. The following characters are all assigned the positional category Right,\n# but may have different positions in some cases:\n#   * U+0BC1 TAMIL VOWEL SIGN U and U+0BC2 TAMIL VOWEL SIGN UU have\n#     contextually variable placement in Tamil.\n#   * U+0D41 MALAYALAM VOWEL SIGN U and U+0D42 MALAYALAM VOWEL SIGN UU form\n#     complex ligatures with consonants in older Malayalam orthography.\n#   * U+11341 GRANTHA VOWEL SIGN U and U+11342 GRANTHA VOWEL SIGN UU have\n#     contextually variable placement in Grantha.\n#   * U+11440 NEWA VOWEL SIGN O and U+11441 NEWA VOWEL SIGN AU have contextually\n#     variable placement in Newa.\n#\n# 2. The following characters are all assigned the positional category Top,\n# but may have different positions in some cases:\n#   * U+1143E NEWA VOWEL SIGN E and U+1143F NEWA VOWEL SIGN AI have contextually\n#     variable placement in Newa.\n#\n# 3. The following characters are all assigned the positional category Bottom,\n# but may have different positions in some cases:\n#   * U+102F MYANMAR VOWEL SIGN U and U+1030 MYANMAR VOWEL SIGN UU have\n#     contextually variable placement in Myanmar.\n#   * U+1A69 TAI THAM VOWEL SIGN U and U+1A6A TAI THAM VOWEL SIGN UU have\n#     contextually variable placement in Tai Tham.\n#\n# 4. The following character is assigned the positional category Left, but\n# may have different positions in different styles:\n#   * U+119D2 NANDINAGARI VOWEL SIGN I has stylistically variable placement\n#     in Nandinagari.\n\n\n# ================================================\n\n# Property: Indic_Positional_Category\n#\n#  All code points not explicitly listed for Indic_Positional_Category\n#  have the value NA (not applicable).\n#\n# @missing: 0000..10FFFF; NA\n\n# ------------------------------------------------\n\n# Indic_Positional_Category=Right\n",
+      "legalMatches": [
+        {
+          "line": 3,
+          "text": "# \u00a9 2019 Unicode\u00ae, Inc."
+        },
+        {
+          "line": 5,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "12.0.0",
+      "path": "IndicSyllabicCategory.txt",
+      "sha256": "b3932cf25d7ea43e1bf6be6d45094d4552f753f6b651a7a869464028f1aa88a1",
+      "header": "# IndicSyllabicCategory-12.0.0.txt\n# Date: 2019-01-31, 02:26:00 GMT [KW, RP]\n# \u00a9 2019 Unicode\u00ae, Inc.\n# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# For documentation, see UAX #44: Unicode Character Database,\n# at http://www.unicode.org/reports/tr44/\n#\n# This file defines the following property:\n#\n#    Indic_Syllabic_Category     enumerated property\n#\n# Scope: This property is aimed at two general problem\n# areas involving the analysis and processing of Indic scripts:\n#\n#   1. Specification of syllabic structure.\n#   2. Specification of segmentation rules.\n#\n# Both of these problem areas may benefit from having defined subtypes\n# of Indic script characters which are relevant to how Indic\n# syllables (or aksaras) are constructed. Note that rules for\n# syllabic structure in Indic scripts may differ significantly\n# from how phonological syllables are defined.\n#\n# Format:\n#    Field 0  Unicode code point value or range of code point values\n#    Field 1  Indic_Syllabic_Category property value\n#\n# Field 1 is followed by a comment field, starting with the number sign '#',\n# which shows the General_Category property value, the Unicode character name\n# or names, and, in lines with ranges of code points, the code point count in\n# square brackets.\n#\n# The scripts assessed as Indic in the structural sense used for the\n# Indic_Syllabic_Category are the following:\n#\n# Ahom, Balinese, Batak, Bengali, Bhaiksuki, Brahmi, Buginese, Buhid,\n# Chakma, Cham, Devanagari, Dogra, Grantha, Gujarati, Gunjala Gondi,\n# Gurmukhi, Hanunoo, Javanese, Kaithi, Kannada, Kayah Li, Kharoshthi,\n# Khmer, Khojki, Khudawadi, Lao, Lepcha, Limbu, Mahajani, Makasar,\n# Malayalam, Marchen, Masaram Gondi, Meetei Mayek, Modi, Multani,\n# Myanmar, Nandinagari, Newa, New Tai Lue, Oriya, Phags-pa, Rejang,\n# Saurashtra, Sharada, Siddham, Sinhala, Soyombo, Sundanese, Syloti\n# Nagri, Tagalog, Tagbanwa, Tai Le, Tai Tham, Tai Viet, Takri, Tamil,\n# Telugu, Thai, Tibetan, Tirhuta, and Zanabazar Square.\n#\n# All characters for all other scripts not in that list\n# take the default value for this property, unless they\n# are individually listed in this data file.\n#\n\n# ================================================\n\n# Property: Indic_Syllabic_Category\n#\n#  All code points not explicitly listed for Indic_Syllabic_Category\n#  have the value Other.\n#\n# @missing: 0000..10FFFF; Other\n\n# ================================================\n\n# Indic_Syllabic_Category=Bindu\n\n# Bindu/Anusvara (nasalization or -n)\n\n# [Not derivable]\n",
+      "legalMatches": [
+        {
+          "line": 3,
+          "text": "# \u00a9 2019 Unicode\u00ae, Inc."
+        },
+        {
+          "line": 5,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "12.0.0",
+      "path": "PropertyValueAliases.txt",
+      "sha256": "648e1cb9942f02b9358edc52d523803efa491ff576aa7063d4b9aebdef7d7217",
+      "header": "# PropertyValueAliases-12.0.0.txt\n# Date: 2019-02-19, 05:01:57 GMT\n# \u00a9 2019 Unicode\u00ae, Inc.\n# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# Unicode Character Database\n#   For documentation, see http://www.unicode.org/reports/tr44/\n#\n# This file contains aliases for property values used in the UCD.\n# These names can be used for XML formats of UCD data, for regular-expression\n# property tests, and other programmatic textual descriptions of Unicode data.\n#\n# The names may be translated in appropriate environments, and additional\n# aliases may be useful.\n#\n# FORMAT\n#\n# Each line describes a property value name.\n# This consists of three or more fields, separated by semicolons.\n#\n# First Field: The first field describes the property for which that\n# property value name is used.\n#\n# Second Field: The second field is the short name for the property value.\n# It is typically an abbreviation, but in a number of cases it is simply\n# a duplicate of the \"long name\" in the third field.\n#\n# Third Field: The third field is the long name for the property value, \n# typically the formal name used in documentation about the property value.\n#\n# In the case of Canonical_Combining_Class (ccc), there are 4 fields: \n# The second field is numeric, the third is the short name, and the fourth is the long name.\n#\n# The above are the preferred aliases. Other aliases may be listed in additional fields.\n#\n# Loose matching should be applied to all property names and property values, with\n# the exception of String Property values. With loose matching of property names and\n# values, the case distinctions, whitespace, hyphens, and '_' are ignored.\n# For Numeric Property values, numeric equivalence is applied: thus \"01.00\"\n# is equivalent to \"1\".\n#\n# NOTE: Property value names are NOT unique across properties. For example:\n#\n#   AL means Arabic Letter for the Bidi_Class property, and\n#   AL means Above_Left for the Canonical_Combining_Class property, and\n#   AL means Alphabetic for the Line_Break property.\n#\n# In addition, some property names may be the same as some property value names.\n# For example:\n#\n#   sc means the Script property, and\n#   Sc means the General_Category property value Currency_Symbol (Sc)\n#\n# The combination of property value and property name is, however, unique.\n#\n# For more information, see UAX #44, Unicode Character Database, and\n# UTS #18, Unicode Regular Expressions.\n# ================================================\n\n\n# ASCII_Hex_Digit (AHex)\n",
+      "legalMatches": [
+        {
+          "line": 3,
+          "text": "# \u00a9 2019 Unicode\u00ae, Inc."
+        },
+        {
+          "line": 5,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "12.0.0",
+      "path": "Scripts.txt",
+      "sha256": "bd327cbb8bffd2e4b40b1e9842c9a7d641d1c4e91c34a41020cf174f3a1c86a1",
+      "header": "# Scripts-12.0.0.txt\n# Date: 2019-01-28, 22:16:47 GMT\n# \u00a9 2019 Unicode\u00ae, Inc.\n# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# Unicode Character Database\n#   For documentation, see http://www.unicode.org/reports/tr44/\n# For more information, see:\n#   UAX #24, Unicode Script Property: http://www.unicode.org/reports/tr24/\n#     Especially the sections:\n#       http://www.unicode.org/reports/tr24/#Assignment_Script_Values\n#       http://www.unicode.org/reports/tr24/#Assignment_ScriptX_Values\n#\n\n# ================================================\n\n# Property:\tScript\n\n#  All code points not explicitly listed for Script\n#  have the value Unknown (Zzzz).\n\n# @missing: 0000..10FFFF; Unknown\n\n# ================================================\n",
+      "legalMatches": [
+        {
+          "line": 3,
+          "text": "# \u00a9 2019 Unicode\u00ae, Inc."
+        },
+        {
+          "line": 5,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "12.0.0",
+      "path": "SpecialCasing.txt",
+      "sha256": "22b1bff498f08633f72468d46eebb65e30dc325fbb6822dde319cb605af014c2",
+      "header": "# SpecialCasing-12.0.0.txt\n# Date: 2019-01-22, 08:18:50 GMT\n# \u00a9 2019 Unicode\u00ae, Inc.\n# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# Unicode Character Database\n#   For documentation, see http://www.unicode.org/reports/tr44/\n#\n# Special Casing\n#\n# This file is a supplement to the UnicodeData.txt file. It does not define any\n# properties, but rather provides additional information about the casing of\n# Unicode characters, for situations when casing incurs a change in string length\n# or is dependent on context or locale. For compatibility, the UnicodeData.txt\n# file only contains simple case mappings for characters where they are one-to-one\n# and independent of context and language. The data in this file, combined with\n# the simple case mappings in UnicodeData.txt, defines the full case mappings\n# Lowercase_Mapping (lc), Titlecase_Mapping (tc), and Uppercase_Mapping (uc).\n#\n# Note that the preferred mechanism for defining tailored casing operations is\n# the Unicode Common Locale Data Repository (CLDR). For more information, see the\n# discussion of case mappings and case algorithms in the Unicode Standard.\n#\n# All code points not listed in this file that do not have a simple case mappings\n# in UnicodeData.txt map to themselves.\n# ================================================================================\n# Format\n# ================================================================================\n# The entries in this file are in the following machine-readable format:\n#\n# <code>; <lower>; <title>; <upper>; (<condition_list>;)? # <comment>\n#\n# <code>, <lower>, <title>, and <upper> provide the respective full case mappings\n# of <code>, expressed as character values in hex. If there is more than one character,\n# they are separated by spaces. Other than as used to separate elements, spaces are\n# to be ignored.\n#\n# The <condition_list> is optional. Where present, it consists of one or more language IDs\n# or casing contexts, separated by spaces. In these conditions:\n# - A condition list overrides the normal behavior if all of the listed conditions are true.\n# - The casing context is always the context of the characters in the original string,\n#   NOT in the resulting string.\n# - Case distinctions in the condition list are not significant.\n# - Conditions preceded by \"Not_\" represent the negation of the condition.\n# The condition list is not represented in the UCD as a formal property.\n#\n# A language ID is defined by BCP 47, with '-' and '_' treated equivalently.\n#\n# A casing context for a character is defined by Section 3.13 Default Case Algorithms\n# of The Unicode Standard.\n#\n# Parsers of this file must be prepared to deal with future additions to this format:\n#  * Additional contexts\n#  * Additional fields\n# ================================================================================\n\n# ================================================================================\n# Unconditional mappings\n# ================================================================================\n\n# The German es-zed is special--the normal mapping is to SS.\n# Note: the titlecase should never occur in practice. It is equal to titlecase(uppercase(<es-zed>))\n",
+      "legalMatches": [
+        {
+          "line": 3,
+          "text": "# \u00a9 2019 Unicode\u00ae, Inc."
+        },
+        {
+          "line": 5,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "12.0.0",
+      "path": "UnicodeData.txt",
+      "sha256": "57913fdb1c1271fa9fd51dea08d49370f33d5bfda6bbaba348f44d90029ea11d",
+      "header": "",
+      "legalMatches": [],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "12.0.0",
+      "path": "extracted/DerivedNumericValues.txt",
+      "sha256": "73192b1b7662d9ea424b779bcda06ccbe57a4121bf28ed981a39a78aa5808d06",
+      "header": "# DerivedNumericValues-12.0.0.txt\n# Date: 2019-01-22, 08:18:31 GMT\n# \u00a9 2019 Unicode\u00ae, Inc.\n# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# Unicode Character Database\n#   For documentation, see http://www.unicode.org/reports/tr44/\n\n# ================================================\n\n# Derived Property:   Numeric_Value\n#  Field 1:\n#    The values are based on field 8 of UnicodeData.txt, plus the fields\n#    kAccountingNumeric, kOtherNumeric, kPrimaryNumeric in the Unicode Han Database (Unihan).\n#    The derivations for these values are as follows.\n#      Numeric_Value = the value of kAccountingNumeric, kOtherNumeric, or kPrimaryNumeric, if they exist; otherwise\n#      Numeric_Value = the value of field 8, if it exists; otherwise\n#      Numeric_Value = NaN\n#  Field 2:\n#    This field is empty; it used to be a copy of the numeric type.\n#\n#  Field 3:\n#    This field was added to this extracted data as of Unicode 5.1.0,\n#    expressing the same numeric value either as a whole integer\n#    where possible, or as a rational fraction such as \"1/6\".\n#\n# WARNING: Certain values, such as 0.16666667, are repeating fractions.\n# Although they are only printed with a limited number of decimal places\n# in this file, they should be expressed to the limits of the precision\n# available when used.\n#\n\n# ================================================\n",
+      "legalMatches": [
+        {
+          "line": 3,
+          "text": "# \u00a9 2019 Unicode\u00ae, Inc."
+        },
+        {
+          "line": 5,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    },
+    {
+      "edition": "12.0.0",
+      "path": "ReadMe.txt",
+      "sha256": "ecc46cb63f649b88a33746a2ef031ebbc0d028f4c89b81eacf1fca45307e052d",
+      "header": "# Unicode Character Database\n# Date: 2019-03-01, 22:17:00 GMT [KW]\n# \u00a9 2019 Unicode\u00ae, Inc.\n# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.\n# For terms of use, see http://www.unicode.org/terms_of_use.html\n#\n# For documentation, see the following:\n# NamesList.html\n# UAX #38, \"Unicode Han Database (Unihan)\"\n# UAX #44, \"Unicode Character Database.\"\n#\n# The UAXes can be accessed at http://www.unicode.org/versions/Unicode12.0.0/\n",
+      "legalMatches": [
+        {
+          "line": 3,
+          "text": "# \u00a9 2019 Unicode\u00ae, Inc."
+        },
+        {
+          "line": 5,
+          "text": "# For terms of use, see http://www.unicode.org/terms_of_use.html"
+        }
+      ],
+      "specificRestrictionFound": false,
+      "outcome": "Unicode License v3 default; no file-specific override found"
+    }
+  ]
+}

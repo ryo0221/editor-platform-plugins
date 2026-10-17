@@ -1,5 +1,8 @@
 # Fontkit embedded component reconciliation
 
+See [final scoped coverage](fontkit-final-coverage.md) for current applicability,
+archive containment, and the correction of historical-provenance blocker language.
+
 Historical PR #35 audit. The [data/runtime follow-up](fontkit-data-runtime.md)
 resolves the represented Unicode editions and USE grammar chain, adds confirmed
 notices, and narrows remaining terms/polyfill/shaper uncertainties.

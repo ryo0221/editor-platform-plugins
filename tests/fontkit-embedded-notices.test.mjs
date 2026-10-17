@@ -6,13 +6,13 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { retainFontkitEmbeddedNotices } from '../scripts/fontkit-embedded-notices.mjs';
 
-test('fontkit partial notices preserve exact source bytes; changed bundled code requires re-audit', async () => {
+test('fontkit scoped notices preserve exact source bytes; changed bundled code requires re-audit', async () => {
   const temp = await mkdtemp(join(tmpdir(), 'fontkit-notices-'));
   try {
     const texts = [];
     const metadata = await retainFontkitEmbeddedNotices('node_modules/@pdf-lib/fontkit', temp, texts);
-    assert.equal(metadata.status, 'PARTIAL');
-    assert.equal(texts.length, 18);
+    assert.equal(metadata.status, 'IDENTIFIED-NOTICES-RETAINED');
+    assert.equal(texts.length, 19);
     assert.equal(metadata.evidenceFiles.length, 10);
     assert.ok(metadata.evidenceFiles.every(file => !texts.includes(file.path)));
     assert.ok(texts.includes('embedded/buffer-5.6.0-LICENSE.txt'));

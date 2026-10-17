@@ -1,5 +1,8 @@
 # Partial embedded notice retention for fontkit 1.1.1
 
+See [final scoped coverage](fontkit-final-coverage.md) for current applicability,
+archive containment, and the correction of historical-provenance blocker language.
+
 Historical PR #34 report. See [the follow-up reconciliation](fontkit-closure.md)
 for added notices, bounded unknowns, and the correction separating source
 reproducibility from notice obligations.

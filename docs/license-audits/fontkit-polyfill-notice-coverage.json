@@ -1,0 +1,15 @@
+{
+  "path": "licenses/npm/readable-stream@2.3.8/LICENSE",
+  "archiveNoticeSha256": "ec62dc96da0099b87f4511736c87309335527fb7031639493e06c95728dc8c54",
+  "sourceNoticeSha256": "6239c6144c31e58cf925c34483606969c555574d64ffa96518ab5d7f45c75d43",
+  "containsExact": true,
+  "containsWhitespaceNormalized": true,
+  "sourceNoticeOffset": 1237,
+  "sourceNoticeLength": 1096,
+  "node": {
+    "nodeSource": "https://raw.githubusercontent.com/nodejs/node/v6.3.0/LICENSE",
+    "nodeSourceSha256": "d1e080b82e3ee3ebfd47cfe9bfd772ecf3f0c810a52c74c8e9ec48cbc554e3be",
+    "archivedCombinedNoticeIsExactPrefixOfNodeLicense": true,
+    "archivePath": "licenses/npm/readable-stream@2.3.8/LICENSE"
+  }
+}
