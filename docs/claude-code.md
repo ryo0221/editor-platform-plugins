@@ -7,8 +7,9 @@ button until the release gates below pass.
 
 ## Candidate environment
 
-The current packager produces Linux x64 only, using the official Node 24.19.0
-distribution pinned in scripts/claude-code-node.json. It verifies the archive's
+The default target is Linux x64. macOS arm64/x64 and Windows x64 are also
+packaging candidates, with native acceptance NOT RUN. All use official Node
+24.19.0 distributions pinned in scripts/claude-code-node-targets.json. It verifies the archive's
 SHA-256 before extraction and includes that distribution's binary and LICENSE.
 The builder's Node executable and arbitrary runtime/license overrides are rejected.
 Runtime use requires no
@@ -195,3 +196,17 @@ opener, default storage location and the full signed-in scenario remain NOT RUN.
 The existing runtime selects `open`, `explorer.exe` or `xdg-open`; cross-packaging
 cannot verify that these actually open the user's graphical browser. Keep the LP
 supported-environment list empty until actual-host evidence exists per target.
+
+Re-run the four-target offline package inspection after sequentially building all
+four candidates. Put the already-downloaded official archives (using their exact
+pinned filenames) in one directory, then run:
+
+```sh
+EDITOR_NODE_ARCHIVE_DIR=/absolute/path/to/official-archives npm run test:platform-packages
+```
+
+This verifies official and packaged checksums, allowed paths/runtime files, Node
+and LICENSE bytes, target metadata and MCP commands, and rejects another target's
+official archive. It never executes any target Node binary or downloads anything.
+Native OS acceptance remains separate. Record the source commit used for each
+rebuild: documentation changes also change the included source and archive hash.
