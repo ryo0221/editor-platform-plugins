@@ -263,6 +263,8 @@ test('Data reference: real Slide follows committed source, preserves destination
   await expect(frame.locator('.save-state')).toContainText('v3');
   const captured = (await invoke(page, 'read_deck', { deckId: deck.id })).structuredContent.deck;
   expect(captured.content.slides[0].objects.at(-1).reference.snapshot.revision).toBe(2);
+  await expect.poll(projected).toContain('987654');
+  await expect(frame.getByText('linked_data: 取得中', { exact: false })).toHaveCount(0);
   await page.screenshot({ path: 'test-results/data-slide-reference.png', fullPage: true });
   await invoke(page, 'delete_artifact', { artifactId: source.id, baseRevision: 2 });
   await expect(frame.getByText('参照元が見つかりません', { exact: false }).first()).toBeVisible({ timeout: 12000 });

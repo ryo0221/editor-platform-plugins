@@ -273,3 +273,52 @@ acceptance: NOT RUN. This base change does not enable Animation or references.
 The public snapshot contains AnimationControlledSurface, rectangle Player v1 and
 Data/Graph ReferenceResolver adapters; Host adapters remain separate work.
 No performance measurement, automatic Actions, Release or merge was performed.
+
+## Data/Graph → Slide references — issue #7 (2026-10-17)
+
+Depends only on the public-sync base PR #14. This sibling of Animation PR #17
+does not enable Animation; combine both capability declarations when integrating.
+Shared MCP registration changes preserve the single-owner authentication and
+model-only human-tool boundary. OAuth authorization hooks are separate work and
+must be retained during integration.
+
+Candidate source and package-test commit:
+`dd9c8d6aba1887b0ea42c953d0275ef68275f5bd`. Public pin:
+`97ea905745101b3814d14febcc0c31b157023c71`. Debian 13 x64, Node 24.19.0,
+Chromium 151.0.7922.173. Subsequent screenshot-wait/evidence changes do not change
+runtime code and were not used to rebuild the archives below.
+
+| Check | Result |
+| --- | --- |
+| Public pin, strict types, Editor/browser/harness builds | PASS |
+| Unit/protocol | PASS, 28 tests |
+| Full Chromium browser run | PASS, 22 cases, no retries/skips |
+| Linux isolated Code package | PASS, 1 test, including Data/Graph snapshot creation |
+| Existing Desktop MCPB | PASS, 2 tests, including a reviewed embedded Data image |
+| Updated screenshot-wait reference browser case | PASS, 1 additional run; rendered table inspected |
+| Signed-in hosts; native macOS/Windows; mobile; Release | NOT RUN |
+
+Protocol checks cover fixed/follow capture, no implicit destination writes, pending
+source proposals excluded, issued-version tamper rejection even with recomputed
+hash, concurrent issuance, restart retention, Graph Profile dependency and missing
+target/source refusal. The browser edits saved Data, observes the real Slide
+projection update, verifies the destination stayed at its old saved revision,
+explicitly saves the captured source revision and observes deletion diagnostics.
+
+Initial browser checks found a real export bug: EditorSession.content returns a
+caller-owned copy, so object-identity comparison falsely rejected unchanged draft
+exports. The Host now uses public sameLocalRevision. An interrupted runner left
+a test listener; it was stopped before rerunning. A subsequent reference assertion
+expected grouped digits, while the native table correctly displayed raw 987654;
+the assertion now matches native output. The final full check passed unchanged
+application behavior and all existing browser cases.
+
+```text
+7225aaa2d538b27ba288ab441d88d359edb8cc935e355c5bc2b78e386eb7de76  editor-platform-claude-0.1.3.mcpb
+05a9c7da5a666a90c71669b67bcb56b666843aa53c86a2db533c8e66920c3df4  editor-platform-claude-code-0.1.3-linux-x64.tar.gz
+```
+
+These generated files remain local. Document/Design/Whiteboard destinations are
+not wired in this increment. Back up the complete data directory, including
+reference-snapshots; fixed history has no automatic cleanup. No private source,
+CI activation, performance measurement, Release or merge was performed.
