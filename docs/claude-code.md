@@ -17,6 +17,7 @@ Git, npm, source build, external Node installation, API key or server command.
 Linux requires a graphical desktop, browser, `xdg-open`, and a system compatible
 with the bundled Node binary (official Node 24 Linux x64 baseline: glibc 2.28+
 and libstdc++ 6.0.25+).
+WSL has an explicit Windows-opener candidate; see [WSL acceptance](wsl.md).
 macOS, Windows, WSL, remote SSH, cloud/headless sessions and IDE integrations are
 NOT accepted. A server-side browser opened in a remote session is not the user's
 local browser. Native graphics/browser compatibility remains a release gate.
@@ -110,7 +111,10 @@ edits are not included until explicit Save. The plugin calls no AI service itsel
 
 ## Errors and recovery
 
-- Browser opener fails: restore `xdg-open` and the default graphical browser, then
+- WSL opener fails: follow [WSL diagnostics](wsl.md). The plugin tries existing
+  `wslview`, then `explorer.exe` only when the first executable is absent. It does
+  not configure a browser or expose a manual authentication URL.
+- Other Linux browser opener fails: restore `xdg-open` and the default graphical browser, then
   retry `open_editor`. Headless/remote sessions are not supported.
 - Browser disconnects after Claude Code exit: restart Claude Code and call
   `open_editor` again. The old process's port/capability are intentionally expired.
@@ -196,7 +200,8 @@ run packaging commands sequentially, not concurrently.
 These targets are **not accepted OS support**. Native macOS arm64/x64, Windows x64
 and WSL installation, executable permissions, plugin path expansion, OS browser
 opener, default storage location and the full signed-in scenario remain NOT RUN.
-The existing runtime selects `open`, `explorer.exe` or `xdg-open`; cross-packaging
+The runtime selects `open`, `explorer.exe` or `xdg-open`, with an explicit WSL
+`wslview`/`explorer.exe` route; cross-packaging
 cannot verify that these actually open the user's graphical browser. Keep the LP
 supported-environment list empty until actual-host evidence exists per target.
 
