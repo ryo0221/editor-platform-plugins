@@ -257,3 +257,45 @@ provenance/hashes and retain the standalone relocation/restart workflow.
 Rebuilt Code archive: PASS (1 isolated package test). Existing Desktop MCPB:
 PASS (2 isolated package tests). Together with the 27 unit/protocol and 21 browser
 cases, all 51 tests passed. Real signed-in host acceptance remains NOT RUN.
+
+## Issue #4 — cross-packaging evidence (2026-10-17)
+
+Candidate source commit: `b8136d8583b407d4da3f3e1923aa8c15d333ec7b`.
+Plugin: 0.1.3 candidate. Public pin remains
+`a9e708331ff9b78886a02d3c30dca67bfafdf2e8` (unchanged).
+Builder: Debian GNU/Linux 13 x64, Node 24.19.0, Chromium 151.0.7922.173.
+The following documentation-only evidence commit is not a rebuilt candidate.
+
+| Check | Result |
+| --- | --- |
+| Full `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run check` | PASS: 28 unit/protocol + 21 browser cases |
+| Linux standalone Code archive | PASS: 1 isolated package test |
+| Existing Desktop MCPB | PASS: 2 isolated package tests (builder Node 24.19.0) |
+| Four official Node archives / extracted binary and LICENSE / packaged UI hashes / target metadata and MCP command | PASS: static inspection |
+| Wrong-target official archive rejected | PASS: Linux archive against Windows pin |
+| Signed-in Claude Code, Codex, ChatGPT and Claude Desktop acceptance | NOT RUN |
+| Native macOS arm64/x64, Windows x64, WSL installation/browser/storage acceptance | NOT RUN |
+| Release and demo video | NOT RUN |
+
+Initial full check: 28 protocol PASS; browser 20 PASS / 1 FAIL while package builds
+were also replacing generated output. The failing case timed out waiting for the
+harness to connect, before editing assertions. After all packaging completed,
+the unchanged full check passed 28 + 21 with no retries or skips. Concurrent
+build/output replacement is a possible cause, not a proven diagnosis. Do not run
+packaging concurrently with browser checks or another package build.
+
+Archive SHA-256 (all generated from the candidate source commit above):
+
+```text
+b0255b78a9b4d3aaab5947df1832ae1dc2071098967510c21ee8a9ae280b3dd8  editor-platform-claude-0.1.3.mcpb
+0102190badb7e77e30e32f696bde00a67d9e60047020054a282032042f04627a  editor-platform-claude-code-0.1.3-darwin-arm64.tar.gz
+eef22ef90991f4d8f80e199feece2ba88af9a8d0eaf9149c3cbffa5ef17da740  editor-platform-claude-code-0.1.3-darwin-x64.tar.gz
+e3c1addf748d32c984f751e894a20bb965d5fb6a01894e3f9a5438a8b74b1607  editor-platform-claude-code-0.1.3-linux-x64.tar.gz
+cc1b5bf2bfd9f3af893a7cd40e6cd119e43bb1292509002fbfce756dfe8dbcd2  editor-platform-claude-code-0.1.3-win32-x64.tar.gz
+```
+
+The files remain local under `release/`, outside Git. macOS/Windows archives were
+inspected on Linux and never executed. No supported-OS or LP availability claim
+follows from this packaging evidence. Issue #4 remains open for native acceptance.
+No automatic CI, performance measurement, private-source copying or release was
+introduced. OS browser openers and human-only model/browser boundaries are unchanged.
