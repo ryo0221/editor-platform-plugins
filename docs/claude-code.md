@@ -177,6 +177,14 @@ Official references checked 2026-10-16:
 - https://code.claude.com/docs/en/plugins/manifest-reference
 - https://code.claude.com/docs/en/plugins/install
 
+## Candidate identity and acceptance records
+
+Each new Code package includes plugin source commit/dirty status in build-info.json
+and emits a `.acceptance-template.json` next to its checksum. See
+[recording instructions](acceptance-records.md) and the
+[remaining issue audit](remaining-acceptance.md). Actual-host rows start NOT RUN;
+packaging never declares an OS supported.
+
 ## Cross-packaging candidates (issue #4)
 
 Maintainers can build on Linux with an explicit target, without executing the
