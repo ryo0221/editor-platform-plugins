@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { browserReferences } from './references';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 import { App } from '@modelcontextprotocol/ext-apps';
-import { EditorInputs, EditorSession, type EditorCommand } from '@editor-platform/editor-core';
+import { EditorInputs, EditorSession, sameLocalRevision, type EditorCommand } from '@editor-platform/editor-core';
 import { EditorInputsContext, EditorHistoryContext, EditorExportGuardContext, EditorOfficeCapabilitiesContext } from '@editor-platform/editor-ui';
 import { relationProfile, type GraphProfile } from '@editor-platform/structured-graph/model';
 import type { ArtifactSummary } from '../server/inventory';
@@ -35,6 +36,7 @@ function Editor() {
   const [listState, setListState] = useState<'active' | 'deleted'>('active');
   const [nextCursor, setNextCursor] = useState<string>();
   const [newKind, setNewKind] = useState<ArtifactKind>('slide');
+  const references = useMemo(() => record?.id ? browserReferences(async (name, args) => { await connection; return await bridge.callServerTool({ name, arguments: args }) as Reply; }, record.id) : undefined, [record?.id]);
   const inputs = useRef(new EditorInputs()).current;
   const pending = useSyncExternalStore(inputs.subscribe, inputs.getSnapshot);
   const [dirty, setDirty] = useState(false); const dirtyRef = useRef(false);
@@ -180,7 +182,14 @@ function Editor() {
         <button disabled={busy || !!proposal || !session.current?.canUndo} onClick={() => history('undo')}>元に戻す</button>
         <button disabled={busy || !!proposal || !session.current?.canRedo} onClick={() => history('redo')}>やり直す</button>
         <button disabled={busy || !!proposal || !selected.length} onClick={() => void shareSelection()}>{canShareContext ? '選択箇所を会話に共有' : '選択箇所を保存（チャットで読込）'}</button>
-        <button disabled={busy} onClick={() => { try { flush(); download(`${record.id}.json`, JSON.stringify(record.kind === 'graph' ? { graph: session.current!.content, profile: record.profile ?? relationProfile } : session.current!.content, null, 2), 'application/json'); } catch (e) { setMessage((e as Error).message); } }}>ローカルJSON</button>
+        <button disabled={busy} onClick={() => { try { flush(); void action(async () => {
+          const current = recordRef.current!; const draft = session.current!.content; const draftRevision = session.current!.revision;
+          const captured = !current.kind || current.kind === 'slide'
+            ? ((await call('capture_slide_references', { deckId: current.id, content: draft })).structuredContent as { content: unknown }).content
+            : current.kind === 'graph' ? { graph: draft, profile: current.profile ?? relationProfile } : draft;
+          if (recordRef.current !== current || !sameLocalRevision(session.current!.revision, draftRevision) || pendingRef.current.dirty || pendingRef.current.composing) throw Error('Draft changed while capturing references; retry export.');
+          download(`${current.id}.json`, JSON.stringify(captured, null, 2), 'application/json');
+        }); } catch (e) { setMessage((e as Error).message); } }}>ローカルJSON</button>
         <button disabled={busy || dirty || pending.dirty > 0 || !!proposal} onClick={() => void action(async () => {
           const result = await call('export_deck', { deckId: record.id });
           const output = result.structuredContent as Record<string, unknown> | undefined;
@@ -217,7 +226,7 @@ function Editor() {
         <EditorHistoryContext.Provider value={{ undo: () => history('undo'), redo: () => history('redo') }}>
           <EditorExportGuardContext.Provider value={flush}>
             <EditorOfficeCapabilitiesContext.Provider value={{ pptx: false, docx: false, reason: 'この接続ではJSONとSVGを利用してください。' }}>
-              <NativeSurface key={`${record!.id}:${proposal ? 'preview-'+proposal.id : 'edit'}`} kind={record!.kind ?? 'slide'} content={content} execute={execute} select={(ids) => setSelected(Array.isArray(ids) ? ids : [ids])} selected={selected} readOnly={busy || !!proposal} artifactId={record!.id} profile={record!.profile} />
+              <NativeSurface key={`${record!.id}:${proposal ? 'preview-'+proposal.id : 'edit'}`} kind={record!.kind ?? 'slide'} content={content} execute={execute} select={(ids) => setSelected(Array.isArray(ids) ? ids : [ids])} selected={selected} readOnly={busy || !!proposal} artifactId={record!.id} profile={record!.profile} references={references} />
             </EditorOfficeCapabilitiesContext.Provider>
           </EditorExportGuardContext.Provider>
         </EditorHistoryContext.Provider>

@@ -89,7 +89,7 @@ test('installed MCPB works offline, across relocation and restart, with no check
   };
   try {
     await connect();
-    assert.equal((await client!.listTools()).tools.length, 21);
+    assert.equal((await client!.listTools()).tools.length, 25);
     const capabilities = await invoke('list_editors', {});
     assert.equal(capabilities.editors.length, 9);
     const saved: { id: string; kind: string }[] = [];

@@ -18,7 +18,7 @@ test('real MCP initialize/discovery, typed proposals, app-only metadata and bund
   try {
     await server.connect(b); await client.connect(a);
     const { tools } = await client.listTools();
-    assert.equal(tools.length, 21);
+    assert.equal(tools.length, 25);
     assert.deepEqual((tools.find((t) => t.name === 'apply_slide_proposal')?._meta?.ui as {visibility: string[]}).visibility, ['app']);
     const capabilities = CallToolResultSchema.parse(await client.callTool({ name: 'list_editors', arguments: {} }));
     assert.equal((capabilities.structuredContent!.editors as unknown[]).length, 9);

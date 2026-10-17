@@ -28,7 +28,7 @@ async function harness(run: (call: (name: string, args: Record<string, unknown>,
 
 test('discovered Slide contract and all published edit examples work; full-content proposals handle chart/table changes', async () => harness(async (call, client) => {
   const guide = await call('get_editor_guide', { kind: 'slide' });
-  assert.equal(guide.capabilities.crossArtifactEmbedding, false);
+  assert.deepEqual(guide.capabilities.crossArtifactEmbedding.destinations, ['slide']);
   assert.match(client.getInstructions()!, /static snapshots/);
   const tools = (await client.listTools()).tools;
   const schema = tools.find((t) => t.name === 'propose_slide_changes')!.inputSchema;

@@ -31,11 +31,13 @@ preview requires a separately hosted, pinned React runtime and is not implemente
 by this preview. File and Review retain their upstream viewing/comparison semantics;
 they are not arbitrary binary document editors. Graph uses the public relation Profile by default, or a declarative custom Profile supplied at creation and retained immutably with that artifact. Profile schema migration is not supported by this Host.
 
-Slide charts are static snapshots. Cross-artifact embedding and automatic source-update
-propagation are not supported; upstream work is tracked in [#264](https://github.com/ryo0221/editor-platform/issues/264).
+Slide charts are static snapshots. Saved Data/Graph can also be embedded as fixed
+or follow references in Slide, using the public resolver and adapters; see
+[reference semantics and limits](docs/references.md). Source updates refresh the
+view; explicit Save/export captures versions. Other destination adapters are pending.
 
-Animation, Video and GIS are not in the pinned public upstream. Their plugin
-adapters require an approved public-source export and are not claimed complete.
+The public source now includes Animation, Video and GIS. Their plugin adapters
+are separate work and are not enabled by the reference integration.
 
 ## Set up
 
