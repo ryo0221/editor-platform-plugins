@@ -198,6 +198,7 @@ if (code) {
   info.nodeLicenseSha256 = digest(await readFile(join(stage, 'runtime', 'LICENSE')));
   info.reactPreviewSha256 = digest(await readFile(join(stage, 'ui', 'react-preview.html')));
   info.browserSha256 = digest(await readFile(join(stage, 'ui', 'browser.html')));
+  info.codeEntrySha256 = digest(await readFile(join(stage, 'server', 'code.mjs')));
   info.codexSetupSha256 = digest(await readFile(join(stage, 'server', 'codex-setup.mjs')));
   info.shellClientSha256 = digest(await readFile(join(stage, 'server', 'shell-client.mjs')));
   info.platform = nodeDistribution.platform; info.arch = nodeDistribution.arch;

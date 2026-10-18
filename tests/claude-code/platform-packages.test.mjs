@@ -57,6 +57,7 @@ for (const target of Object.keys(pins)) {
       assert.ok(bytes('SECURITY.md').length > 0);
       const info = JSON.parse(bytes('build-info.json'));
       assert.equal(digest(bytes('server/shell-client.mjs')), info.shellClientSha256);
+      assert.equal(digest(bytes('server/code.mjs')), info.codeEntrySha256);
       assert.equal(digest(bytes('server/codex-setup.mjs')), info.codexSetupSha256);
       assert.deepEqual(bytes('docs/codex-windows-wsl.md'), await readFile(new URL('../../docs/codex-windows-wsl.md', import.meta.url)));
       assert.deepEqual(info.nodeDistribution, pin);

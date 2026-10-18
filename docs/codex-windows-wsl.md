@@ -56,13 +56,13 @@ Set-Location '.\editor-platform-new\plugins\editor-platform'
 & '.\runtime\node.exe' '.\server\codex-setup.mjs' plan --channel windows-app
 ```
 
-WSL terminal, using its Linux home rather than a Windows shell:
+WSL2 is required for this acceptance target. In its Linux terminal/home, rather than a Windows shell:
 
 ```sh
-sha256sum -c editor-platform-claude-code-0.1.3-linux-x64.tar.gz.sha256
-mkdir editor-platform-new
-tar -xzf editor-platform-claude-code-0.1.3-linux-x64.tar.gz -C editor-platform-new
-cd editor-platform-new/plugins/editor-platform
+sha256sum -c editor-platform-claude-code-0.1.3-linux-x64.tar.gz.sha256 &&
+mkdir editor-platform-new &&
+tar -xzf editor-platform-claude-code-0.1.3-linux-x64.tar.gz -C editor-platform-new &&
+cd editor-platform-new/plugins/editor-platform &&
 ./runtime/node ./server/codex-setup.mjs plan --channel wsl-cli
 ```
 
@@ -89,7 +89,10 @@ The tool refuses an existing install destination. It copies the common runtime,
 source and notices into the stable install location and emits connection fields.
 It never reads/writes Codex config, secrets or other channel installations.
 
-**Windows app:** reopen the app, choose its native Windows agent, open Settings →
+**Windows app:** first inspect existing MCP settings for `editor-platform-windows`.
+If present, confirm that you own that connection and inspect its paths before
+changing it; do not overwrite an unrelated registration. Reopen the app, choose
+its native Windows agent, open Settings →
 MCP servers → Add server, select STDIO and enter the emitted `name`, `command`,
 `args` and `EDITOR_DATA_DIR` environment value. Command is the absolute `node.exe`
 path; the one argument is the absolute installed `server/code.mjs` path. Preserve
