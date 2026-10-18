@@ -1,9 +1,12 @@
-# #9 readiness and minimum operator procedure
+# Archived ChatGPT server-readiness notes (#9)
 
-Self-operated HTTPS/OAuth with one owner is settled. This runbook does not reopen
-that decision. It prepares the existing implementation for an approved operator
-setup; no public infrastructure, account, registration or persistent grant has
-been created. `available` status still requires signed-in ChatGPT acceptance.
+**Not a supported installation or deployment guide (2026-10-18).** The product
+must run in the user's existing environment, without requiring the provider or
+the user to operate an additional server/domain/IdP. The HTTPS/OAuth delivery model
+below is not adopted; selection and deployment preparation are stopped.
+These notes preserve prior implementation and verification context only.
+They are not a request for accounts, hosting choices, costs or OAuth approval.
+No replacement local ChatGPT route or actual-host acceptance is claimed.
 
 ## Findings resolved before real IdP/TLS setup
 
@@ -21,7 +24,7 @@ These are local implementation checks. Neither a saved discovery document nor an
 SDK request fixture proves the IdP rejects bad verifiers, code replay, wrong
 redirects, revoked users, or expired grants.
 
-## Concrete choices still needed
+## Former infrastructure choices (no longer requested)
 
 Recommended: reuse an existing maintained IdP that passes the offline checklist
 and can issue RFC 9068 `at+jwt` with the configured resource audience, exact owner
@@ -52,7 +55,7 @@ request/connection limits, no request-body/token logging, no caching and no stre
 buffering. Do not expose health, demo, browser, storage or a separate backend port.
 No tunnel/account/domain/certificate automation is provided or run here.
 
-## Minimum steps once the specific IdP/TLS setup is authorized
+## Historical setup sequence (not a product installation path)
 
 1. Build the reviewed source with its pinned public submodule and dependencies:
    `npm ci`, `npm ci --prefix integrations/chatgpt --ignore-scripts`, `npm run build`.

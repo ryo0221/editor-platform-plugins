@@ -62,34 +62,25 @@ check; validation in this repository covers the MCP stdio protocol itself.
 CLI hosts can use tools without rendering the UI; UI-only proposal acceptance
 then requires a compatible MCP Apps UI host.
 
-## Web chat
+## ChatGPT status — unsupported (2026-10-18)
 
-Optional single-owner OAuth candidates are documented in the
-[transport gateway guide](../integrations/chatgpt/README.md) and
-[direct verifier guide](../integrations/chatgpt/tool-auth.md). Use one mode only:
-the direct verifier must receive the original Authorization header, not the
-transport gateway’s substituted credential. Live TLS/IdP and real-host acceptance
-are NOT RUN. The following static-token guidance describes the default mode.
+The current ChatGPT route requires an externally reachable HTTPS/OAuth server.
+That delivery model is not adopted: the product must run in the user's existing
+environment without asking either the provider or the user to operate an
+additional server/domain/IdP. Do not present it as "preparing", an install option,
+or a task waiting for the user's hosting choice. No alternative local ChatGPT
+connection is implemented or claimed here.
 
-Both providers need an endpoint reachable from their servers, not a loopback URL
-on the user's computer. Deploy behind TLS with a host-compatible OAuth gateway.
-For this preview, proxy authenticated requests into the one private workspace;
-do not use it as a multi-tenant backend. Have the trusted gateway validate OAuth
-and inject the private upstream bearer credential. Never put that credential in
-HTML, a repository, model-visible tool data, a URL or a distributable manifest.
+The [OAuth source and tests](../integrations/chatgpt/README.md),
+[tool authorization notes](../integrations/chatgpt/tool-auth.md) and
+[former runbook](../integrations/chatgpt/runbook.md) are retained as historical
+engineering evidence, not deployment recommendations. Local test success does
+not imply signed-in ChatGPT acceptance; that remains NOT RUN. Code is retained,
+and #9 is closed as not_planned; no Release is implied.
 
-Configure `HOST`, `PORT`, `EDITOR_ALLOWED_HOST` (hostname only),
-`EDITOR_ACCESS_TOKEN` (at least 32 characters for non-loopback bindings), and
-`EDITOR_DATA_DIR`. The startup guard prevents accidentally serving an unauthenticated
-non-loopback endpoint. Restrict upstream network access to the gateway. The bearer
-guard is **not** an OAuth implementation; a complete gateway is a separate required
-deployment component, and no such live deployment was performed here.
-
-ChatGPT: add the HTTPS `/mcp` endpoint as a custom MCP server and configure the
-gateway's supported authentication. Claude: add it as a custom remote connector.
-Use a private test deployment before submitting to either directory. Confirm UI
-rendering, tool visibility, authorization, download behavior and host CSP limits
-in each real host. This source preview does not claim those checks have passed.
+The local client paths above remain separate and retain their own acceptance
+requirements. In particular, Codex local runtime support does not mean ChatGPT
+web support. This policy change does not certify a different remote host.
 
 ## Reference documentation
 

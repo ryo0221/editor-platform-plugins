@@ -1,4 +1,9 @@
-# Tool-level OAuth hook candidate (#9)
+# Historical tool-level OAuth hook (#9)
+
+**Current product status: unsupported (2026-10-18).** This server-dependent route
+is retained for engineering reference, not offered as an installation option.
+Neither the provider nor the user is asked to operate additional infrastructure.
+See [the current policy](README.md); deployment preparation is stopped.
 
 The shared server includes the protocol signals required by the
 [official ChatGPT authentication guide](https://developers.openai.com/plugins/build/auth)
