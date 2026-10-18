@@ -1,5 +1,15 @@
 # Verification — 2026-10-16
 
+## Reading the dated records
+
+The sections below are historical checkpoints, not a single current status matrix.
+Issue #10 closed on 2026-10-17 for the limited Linux x64 existing-Codex shell/browser
+route with a separate browser operator. See [the shell evidence](codex-shell-verification.md)
+and [current publication gates](codex-release.md). Older Codex NOT RUN rows refer
+to those earlier checkpoints or native registration, which remains NOT RUN.
+The current public upstream pin is recorded in `upstream.json`; earlier pins and
+counts below are retained as historical evidence, not proof of a newer archive.
+
 ## Exact dependency
 
 The public upstream is pinned to `a9e708331ff9b78886a02d3c30dca67bfafdf2e8`,

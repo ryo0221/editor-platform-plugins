@@ -100,6 +100,8 @@ explicit, and normal desktop browser association still needs acceptance.
 
 Limit any LP wording to Linux shell/browser preview with those prerequisites.
 Keep availability preparing unless the owner accepts that precise scope and
-supplies a distributable candidate and guide URL. This PR does not close #10,
-change LP state or publish a Release. Its Codex evidence is not #5 Claude Code
+supplies a distributable candidate and guide URL. Issue #10 was subsequently closed with owner approval after PR #30 integration
+at `5af1c2398d6bf22356b00f0b10b9edde8b1af086` (51 unit/protocol, 26 browser,
+2 package and 1 archive-browser checks PASS). That closure does not publish a
+Release or accept newer archive hashes; see [current publication preparation](codex-release.md). Its Codex evidence is not #5 Claude Code
 footage and must not be relabeled as such.
