@@ -48,6 +48,12 @@ and protected local-browser Editor route are under development. See the
 recovery and release gates. No accepted OS, public download or live-host acceptance
 is claimed. The Desktop `.mcpb` below is a separate format.
 
+**Codex completion targets:** Windows app (native Windows agent) and WSL CLI.
+The [platform-specific installation candidate](docs/codex-windows-wsl.md) reuses
+this runtime and provides isolated install/update/removal plus connection fields.
+Native acceptance for both targets is pending; cloud limitations do not make them
+unsupported. See [channel boundaries and acceptance](docs/channels.md).
+
 For **Codex**, the [prebuilt shell/browser route](docs/codex-shell.md) is accepted
 as a limited Linux x64 preview using an existing Codex session and a separately
 prepared browser operator. Issue #10 is closed for that scope. No extra Codex or

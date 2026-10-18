@@ -36,7 +36,7 @@ for (const target of Object.keys(pins)) {
       assert.equal(new Set(entries).size, entries.length);
       for (const entry of entries) {
         assert.ok(entry.startsWith('./') && !entry.includes('\\') && !entry.split('/').includes('..'), entry);
-        assert.match(entry, /^\.\/(?:$|(?:INSTALL|CODEX)\.md$|\.claude-plugin\/(?:$|marketplace\.json$)|plugins\/(?:$|editor-platform\/(?:$|(?:LICENSE|INSTALL\.md|SECURITY\.md|SOURCE\.md|THIRD-PARTY-NOTICES\.json|build-info\.json|package\.json|\.mcpbignore|\.mcp\.json)$|(?:runtime|source|licenses|node_modules|server|ui|skills|\.claude-plugin)\/.*$|docs\/(?:$|codex(?:-shell)?\.md$))))/);
+        assert.match(entry, /^\.\/(?:$|(?:INSTALL|CODEX)\.md$|\.claude-plugin\/(?:$|marketplace\.json$)|plugins\/(?:$|editor-platform\/(?:$|(?:LICENSE|INSTALL\.md|SECURITY\.md|SOURCE\.md|THIRD-PARTY-NOTICES\.json|build-info\.json|package\.json|\.mcpbignore|\.mcp\.json)$|(?:runtime|source|licenses|node_modules|server|ui|skills|\.claude-plugin)\/.*$|docs\/(?:$|codex(?:-shell|-windows-wsl)?\.md$))))/);
       }
       const types = execFileSync('tar', ['-tvzf', archive], { encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 }).trim().split('\n');
       assert.ok(types.every((entry) => entry.startsWith('-') || entry.startsWith('d')), 'only regular files/directories are allowed');
@@ -57,6 +57,8 @@ for (const target of Object.keys(pins)) {
       assert.ok(bytes('SECURITY.md').length > 0);
       const info = JSON.parse(bytes('build-info.json'));
       assert.equal(digest(bytes('server/shell-client.mjs')), info.shellClientSha256);
+      assert.equal(digest(bytes('server/codex-setup.mjs')), info.codexSetupSha256);
+      assert.deepEqual(bytes('docs/codex-windows-wsl.md'), await readFile(new URL('../../docs/codex-windows-wsl.md', import.meta.url)));
       assert.deepEqual(info.nodeDistribution, pin);
       const record = JSON.parse(await readFile(`${archive}.acceptance-template.json`, 'utf8'));
       assert.equal(record.package.sha256, digest(await readFile(archive)));

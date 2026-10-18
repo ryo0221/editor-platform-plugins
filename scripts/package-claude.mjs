@@ -190,6 +190,7 @@ if (code) {
       if (!dependency.external || !isBuiltin(dependency.path)) throw Error(`Unbundled shell client dependency: ${dependency.path}`);
     }
   }
+  await copyFile(join(root, 'src', 'codex', 'setup.mjs'), join(stage, 'server', 'codex-setup.mjs'));
   const infoPath = join(stage, 'build-info.json');
   const info = JSON.parse(await readFile(infoPath, 'utf8'));
   info.nodeDistribution = nodeDistribution;
@@ -197,6 +198,7 @@ if (code) {
   info.nodeLicenseSha256 = digest(await readFile(join(stage, 'runtime', 'LICENSE')));
   info.reactPreviewSha256 = digest(await readFile(join(stage, 'ui', 'react-preview.html')));
   info.browserSha256 = digest(await readFile(join(stage, 'ui', 'browser.html')));
+  info.codexSetupSha256 = digest(await readFile(join(stage, 'server', 'codex-setup.mjs')));
   info.shellClientSha256 = digest(await readFile(join(stage, 'server', 'shell-client.mjs')));
   info.platform = nodeDistribution.platform; info.arch = nodeDistribution.arch;
   await writeFile(infoPath, JSON.stringify(info, null, 2) + '\n');
@@ -210,8 +212,10 @@ if (code) {
   await copyFile(join(root, 'docs', 'claude-code.md'), join(marketplace, 'INSTALL.md'));
   await copyFile(join(root, 'docs', 'codex.md'), join(stage, 'docs', 'codex.md'));
   await copyFile(join(root, 'docs', 'codex-shell.md'), join(stage, 'docs', 'codex-shell.md'));
+  await copyFile(join(root, 'docs', 'codex-windows-wsl.md'), join(stage, 'docs', 'codex-windows-wsl.md'));
   await writeFile(join(marketplace, 'CODEX.md'), [
     '# Codex candidate routes', '',
+    'Windows app / WSL CLI setup: [platform-specific installation](plugins/editor-platform/docs/codex-windows-wsl.md). Native acceptance is pending.',
     'Read [the bundled Codex guide](plugins/editor-platform/docs/codex.md).',
     'For an existing Codex session with shell access, read [the shell route](plugins/editor-platform/docs/codex-shell.md).',
     'This uses the bundled model-only stdio runtime and local browser; no Claude Code installation or source build is required.',
