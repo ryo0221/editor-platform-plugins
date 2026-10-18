@@ -3,14 +3,26 @@
 Use an existing Codex session with shell access to operate the extracted package
 through its bundled MCP client. No second Codex process, new login, native MCP
 registration, source clone, npm, build or external Node is needed. The package
-does not call a model provider. This route requires the host to permit a persistent
+does not call a model provider. It runs in the user's own execution environment: no provider-hosted service or
+separate server setup is needed. Its temporary loopback listener starts and stops
+with the bundled client. This route requires the host to permit a persistent
 shell process, local process launch and loopback listening.
 
-Status: Linux x64 shell/browser preview. The current Codex session exercised the
-packaged model-only server and real Chromium through an external shell client and
-headless browser operator. This candidate adds the missing bundled shell client;
-see the separate verification record. Ordinary desktop browser association and
-native Windows/macOS remain unaccepted. There is no public Release download yet.
+Status: Linux x64 shell/browser preview accepted within the scope of issue #10
+(closed 2026-10-17). The existing Codex session exercised the bundled shell client
+and real Chromium through a separate headless browser operator; see the
+[verification record](https://github.com/ryo0221/editor-platform-plugins/blob/main/docs/codex-shell-verification.md).
+Ordinary desktop browser association and native Windows/macOS remain unaccepted.
+There is no public Release download yet. Public-release preparation does not
+expand the supported scope or imply a one-click graphical/headless installation.
+
+Prerequisites: Linux x64 with glibc >=2.28 and libstdc++ >=6.0.25 (the bundled
+Node baseline), an existing Codex session permitted to keep a shell process alive,
+and a separately prepared browser operator on the same machine/network namespace.
+Only Debian 13 x64 with Chromium has been exercised; other distributions are not
+certified by the Node baseline. Basic checksum/extraction utilities are needed.
+An environment that destroys processes when the agent turn ends cannot preserve
+the live browser session across turns. Saved artifacts survive a clean restart.
 
 ## Start from the archive
 
@@ -110,4 +122,5 @@ existing Codex shell access required. Cloud headless workflow verified with a
 separate browser operator. Native MCP registration, normal GUI launch and other
 OS environments are not accepted.”** Keep `codex.status` preparing if the LP
 cannot express this scope or no distributable candidate/guide URL is supplied.
-This document does not publish a Release, change LP configuration or close #10.
+Issue #10 is closed only for that limited scope. This document does not publish
+a Release or change LP configuration.

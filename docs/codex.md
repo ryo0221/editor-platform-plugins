@@ -109,7 +109,9 @@ For each tested candidate, record:
 | Export file contents, restart/new conversation discovery | NOT RUN |
 | Candidate update, data retention, uninstall/reinstall | NOT RUN |
 
-Local harness/package tests do not turn any actual-host row into PASS. Keep issue
-#10 open and LP `codex.status` preparing until real-host evidence and a distributable
-accepted version are available. No account creation, persistent registration or
-sign-in was performed while preparing this guide.
+The rows above describe native CLI registration only. Issue #10 was closed on
+2026-10-17 for the separately accepted [Linux shell/browser route](codex-shell.md);
+native registration is not a prerequisite for that route. Local harness tests do
+not make native registration PASS. Public distribution and LP publication remain
+separate owner decisions. No account creation, persistent registration or sign-in
+was performed while preparing this guide.

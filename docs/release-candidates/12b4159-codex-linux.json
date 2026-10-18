@@ -1,0 +1,112 @@
+{
+  "recordedAt": "2026-10-18T11:54:12.091131+00:00",
+  "candidateStatus": "integrated review candidate; NOT PUBLISHED; ready for exact-artifact owner review within limited scope",
+  "baseMain": "ea3e03a38fd33d8b51c4515805e23404a7f431f7",
+  "sourceCommit": "12b415924ccc7692902560334ecb5938e18bd255",
+  "sourceDirty": false,
+  "publicUpstream": {
+    "repository": "https://github.com/ryo0221/open-editor-platform.git",
+    "commit": "97ea905745101b3814d14febcc0c31b157023c71",
+    "tree": "50b7aad70ee7b5ca3f50c2869d20f870be557a47",
+    "manifestSha256": "60f45962a92a7759ea23decfb7e634fd53a946632094cd4310c0aff824eb0c7e"
+  },
+  "archive": {
+    "filename": "editor-platform-claude-code-0.1.3-linux-x64.tar.gz",
+    "sha256": "0b3de4063cf2053ba78f9962c3222c9c732c2e49d4450d1f48b8ea1353c3e8e7",
+    "bytes": 52212810
+  },
+  "environment": {
+    "os": "Debian 13 x64",
+    "node": "24.19.0",
+    "chromium": "151.0.7922.173",
+    "playwright": "1.63.0",
+    "host": "current Codex shell session; host build identifier not exposed"
+  },
+  "tests": {
+    "fullCheck": {
+      "sourceCommit": "21375080d01c09a4cb6066e701f8806187c5a17e",
+      "unitProtocol": 53,
+      "browser": 26,
+      "result": "PASS",
+      "note": "No changes to src/scripts/tests/package files/public pin since this full run; subsequent commits only documentation/policy integration. All final archive tests rerun."
+    },
+    "finalPackage": {
+      "count": 2,
+      "result": "PASS"
+    },
+    "finalArchiveBrowser": {
+      "count": 2,
+      "result": "PASS",
+      "routes": [
+        "direct stdio",
+        "bundled shell client"
+      ],
+      "scope": "isolated process environment and real automated browser, not a fresh OS"
+    },
+    "sourceAndNoticeClosure": {
+      "result": "PASS",
+      "archiveSha256": "0b3de4063cf2053ba78f9962c3222c9c732c2e49d4450d1f48b8ea1353c3e8e7",
+      "sourceCommit": "12b415924ccc7692902560334ecb5938e18bd255",
+      "sourceDirty": false,
+      "files": 1947,
+      "publicFiles": 1749,
+      "noticeInventoryEntries": 538,
+      "inventoryTextFiles": 545,
+      "matchedFontkitNoticeFiles": 30
+    },
+    "currentCodexDocumentWorkflow": {
+      "date": "2026-10-18T11:53:06.627192+00:00",
+      "sourceCommit": "12b415924ccc7692902560334ecb5938e18bd255",
+      "sourceDirty": false,
+      "archiveSha256": "0b3de4063cf2053ba78f9962c3222c9c732c2e49d4450d1f48b8ea1353c3e8e7",
+      "os": "Debian 13 x64",
+      "node": "bundled 24.19.0",
+      "browser": "Chromium 151.0.7922.173 headless; external Playwright 1.63.0",
+      "host": "Current Codex agent shell session; host build ID not exposed; not native CLI registration",
+      "route": "Codex shell -> bundled shell-client.mjs -> model-only server; separate automated real Chromium operator",
+      "checks": {
+        "guide": "PASS",
+        "create": "PASS",
+        "nativeEditSave": "PASS",
+        "modelSavedReread": "PASS",
+        "previewReject": "PASS",
+        "previewApply": "PASS",
+        "markdownExport": "PASS",
+        "browserReload": "PASS",
+        "processRestartDiscovery": "PASS",
+        "EOFshutdown": "PASS"
+      },
+      "humanOnlyModelCalls": 0,
+      "capabilityFileRemoved": true,
+      "notRun": [
+        "normal Linux GUI association",
+        "native Windows/macOS/WSL",
+        "new Codex installation or native MCP registration",
+        "actual Claude Code",
+        "public Release"
+      ],
+      "published": false
+    }
+  },
+  "history": [
+    "Initial inspection incorrectly compared archive source 2137508 with the already advanced documentation-only HEAD dcca8f9; comparison failed. Rechecked against its fixed source, then rebuilt and tested dcca8f9. No product test failure."
+  ],
+  "notRun": [
+    "ordinary Linux GUI opener",
+    "native Windows/macOS/WSL",
+    "native Codex MCP registration",
+    "Claude Code authentication/acceptance",
+    "Release/tag/LP publication"
+  ],
+  "logs": {
+    "build-integrated.log": "e235c059e50371590375a35017dca220ed64b506dfe3e2c01b26fe7d3e067325",
+    "archive-browser-integrated.log": "14c7151fe40a27e11257365ed646539fd821e43de9f7c202a0f5e7d125358589",
+    "package-integrated.log": "28f271a954e56f5545ddd6267cedc589ba7af46dfe7e61eecec6eb475c55515f",
+    "check.log": "9c9daf896f57cfe1d659fd439ad0b0f3a6d186a30f7d24f2ef3b220a678717c4"
+  },
+  "integration": {
+    "PR38": "merged in main; ChatGPT unsupported and issue9 closed/not_planned retained",
+    "runtimeAndTestsUnchangedSinceFullCheck": true,
+    "conflictResolved": "remaining-acceptance adjacent issue9/10 rows; preserve both final policies"
+  }
+}

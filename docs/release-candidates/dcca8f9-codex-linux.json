@@ -1,0 +1,110 @@
+{
+  "recordedAt": "2026-10-18T11:51:02.824921+00:00",
+  "candidateStatus": "review candidate; NOT PUBLISHED; integrate PR38 policy before publication and rebuild/retest",
+  "baseMain": "e59510b555e260294e8725559df53d77f9749147",
+  "sourceCommit": "dcca8f9341111708277ffeb9637e48d472b76720",
+  "sourceDirty": false,
+  "publicUpstream": {
+    "repository": "https://github.com/ryo0221/open-editor-platform.git",
+    "commit": "97ea905745101b3814d14febcc0c31b157023c71",
+    "tree": "50b7aad70ee7b5ca3f50c2869d20f870be557a47",
+    "manifestSha256": "60f45962a92a7759ea23decfb7e634fd53a946632094cd4310c0aff824eb0c7e"
+  },
+  "archive": {
+    "filename": "editor-platform-claude-code-0.1.3-linux-x64.tar.gz",
+    "sha256": "628af73ebb53d0b1da676466753bd99ab1a30854553742bfe391693648798fd0",
+    "bytes": 52205639
+  },
+  "environment": {
+    "os": "Debian 13 x64",
+    "node": "24.19.0",
+    "chromium": "151.0.7922.173",
+    "playwright": "1.63.0",
+    "host": "current Codex shell session; host build identifier not exposed"
+  },
+  "tests": {
+    "fullCheck": {
+      "sourceCommit": "21375080d01c09a4cb6066e701f8806187c5a17e",
+      "unitProtocol": 53,
+      "browser": 26,
+      "result": "PASS",
+      "note": "Final candidate differs only in remaining-acceptance documentation; packaged checks rerun on final archive."
+    },
+    "finalPackage": {
+      "count": 2,
+      "result": "PASS"
+    },
+    "finalArchiveBrowser": {
+      "count": 2,
+      "result": "PASS",
+      "routes": [
+        "direct stdio",
+        "bundled shell client"
+      ],
+      "scope": "isolated process environment and real automated browser, not a fresh OS"
+    },
+    "sourceAndNoticeClosure": {
+      "result": "PASS",
+      "archiveSha256": "628af73ebb53d0b1da676466753bd99ab1a30854553742bfe391693648798fd0",
+      "sourceCommit": "dcca8f9341111708277ffeb9637e48d472b76720",
+      "sourceDirty": false,
+      "files": 1945,
+      "publicFiles": 1749,
+      "noticeInventoryEntries": 538,
+      "inventoryTextFiles": 545,
+      "matchedFontkitNoticeFiles": 30
+    },
+    "currentCodexDocumentWorkflow": {
+      "date": "2026-10-18T11:50:11.776535+00:00",
+      "sourceCommit": "dcca8f9341111708277ffeb9637e48d472b76720",
+      "sourceDirty": false,
+      "archiveSha256": "628af73ebb53d0b1da676466753bd99ab1a30854553742bfe391693648798fd0",
+      "os": "Debian 13 x64",
+      "node": "bundled 24.19.0",
+      "browser": "Chromium 151.0.7922.173 headless; external Playwright 1.63.0",
+      "host": "Current Codex agent shell session; host build ID not exposed; not native CLI registration",
+      "route": "Codex shell -> bundled shell-client.mjs -> model-only server; separate automated real Chromium operator",
+      "checks": {
+        "guide": "PASS",
+        "create": "PASS",
+        "nativeEditSave": "PASS",
+        "modelSavedReread": "PASS",
+        "previewReject": "PASS",
+        "previewApply": "PASS",
+        "markdownExport": "PASS",
+        "browserReload": "PASS",
+        "processRestartDiscovery": "PASS",
+        "EOFshutdown": "PASS"
+      },
+      "humanOnlyModelCalls": 0,
+      "capabilityFileRemoved": true,
+      "notRun": [
+        "normal Linux GUI association",
+        "native Windows/macOS/WSL",
+        "new Codex installation or native MCP registration",
+        "actual Claude Code",
+        "public Release"
+      ],
+      "published": false
+    }
+  },
+  "history": [
+    "Initial inspection incorrectly compared archive source 2137508 with the already advanced documentation-only HEAD dcca8f9; comparison failed. Rechecked against its fixed source, then rebuilt and tested dcca8f9. No product test failure."
+  ],
+  "notRun": [
+    "ordinary Linux GUI opener",
+    "native Windows/macOS/WSL",
+    "native Codex MCP registration",
+    "Claude Code authentication/acceptance",
+    "Release/tag/LP publication"
+  ],
+  "logs": {
+    "package.log": "39911c773b630b3ae8eaf3c36ccd4fae2e4bcb5d2027c7c0fe594619c1e9c187",
+    "check.log": "9c9daf896f57cfe1d659fd439ad0b0f3a6d186a30f7d24f2ef3b220a678717c4",
+    "package-final.log": "dab78723bac89b9d1adda20dc8abfe9caf85c4229a52d5398c44d2a20857d12a",
+    "archive-browser-final.log": "7c097bc6a1c00a8e34732f752c60635b04345d932b6d428e835916fa96dcea66",
+    "build.log": "960f10278404afee5d08bc5d0eed074315ca3e242a781ad54cb465877210d0ed",
+    "build-final.log": "e07a7e82baafa3413839ccaca1f43d318eaef54a858c2c3a3a6a5860bcfd40a4",
+    "archive-browser.log": "072501b2d65ac87dfbabc8c5175ab2619c1cfc148568c2601a5fd5ad943b6fce"
+  }
+}

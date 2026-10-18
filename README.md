@@ -48,6 +48,13 @@ and protected local-browser Editor route are under development. See the
 recovery and release gates. No accepted OS, public download or live-host acceptance
 is claimed. The Desktop `.mcpb` below is a separate format.
 
+For **Codex**, the [prebuilt shell/browser route](docs/codex-shell.md) is accepted
+as a limited Linux x64 preview using an existing Codex session and a separately
+prepared browser operator. Issue #10 is closed for that scope. No extra Codex or
+Claude login, native MCP registration, source build or external Node is required.
+There is no public download yet; normal GUI launch and native Windows/macOS are
+not accepted. See the [Linux publication checklist](docs/codex-release.md).
+
 For **Claude Desktop**, install the prebuilt `.mcpb` extension from its Settings
 screen: see [the installation guide](docs/claude-desktop.md). It includes the UI,
 server and runtime dependencies, and uses Desktop's built-in Node.js. No Git,

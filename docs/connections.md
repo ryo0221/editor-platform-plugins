@@ -41,9 +41,11 @@ The extension uses Desktop's built-in runtime and keeps data outside its install
 directory. This is a Desktop extension, distinct from the Claude Code plugin
 manifest below. Actual signed-in Desktop installation/UI acceptance is pending.
 
-Codex reviewers can follow the [prebuilt CLI candidate procedure](codex.md),
-which reuses the model-only stdio/local-browser route with a separate data
-directory. Actual signed-in Codex acceptance remains NOT RUN.
+Codex users can follow the [bundled shell/browser procedure](codex-shell.md).
+Issue #10 is closed for the accepted Linux x64 existing-session shell route with
+a separately prepared browser operator; see [the scoped evidence](codex-shell-verification.md).
+Native MCP registration remains a separate [unaccepted candidate](codex.md).
+Normal GUI launch and native Windows/macOS have not been accepted.
 
 For source-based clients:
 
@@ -74,7 +76,7 @@ The [OAuth source and tests](../integrations/chatgpt/README.md),
 [former runbook](../integrations/chatgpt/runbook.md) are retained as historical
 engineering evidence, not deployment recommendations. Local test success does
 not imply signed-in ChatGPT acceptance; that remains NOT RUN. Code is retained,
-and #9 stays open pending its separate disposition; no Release is implied.
+and #9 is closed as not_planned; no Release is implied.
 
 The local client paths above remain separate and retain their own acceptance
 requirements. In particular, Codex local runtime support does not mean ChatGPT

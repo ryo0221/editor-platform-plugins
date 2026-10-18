@@ -3,7 +3,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
+import { createInterface } from 'node:readline';
+import { once } from 'node:events';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createHash } from 'node:crypto';
@@ -11,7 +13,7 @@ import { chromium, expect } from '@playwright/test';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 
-test('Linux archive browser: three slides, native Undo/Redo, review, export and process restart', { timeout: 120000 }, async () => {
+for (const mode of ['stdio', 'shell']) test(`Linux archive ${mode} browser: three slides, native Undo/Redo, review, export and process restart`, { timeout: 120000 }, async () => {
   const archive = resolve(process.env.EDITOR_CODE_ARCHIVE ?? 'release/editor-platform-claude-code-0.1.3-linux-x64.tar.gz');
   const hash = createHash('sha256').update(await readFile(archive)).digest('hex');
   assert.equal(hash, (await readFile(archive + '.sha256', 'utf8')).split(' ')[0]);
@@ -19,18 +21,49 @@ test('Linux archive browser: three slides, native Undo/Redo, review, export and 
   const install = join(temp, '日本語 install path'); await mkdir(install);
   execFileSync('tar', ['-xzf', archive, '-C', install]);
   const plugin = join(install, 'plugins/editor-platform');
+  // Only runtime files are available to the launched package; no source checkout.
+  await rm(join(plugin, 'source'), { recursive: true });
+  const home = join(temp, 'home'); await mkdir(home);
+  const privateDir = join(temp, 'private'); await mkdir(privateDir, { mode: 0o700 });
+  const urlFile = join(privateDir, 'url');
   const bin = join(temp, 'bin'); await mkdir(bin);
-  await writeFile(join(bin, 'xdg-open'), '#!/bin/sh\nprintf "%s" "$1" > "$EDITOR_TEST_URL_FILE"\n', { mode: 0o700 });
+  await writeFile(join(bin, 'xdg-open'), '#!/bin/sh\numask 077\nprintf "%s" "$1" > "$EDITOR_TEST_URL_FILE"\n', { mode: 0o700 });
   const browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ?? '/usr/bin/chromium', args: ['--no-sandbox'] });
   const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
   const errors = []; page.on('pageerror', e => errors.push(e.message));
   let client, id, savedContent, oldUrl;
   const call = async (name, args = {}) => { const r = await client.callTool({ name, arguments: args }); assert.ok(!r.isError, JSON.stringify(r)); return r.structuredContent; };
   const start = async () => {
-    client = new Client({ name: 'shell-archive-acceptance', version: '1' });
-    await client.connect(new StdioClientTransport({ command: join(plugin, 'runtime/node'), args: [join(plugin, 'server/code.mjs')], cwd: temp,
-      env: { PATH: bin, EDITOR_DATA_DIR: join(temp, 'data'), EDITOR_TEST_URL_FILE: join(temp, 'url') }, stderr: 'pipe' }));
-    await call('open_editor'); return await readFile(join(temp, 'url'), 'utf8');
+    const env = { PATH: bin, HOME: home, EDITOR_DATA_DIR: join(temp, 'data'), EDITOR_TEST_URL_FILE: urlFile };
+    if (mode === 'stdio') {
+      client = new Client({ name: 'archive-acceptance', version: '1' });
+      await client.connect(new StdioClientTransport({ command: join(plugin, 'runtime/node'), args: [join(plugin, 'server/code.mjs')], cwd: temp, env, stderr: 'pipe' }));
+    } else {
+      const child = spawn(join(plugin, 'runtime/node'), [join(plugin, 'server/shell-client.mjs')], { cwd: temp, env, stdio: ['pipe', 'pipe', 'pipe'] });
+      const exited = once(child, 'exit');
+      const rows = createInterface({ input: child.stdout })[Symbol.asyncIterator]();
+      const next = async () => { const row = await rows.next(); assert.equal(row.done, false); return JSON.parse(row.value); };
+      let sequence = 0;
+      client = {
+        async callTool({ name, arguments: args }) {
+          const id = ++sequence;
+          child.stdin.write(JSON.stringify({ id, tool: name, arguments: args }) + '\n');
+          const reply = await next(); assert.equal(reply.id, id); assert.equal(reply.error, undefined);
+          return reply.result;
+        },
+        async close() {
+          child.stdin.end();
+          const timer = setTimeout(() => child.kill('SIGKILL'), 5000);
+          try { const [code, signal] = await exited; assert.equal(code, 0); assert.equal(signal, null); }
+          finally { clearTimeout(timer); }
+        },
+      };
+      assert.deepEqual(await next(), { event: 'ready', channel: 'model-only', browserVerified: false });
+      for (const name of ['save_slide_draft', 'apply_slide_proposal', 'reject_slide_proposal']) {
+        assert.equal((await client.callTool({ name, arguments: {} })).isError, true);
+      }
+    }
+    await call('open_editor'); return await readFile(urlFile, 'utf8');
   };
   try {
     oldUrl = await start();
@@ -40,6 +73,8 @@ test('Linux archive browser: three slides, native Undo/Redo, review, export and 
     content.slides = Array.from({ length: 3 }, (_, i) => ({ ...structuredClone(first), id: 'cafe_slide_' + i, objects: first.objects.map(o => ({ ...structuredClone(o), id: i ? o.id + '_' + i : o.id })) }));
     const made = await call('create_deck', { title: '星見台カフェ 配布物受入', content }); id = made.deck.id;
     await page.goto(oldUrl);
+    await expect(page.locator('#status')).toContainText('Claude Codeに接続');
+    assert.equal(new URL(page.url()).hash, '');
     const frame = page.frameLocator('#editor');
     await frame.getByRole('button', { name: '開く', exact: true }).click();
     const title = frame.locator('[data-canvas-target="strategy_title"]');
@@ -77,6 +112,8 @@ test('Linux archive browser: three slides, native Undo/Redo, review, export and 
       const actual = (await call('read_deck', { deckId: id })).deck;
       assert.deepEqual(actual.content, apply ? candidate : saved.content);
     }
+    const stale = await client.callTool({ name: 'propose_slide_changes', arguments: { deckId: id, baseRevision: 2, summary: 'Stale proposal', content: candidate } });
+    assert.equal(stale.isError, true);
     savedContent = (await call('read_deck', { deckId: id })).deck.content;
     const downloadPromise = page.waitForEvent('download');
     await frame.getByRole('button', { name: '保存内容を出力', exact: true }).click();
@@ -102,7 +139,7 @@ test('Linux archive browser: three slides, native Undo/Redo, review, export and 
     await expect(frame.locator('.save-state')).toContainText('v3');
     assert.deepEqual(errors, []);
     await mkdir('work/distribution-acceptance', { recursive: true });
-    await page.screenshot({ path: 'work/distribution-acceptance/archive-browser.png', fullPage: true });
-    console.log(JSON.stringify({ archiveSha256: hash, browser: browser.version(), slides: 3, savedRevision: 3, host: 'shell MCP client; actual Claude Code NOT RUN', opener: 'capture stub; native opener NOT RUN' }));
+    await page.screenshot({ path: 'work/distribution-acceptance/archive-browser-' + mode + '.png', fullPage: true });
+    console.log(JSON.stringify({ archiveSha256: hash, browser: browser.version(), slides: 3, savedRevision: 3, client: mode, host: 'automated archive regression directed from Codex; native Codex registration and actual Claude Code NOT RUN', opener: 'capture stub; native opener NOT RUN' }));
   } finally { await client?.close(); await browser.close(); await rm(temp, { recursive: true, force: true }); }
 });
