@@ -1,6 +1,6 @@
 # Codex Linux review candidate — 2026-10-18
 
-**Not published.** Built on main `e59510b` plus the Codex guide/test changes.
+**Superseded by [the integrated candidate](12b4159-codex-linux.md). Not published.** Built on main `e59510b` plus the Codex guide/test changes.
 Exact archive source: `dcca8f9341111708277ffeb9637e48d472b76720`, clean.
 The later evidence commit is not the packaged source and does not replace its hash.
 
