@@ -1,15 +1,17 @@
-# ChatGPT self-operated candidate (#9)
+# ChatGPT remote route — unsupported (#9)
 
-Self-operation with a single owner is the agreed delivery model. Use the dedicated
-[source runtime and runbook](runbook.md): HTTPS terminator → loopback OAuth MCP
-server → private owner workspace. It uses the existing shared tool-authorization
-hook and JOSE verification directly. The former two-process `gateway.mjs` remains
-only a transport-only candidate/test subject; it is **not** the recommended entry
-for ChatGPT tool-level login/reconnect.
+Product decision updated 2026-10-18: the product runs in the user's existing
+environment. This implementation requires an operated HTTPS/OAuth endpoint and
+is therefore **unsupported**, not "preparing" or waiting for hosting approval.
+Do not ask the provider or the user to set up a server, domain or IdP. Selection,
+registration and deployment preparation for this route are stopped. No alternative
+local ChatGPT route is implemented or claimed.
 
-No live IdP, domain, hosting purchase, registration, OAuth grant or ChatGPT session
-has been set up by this work. Status remains preparing. Local tests and offline
-metadata checks do not establish actual-host acceptance.
+Existing code, examples and tests are retained as historical engineering evidence.
+The [former source runtime/runbook](runbook.md), direct verifier and transport-only
+gateway are not supported installation choices. No code is removed and #9 is not
+closed by this documentation change. Live IdP/TLS and signed-in ChatGPT acceptance
+remain NOT RUN; local signed-JWT fixtures do not establish actual-host support.
 
 ## Implemented boundary
 
@@ -30,7 +32,7 @@ validation and revocation policy remain responsibilities of an established IdP.
 No custom OAuth authorization server is implemented here. The SDK fixture verifies
 request construction and error handling, not those IdP enforcement decisions.
 
-## Reproduce locally
+## Historical local verification (developer reference)
 
 From the repository root:
 
@@ -51,7 +53,7 @@ identity rejection, per-request isolation, expiration, key rotation/caching and
 fixed-fixture official SDK discovery/S256/resource-bound token requests. Native
 ChatGPT UI, real TLS and real IdP acceptance remain **NOT RUN**.
 
-## Data and costs
+## Historical data and cost boundaries
 
 Saved contents, titles, IDs, selections, proposals and exports returned by MCP can
 reach ChatGPT/OpenAI; the View receives content too. Unsaved drafts are UI state

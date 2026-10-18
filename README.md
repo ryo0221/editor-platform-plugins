@@ -1,6 +1,6 @@
 # Editor Platform Plugins
 
-ChatGPT / Claude integration source for [Open Editor Platform](https://github.com/ryo0221/open-editor-platform).
+Local editor integration source for [Open Editor Platform](https://github.com/ryo0221/open-editor-platform).
 The implementation mounts **real upstream Editor surfaces** for the published domains.
 It uses the shared MCP Apps bridge and the same MCP server for both hosts.
 
@@ -84,16 +84,14 @@ See [native authoring](docs/authoring.md) and [connection and deployment](docs/c
 compatibility manifest plus `.mcp.codex.json`. Prepare the checkout, dependencies
 and UI build before using local package configurations.
 
-Web chat requires an HTTPS-reachable MCP endpoint and host-compatible authorization.
-The shared UI is self-contained HTML served through an MCP resource; it does not
-fetch a separately hosted editor or load external scripts/styles.
-
-The default HTTP guard accepts a configured bearer token. Optional single-owner
-OAuth candidates provide a [transport gateway](integrations/chatgpt/README.md) or
-[direct tool authorization](integrations/chatgpt/tool-auth.md). These are distinct
-deployment modes and must not be chained together. Live TLS/IdP and actual-host
-acceptance remain NOT RUN; per-user isolation and marketplace publication are not
-implemented. Do not offer this preview as a public shared service.
+**ChatGPT: unsupported under the current product policy.** The implemented remote
+route requires an operated HTTPS/OAuth endpoint. The product must run in the
+user's existing environment; neither the provider nor the user is asked to set up
+an additional server, domain or IdP. This route is not awaiting deployment approval
+and is not a supported installation option. Its source and local test evidence
+remain [historical technical references](integrations/chatgpt/README.md).
+Local Codex/Claude routes keep their own preview/acceptance status; they do not
+establish ChatGPT support. No replacement ChatGPT local route is claimed.
 
 ## Verify
 
