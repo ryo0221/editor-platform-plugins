@@ -13,7 +13,7 @@ import { NativeSurface } from './surfaces';
 import { artifactKinds, domainLabels, type ArtifactKind, type NativeProposal } from '../shared/domains';
 import './styles.css';
 
-const bridge = new App({ name: 'Open Editor', version: '0.1.4' }, {});
+const bridge = new App({ name: 'Open Editor', version: '0.1.5' }, {});
 type Reply = { isError?: boolean; structuredContent?: Record<string, unknown> };
 type ViewRecord = Omit<DeckRecord, 'content' | 'proposals'> & { kind?: ArtifactKind; profile?: GraphProfile; content: unknown; proposals: NativeProposal[] };
 let onResult: (result: Reply) => void = () => undefined;
@@ -48,6 +48,16 @@ function Editor() {
   const [previewId, setPreviewId] = useState<string>();
   const [, render] = useState(0);
   const pendingRef = useRef(pending); pendingRef.current = pending;
+  // EditorSession.content returns a fresh copy on every read. Keep one copy per
+  // draft revision so unrelated re-renders (such as the 4 s saved-state poll) do
+  // not hand surfaces new content and restart the React preview.
+  const draftCopy = useRef<{ session?: EditorSession<unknown>; sequence?: number; content?: unknown }>({});
+  function draftContent() {
+    const current = session.current; if (!current) return undefined;
+    const { sequence } = current.revision;
+    if (draftCopy.current.session !== current || draftCopy.current.sequence !== sequence) draftCopy.current = { session: current, sequence, content: current.content };
+    return draftCopy.current.content;
+  }
   function changed(value: boolean) { dirtyRef.current = value; setDirty(value); }
   function adopt(next: ViewRecord) {
     recordRef.current = next; setRecord(next); session.current = new EditorSession(next.content);
@@ -139,7 +149,9 @@ function Editor() {
     return () => window.removeEventListener('beforeunload', guard);
   }, []);
   const proposal = record?.proposals.find((p) => p.id === previewId);
-  const content = proposal?.preview ?? session.current?.content;
+  // A proposal is immutable once created; polling replaces the record object, not the proposal.
+  const proposalPreview = useMemo(() => proposal?.preview, [record?.id, proposal?.id]);
+  const content = proposalPreview ?? draftContent();
   async function shareSelection() {
     await action(async () => {
       const current = recordRef.current; if (!current) return;

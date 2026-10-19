@@ -1,6 +1,6 @@
 {
   "name": "editor-platform",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Create, edit and review published Editor Platform artifact domains through MCP tools and an optional MCP Apps UI.",
   "author": {
     "name": "Open Editor Platform maintainers"

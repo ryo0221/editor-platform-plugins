@@ -10,7 +10,7 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 
 test('packaged Codex setup: fresh install, real stdio, stable-path update, saved data and uninstall retention (simulated WSL)', { timeout: 90000 }, async () => {
-  const archive=resolve('release/editor-platform-claude-code-0.1.4-linux-x64.tar.gz');
+  const archive=resolve('release/editor-platform-claude-code-0.1.5-linux-x64.tar.gz');
   assert.equal(createHash('sha256').update(await readFile(archive)).digest('hex'),(await readFile(archive+'.sha256','utf8')).split(' ')[0]);
   const temp=await mkdtemp(join(tmpdir(),'codex-install-'));
   try {

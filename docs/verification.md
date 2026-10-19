@@ -479,3 +479,20 @@ contents and that a reload with an unsaved table edit raises `beforeunload` and,
 when dismissed, keeps the draft without saving. With the guard removed this
 check fails. `npm run check`: 63 server tests and 26 browser cases PASS.
 The fixes still need a fresh actual-host re-run of C5/C7; this is not acceptance.
+
+## 0.1.5 — React preview state reset fix (2026-10-19)
+
+The 0.1.3 WSL actual-host R1 run and the 0.1.4 packaged-candidate automation
+(L1-R1, see [candidate-acceptance.md](candidate-acceptance.md)) recorded the same
+FAIL: in Interact mode a Counter returned to its initial value within a few
+seconds without any user action.
+
+Cause: `EditorSession.content` returns a fresh copy on every read. The Editor
+re-renders on each 4 s saved-state poll, so the React UI surface received new
+`content` each time and re-rendered the isolated preview, discarding runtime
+state. The Editor now keeps one draft copy per session revision, and one preview
+per proposal ID, so unrelated re-renders pass the same content.
+
+`tests/browser/react-preview.spec.ts` now waits two poll cycles after a click
+and expects the count to persist; it fails without the fix. `npm run check`:
+63 server tests and 26 browser cases PASS. Actual-host re-run still pending.

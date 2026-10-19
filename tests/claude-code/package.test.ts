@@ -12,7 +12,7 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 
 test('Code archive: standalone runtime/UI, human-only channel, relocation and restart retention', async () => {
-  const archive = resolve('release/editor-platform-claude-code-0.1.4-linux-x64.tar.gz');
+  const archive = resolve('release/editor-platform-claude-code-0.1.5-linux-x64.tar.gz');
   const expected = (await readFile(`${archive}.sha256`, 'utf8')).split(' ')[0];
   assert.equal(createHash('sha256').update(await readFile(archive)).digest('hex'), expected);
   const temp = await mkdtemp(join(tmpdir(), 'code-package-'));
@@ -127,7 +127,7 @@ test('Code archive: standalone runtime/UI, human-only channel, relocation and re
 test('bundled shell client: no external Node/npm, JSON lines, model boundary and EOF restart', { timeout: 60000 }, async () => {
   const directory = await mkdtemp(join(tmpdir(), 'shell-package-'));
   const extracted = join(directory, 'package with spaces'); await mkdir(extracted);
-  execFileSync('tar', ['-xzf', resolve('release/editor-platform-claude-code-0.1.4-linux-x64.tar.gz'), '-C', extracted]);
+  execFileSync('tar', ['-xzf', resolve('release/editor-platform-claude-code-0.1.5-linux-x64.tar.gz'), '-C', extracted]);
   const plugin = join(extracted, 'plugins/editor-platform');
   const data = join(directory, 'data');
   assert.match(execFileSync(join(plugin, 'runtime/node'), [join(plugin, 'server/shell-client.mjs'), '--help'],

@@ -22,7 +22,7 @@ async function fixture(fn) {
   const temp = await mkdtemp(join(tmpdir(), 'codex-setup-'));
   const source = join(temp, 'new package'), root = join(temp, 'installed with spaces'), dataDir = join(temp, 'data');
   const context = { platform: 'linux', arch: 'x64', home: temp, env: { WSL_DISTRO_NAME: 'fixture' }, kernel: '' };
-  const info = { platform: 'linux', arch: 'x64', sourceDirty: false, sourceCommit: 'a'.repeat(40), version: '0.1.4' };
+  const info = { platform: 'linux', arch: 'x64', sourceDirty: false, sourceCommit: 'a'.repeat(40), version: '0.1.5' };
   for (const [name,key] of [['runtime/node','nodeSha256'],['runtime/LICENSE','nodeLicenseSha256'],['node_modules/editor-platform-code-runtime/index.mjs','runtimeSha256'],['ui/editor.html','uiSha256'],['ui/browser.html','browserSha256'],['ui/react-preview.html','reactPreviewSha256'],['server/shell-client.mjs','shellClientSha256'],['source/FILES.sha256','sourceManifestSha256'],['server/code.mjs','codeEntrySha256'],['server/codex-setup.mjs','codexSetupSha256'],['LICENSE'],['SOURCE.md'],['THIRD-PARTY-NOTICES.json']]) {
     await mkdir(join(source,name,'..'),{recursive:true}); await writeFile(join(source,name),name);
     if (key) info[key] = createHash('sha256').update(name).digest('hex');
