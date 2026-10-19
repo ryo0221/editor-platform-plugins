@@ -6,8 +6,8 @@ import { execFileSync } from 'node:child_process';
 import { unzipSync } from 'fflate';
 
 for (const kind of ['code', 'desktop']) test(`${kind} archive retains full fastdom notice and scoped fontkit notices`, async () => {
-  const zip = kind === 'desktop' ? unzipSync(await readFile('release/editor-platform-claude-0.1.3.mcpb')) : undefined;
-  const bytes = path => zip ? Buffer.from(zip[path]) : execFileSync('tar', ['-xOf', 'release/editor-platform-claude-code-0.1.3-linux-x64.tar.gz', './plugins/editor-platform/' + path]);
+  const zip = kind === 'desktop' ? unzipSync(await readFile('release/editor-platform-claude-0.1.4.mcpb')) : undefined;
+  const bytes = path => zip ? Buffer.from(zip[path]) : execFileSync('tar', ['-xOf', 'release/editor-platform-claude-code-0.1.4-linux-x64.tar.gz', './plugins/editor-platform/' + path]);
   const notices = JSON.parse(bytes('THIRD-PARTY-NOTICES.json'));
   const coverage = JSON.parse(await readFile('docs/license-audits/fontkit-closure-evidence.json'));
   for (const row of coverage.existingArchiveCoverage.filter(row => row.existingArchivePaths.length)) {

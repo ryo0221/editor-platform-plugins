@@ -461,3 +461,21 @@ See [the consolidated candidate record](integration-candidate.md) for all adopte
 PR heads, exact tested source commit, OS, PASS/FAIL/NOT RUN results and artifact
 SHA-256 values. This successor combines the independent records above; it does not
 retroactively certify them or constitute actual-host acceptance or a Release.
+
+## 0.1.4 — WSL acceptance C5/C7 fixes (2026-10-19)
+
+The 0.1.3 WSL actual-host run recorded two FAILs; both are fixed in source:
+
+- C5: a browser reload or tab close silently discarded an unsaved Editor draft.
+  The Editor now registers a `beforeunload` guard while the draft, a pending
+  native input or an IME composition is unsaved. The skill no longer tells users
+  to reload the browser to see a proposal; proposals appear in the open Editor.
+- C7: '保存内容を出力' downloaded only the first slide's SVG. A multi-slide deck
+  now downloads one `<deckId>-svg.zip` with every slide as `<n>-<slideId>.svg`;
+  a single-slide deck still downloads one SVG.
+
+`tests/browser/claude-code.spec.ts` checks the single SVG, the three-entry zip
+contents and that a reload with an unsaved table edit raises `beforeunload` and,
+when dismissed, keeps the draft without saving. With the guard removed this
+check fails. `npm run check`: 63 server tests and 26 browser cases PASS.
+The fixes still need a fresh actual-host re-run of C5/C7; this is not acceptance.

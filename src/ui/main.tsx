@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'reac
 import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 import { App } from '@modelcontextprotocol/ext-apps';
+import { strToU8, zipSync } from 'fflate';
 import { EditorInputs, EditorSession, sameLocalRevision, type EditorCommand } from '@editor-platform/editor-core';
 import { EditorInputsContext, EditorHistoryContext, EditorExportGuardContext, EditorOfficeCapabilitiesContext } from '@editor-platform/editor-ui';
 import { relationProfile, type GraphProfile } from '@editor-platform/structured-graph/model';
@@ -12,7 +13,7 @@ import { NativeSurface } from './surfaces';
 import { artifactKinds, domainLabels, type ArtifactKind, type NativeProposal } from '../shared/domains';
 import './styles.css';
 
-const bridge = new App({ name: 'Open Editor', version: '0.1.3' }, {});
+const bridge = new App({ name: 'Open Editor', version: '0.1.4' }, {});
 type Reply = { isError?: boolean; structuredContent?: Record<string, unknown> };
 type ViewRecord = Omit<DeckRecord, 'content' | 'proposals'> & { kind?: ArtifactKind; profile?: GraphProfile; content: unknown; proposals: NativeProposal[] };
 let onResult: (result: Reply) => void = () => undefined;
@@ -21,8 +22,8 @@ const connection = window.parent === window ? Promise.reject(new Error('ChatGPT�
 // Keep the connection rejection available to each action without an unhandled rejection.
 void connection.catch(() => undefined);
 
-function download(filename: string, text: string, mime: string) {
-  const url = URL.createObjectURL(new Blob([text], { type: mime }));
+function download(filename: string, data: BlobPart, mime: string) {
+  const url = URL.createObjectURL(new Blob([data], { type: mime }));
   const link = document.createElement('a'); link.href = url; link.download = filename; link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
@@ -128,6 +129,15 @@ function Editor() {
     }, 4000);
     return () => clearInterval(timer);
   }, []);
+  useEffect(() => {
+    // Browser reload/close discards the in-memory draft; ask before leaving with unsaved edits.
+    const guard = (event: BeforeUnloadEvent) => {
+      if (!dirtyRef.current && !pendingRef.current.dirty && !pendingRef.current.composing) return;
+      event.preventDefault(); event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', guard);
+    return () => window.removeEventListener('beforeunload', guard);
+  }, []);
   const proposal = record?.proposals.find((p) => p.id === previewId);
   const content = proposal?.preview ?? session.current?.content;
   async function shareSelection() {
@@ -197,7 +207,12 @@ function Editor() {
           const output = result.structuredContent as Record<string, unknown> | undefined;
           const slides = output?.slides as { id: string; svg: string }[] | undefined;
           const files = output?.files as { filename: string; text: string; mime: string }[] | undefined;
-          if (slides?.[0]) download(`${slides[0].id}.svg`, slides[0].svg, 'image/svg+xml');
+          if (slides?.length === 1) download(`${slides[0].id}.svg`, slides[0].svg, 'image/svg+xml');
+          else if (slides?.length) {
+            const width = String(slides.length).length;
+            download(`${record.id}-svg.zip`, new Uint8Array(zipSync(Object.fromEntries(slides.map((slide, index) => [`${String(index + 1).padStart(width, '0')}-${slide.id}.svg`, strToU8(slide.svg)])))), 'application/zip');
+            setMessage(`${slides.length}枚のスライドをSVGでまとめて出力しました。`);
+          }
           else if (files?.length) { const file = files[1] ?? files[0]; download(file.filename, file.text, file.mime); }
         })}>保存内容を出力</button>
         <button disabled={busy || pending.dirty > 0 || pending.composing > 0} onClick={() => {

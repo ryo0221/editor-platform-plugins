@@ -14,7 +14,7 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 
 for (const mode of ['stdio', 'shell']) test(`Linux archive ${mode} browser: three slides, native Undo/Redo, review, export and process restart`, { timeout: 120000 }, async () => {
-  const archive = resolve(process.env.EDITOR_CODE_ARCHIVE ?? 'release/editor-platform-claude-code-0.1.3-linux-x64.tar.gz');
+  const archive = resolve(process.env.EDITOR_CODE_ARCHIVE ?? 'release/editor-platform-claude-code-0.1.4-linux-x64.tar.gz');
   const hash = createHash('sha256').update(await readFile(archive)).digest('hex');
   assert.equal(hash, (await readFile(archive + '.sha256', 'utf8')).split(' ')[0]);
   const temp = await mkdtemp(join(tmpdir(), 'archive-browser-'));
