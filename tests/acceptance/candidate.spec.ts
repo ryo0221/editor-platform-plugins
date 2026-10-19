@@ -229,7 +229,8 @@ test('L1-C5c tabs: a competing save from a second tab is refused and keeps the f
   // Tab 2 keeps its buffered draft while polling sees the newer revision.
   await expect(frame2.getByRole('status')).toContainText('保存先が更新されています', { timeout: 10000 });
   await button(frame2, '保存').click();
-  await expect(frame2.getByRole('status')).not.toContainText('保存しました', { timeout: 3000 });
+  // Wait for the save request to settle with the server's CONFLICT refusal.
+  await expect(frame2.getByRole('status')).toContainText('The deck has changed', { timeout: 10000 });
   ev.tab2Message = await frame2.getByRole('status').textContent();
   const saved = await read(s, deck.id);
   ev.revision = saved.revision;
@@ -317,7 +318,7 @@ test('L1-C6 retention: data survives server restart and update; workspace lock r
   if (previous) {
     const old = await extractCandidate(previous, await mkdtemp(join(root, 'previous-')));
     source = old.plugin; ev.previous = { version: old.info.version, archiveSha256: old.archiveSha256 };
-  } else ev.previous = 'NOT RUN: PREVIOUS_ARCHIVE not set; restart-only retention';
+  } else ev.notRun = 'PREVIOUS_ARCHIVE not set; restart-only retention, update not exercised';
   const first = (await server(space, source, 'previous')).s;
   const deck = await threeSlideDeck(first, '架空 受け入れ C6');
   const frame = await openEditor(page, await first.url());

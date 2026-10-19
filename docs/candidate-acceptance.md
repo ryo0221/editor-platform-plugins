@@ -19,11 +19,11 @@ node_modules/.bin/playwright test --config tests/acceptance/candidate.config.mjs
 
 `PREVIOUS_ARCHIVE` is optional. With it, the retention check creates and saves
 data with the previous candidate and then reopens and edits it with the new one.
-Without it, the check covers server restart only and records that the update path
-was not run.
+Without it, the check covers server restart only, and the summary reports C6 as
+`NOT RUN` because the update path was not exercised.
 
 The archive must match its `.sha256` sidecar. It is copied, freshly extracted, and
-its bundled Node, Code runtime module and UI files are re-verified against `build-info.json`.
+its bundled Node, server entry, Code runtime module and UI files are re-verified against `build-info.json`.
 
 ## Output
 
@@ -79,6 +79,7 @@ this plugin are pre-allowed with `--allowedTools`; no permission prompt is shown
 | L2-C6 | C6 | A new conversation finds the deck with `list_artifacts`, requests the Editor and creates nothing new |
 
 Output: `<id>.jsonl` transcripts and `result.json` (host version, model, cost,
-per-check PASS/FAIL with failed assertions). Model behavior is nondeterministic;
+per-check PASS/FAIL with failed assertions). A tool call counts only when its result
+is attached and not an error. Model behavior is nondeterministic;
 review the transcript of any FAIL before recording it. L2 does not cover the
 permission UI or `/mcp` status (C1) or the real OS browser (OS1).

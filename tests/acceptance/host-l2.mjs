@@ -49,8 +49,10 @@ async function saved() {
   return Promise.all(files.map(async (f) => JSON.parse(await readFile(join(data, f), 'utf8'))));
 }
 const objects = (deck) => deck.content.slides.flatMap((s) => s.objects);
+// A call counts only with an attached non-error result.
+const ok = (c) => !!c.result && !c.result.isError;
 const named = (s, name) => s.calls.filter((c) => c.name === tool(name));
-const index = (s, name) => s.calls.findIndex((c) => c.name === tool(name));
+const index = (s, name) => s.calls.findIndex((c) => c.name === tool(name) && ok(c));
 
 const checks = [];
 function check(id, scenario, s, assertions, evidence) {
@@ -67,11 +69,11 @@ try {
   // C2: create from a natural-language request through the skill.
   const c2 = await session('L2-C2', '/editor-platform:editor-platform 架空の新サービス紹介スライドを3枚作って。図表を含め、あとから編集できるようにして');
   const decks = await saved(), deck = decks[0];
-  const create = [...named(c2, 'create_deck'), ...named(c2, 'create_artifact')].find((c) => !c.result?.isError);
-  const guide = named(c2, 'get_editor_guide').find((c) => c.input.kind === 'slide');
+  const create = [...named(c2, 'create_deck'), ...named(c2, 'create_artifact')].find(ok);
+  const guide = named(c2, 'get_editor_guide').find((c) => c.input.kind === 'slide' && ok(c));
   const open = named(c2, 'open_editor').at(-1);
   check('L2-C2', 'C2', c2, { ...sessionOk(c2),
-    'read the slide guide before creating': !!guide && index(c2, 'get_editor_guide') < c2.calls.indexOf(create),
+    'read the slide guide before creating': !!guide && !!create && c2.calls.indexOf(guide) < c2.calls.indexOf(create),
     'created with native content (not legacy slides)': !!create?.input.content && !create?.input.slides,
     'exactly one saved deck with three slides': decks.length === 1 && deck?.content.slides.length === 3,
     'includes a chart or table': !!deck && objects(deck).some((o) => o.type === 'chart' || o.type === 'table'),
@@ -89,7 +91,7 @@ try {
   } else {
   const c4 = await session('L2-C4', '保存版を読み直して、タイトルページの修正案を出して');
   const after = (await saved())[0];
-  const propose = [...named(c4, 'propose_slide_changes'), ...named(c4, 'propose_artifact_changes')].find((c) => !c.result?.isError);
+  const propose = [...named(c4, 'propose_slide_changes'), ...named(c4, 'propose_artifact_changes')].find(ok);
   const readFirst = Math.min(...['read_deck', 'read_artifact'].map((n) => index(c4, n)).filter((i) => i >= 0));
   check('L2-C4', 'C4', c4, { ...sessionOk(c4),
     'reread before proposing': !!propose && readFirst < c4.calls.indexOf(propose),

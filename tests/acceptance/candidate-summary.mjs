@@ -11,6 +11,7 @@ export async function setup() {
   await rm(join(base, 'checks'), { recursive: true, force: true });
   await rm(join(base, 'evidence'), { recursive: true, force: true });
   await mkdir(join(base, 'checks'), { recursive: true });
+  await mkdir(join(base, 'evidence'), { recursive: true });
 }
 
 export async function summarize() {
@@ -22,6 +23,8 @@ export async function summarize() {
     const found = ids.map((id) => byId[id]);
     if (found.some((c) => !c)) return 'NOT RUN';
     if (found.some((c) => c.status !== 'passed')) return 'FAIL';
+    // A passed check that skipped part of its scenario does not certify it.
+    if (found.some((c) => c.evidence?.notRun)) return 'NOT RUN';
     return 'PASS';
   };
   const summary = {

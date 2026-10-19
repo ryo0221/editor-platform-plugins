@@ -30,7 +30,7 @@ export async function extractCandidate(archivePath: string, into: string): Promi
   await execFileAsync('tar', ['-xzf', snapshot, '-C', extracted]);
   const plugin = join(extracted, 'plugins/editor-platform');
   const info = JSON.parse(await readFile(join(plugin, 'build-info.json'), 'utf8'));
-  for (const [file, checksum] of [['runtime/node', info.nodeSha256],
+  for (const [file, checksum] of [['runtime/node', info.nodeSha256], ['server/code.mjs', info.codeEntrySha256],
     ['node_modules/editor-platform-code-runtime/index.mjs', info.runtimeSha256],
     ['ui/editor.html', info.uiSha256], ['ui/browser.html', info.browserSha256],
     ['ui/react-preview.html', info.reactPreviewSha256]]) {
