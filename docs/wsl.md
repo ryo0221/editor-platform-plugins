@@ -1,8 +1,11 @@
-# WSL → Windows browser candidate (#4)
+# WSL → Windows browser (#4)
 
-Status: implementation candidate, **actual WSL acceptance NOT RUN**. Use the Linux
-x64 Code archive for x86_64 WSL, not the Windows native archive. Windows Desktop
-continues to use its separate MCPB and storage. No Release or supported-WSL claim.
+Status: **accepted for Claude Code 0.1.5** on Windows 11 / WSL2 Ubuntu 22.04
+(x86_64) with the Windows default browser (Edge 155) and Claude Code 2.1.303; see
+the [0.1.5 release record](release-candidates/dc4b1c3-claude-code-0.1.5.md). Other
+distributions, WSL versions and browsers are not accepted. Use the Linux x64 Code
+archive for x86_64 WSL, not the Windows native archive. Windows Desktop continues
+to use its separate MCPB and storage.
 
 ## Existing opener selection
 

@@ -18,7 +18,7 @@ const hash = (bytes: Uint8Array | string) => createHash('sha256').update(bytes).
 test('main 0c17336 packaged React browser acceptance from Codex shell (not Claude)', async ({ page }) => {
   test.setTimeout(120000);
   const evidence = resolve('work/cloud-react/evidence'); await mkdir(evidence, { recursive: true });
-  const archive = resolve('release/editor-platform-claude-code-0.1.5-linux-x64.tar.gz');
+  const archive = resolve('release/editor-platform-claude-code-0.1.3-linux-x64.tar.gz');
   // Hash and extract the same snapshot, never a separately prepared directory.
   const archiveBytes = await readFile(archive);
   const archiveSha256 = hash(archiveBytes);

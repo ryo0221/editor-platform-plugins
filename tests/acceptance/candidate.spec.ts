@@ -58,6 +58,11 @@ async function threeSlideDeck(s: Server, title: string) {
 }
 const object = (deck: any, id: string) => deck.content.slides.flatMap((slide: any) => slide.objects).find((o: any) => o.id === id);
 const read = async (s: Server, id: string) => (await s.call('read_deck', { deckId: id })).deck;
+const older = (a: string, b: string) => {
+  const [x, y] = [a, b].map((v) => v.split('.').map(Number));
+  const i = x.findIndex((n, k) => n !== y[k]);
+  return i >= 0 && x[i] < y[i];
+};
 const surfaceOf = (frame: ReturnType<Page['frameLocator']>) => frame.getByRole('region', { name: 'Slide Editor', exact: true });
 const button = (frame: ReturnType<Page['frameLocator']>, name: string) => frame.getByRole('button', { name, exact: true });
 // Compare everything except the listed objects.
@@ -317,6 +322,9 @@ test('L1-C6 retention: data survives server restart and update; workspace lock r
   let source = candidate.plugin;
   if (previous) {
     const old = await extractCandidate(previous, await mkdtemp(join(root, 'previous-')));
+    // Only an older, distinct archive exercises an update.
+    expect(old.archiveSha256, 'PREVIOUS_ARCHIVE differs from the candidate').not.toBe(candidate.archiveSha256);
+    expect(older(old.info.version, candidate.info.version), `PREVIOUS_ARCHIVE ${old.info.version} is older than ${candidate.info.version}`).toBe(true);
     source = old.plugin; ev.previous = { version: old.info.version, archiveSha256: old.archiveSha256 };
   } else ev.notRun = 'PREVIOUS_ARCHIVE not set; restart-only retention, update not exercised';
   const first = (await server(space, source, 'previous')).s;
