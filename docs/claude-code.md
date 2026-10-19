@@ -1,9 +1,11 @@
-# Claude Code — initial distribution candidate
+# Claude Code — initial distribution
 
-**配布準備中 / not released.** This is the Claude Code candidate, not the
-Claude Desktop `.mcpb`. No signed-in Claude Code end-to-end acceptance, official
-review, supported OS or public release is claimed. Do not enable an LP download
-button until the release gates below pass.
+**0.1.5 released for Linux x64 on WSL2 only.** This is the Claude Code plugin, not
+the Claude Desktop `.mcpb`. The accepted scope is Windows 11 / WSL2 Ubuntu 22.04
+with the Windows default browser and Claude Code 2.1.303 or later; see the
+[0.1.5 release record](release-candidates/dc4b1c3-claude-code-0.1.5.md). Native
+Linux desktops, macOS and Windows-native Claude Code are not accepted, and no
+official marketplace review is claimed.
 
 ## Candidate environment
 
@@ -17,19 +19,19 @@ Git, npm, source build, external Node installation, API key or server command.
 Linux requires a graphical desktop, browser, `xdg-open`, and a system compatible
 with the bundled Node binary (official Node 24 Linux x64 baseline: glibc 2.28+
 and libstdc++ 6.0.25+).
-WSL has an explicit Windows-opener candidate; see [WSL acceptance](wsl.md).
-macOS, Windows, WSL, remote SSH, cloud/headless sessions and IDE integrations are
+WSL2 with the Windows opener is accepted for 0.1.5; see [WSL acceptance](wsl.md).
+Native Linux desktops, macOS, Windows, remote SSH, cloud/headless sessions and IDE integrations are
 NOT accepted. A server-side browser opened in a remote session is not the user's
 local browser. Native graphics/browser compatibility remains a release gate.
 
 Use an existing authenticated Claude Code installation with plugin/MCP permissions
 allowed by its organization policy. The official docs describe persistent local
-marketplace installation. A tested minimum Claude Code version is **not yet
-established**; recording the exact accepted version is mandatory before release.
+marketplace installation. The accepted minimum Claude Code version is **2.1.303**
+(the version tested for 0.1.5); later releases must record their own.
 No plugin registration, independent login, billing or additional AI key is needed.
 Claude Code's own authentication, subscription and permission checks still apply.
 
-## Candidate installation (maintainer acceptance, not a published download)
+## Installation
 
 1. Obtain the candidate archive and its `.sha256` from the same reviewed build.
    Check `sha256sum -c <archive>.sha256` before extracting. Extract into a private,
@@ -150,9 +152,10 @@ Record a short fictional-data demonstration in the actual host. A local harness
 video is not actual-host evidence. Publish archive, checksum, installation guide,
 release notes and notices together only after acceptance.
 
-LP handoff remains: status `preparing`; version `0.1.3 candidate`; download URL,
-supported environments and actual-host demo URL `not available`. LP source is a
-separate repository; no LP download link is enabled by this change.
+LP handoff: version `0.1.5`; download is the GitHub Release `v0.1.5`; supported
+environment is WSL2 (Windows 11, Ubuntu 22.04) with Claude Code 2.1.303+;
+actual-host demo URL `not available`. LP source is a separate repository and is
+not changed here.
 
 Maintainers build from public sources with initialized submodules and npm ci:
 

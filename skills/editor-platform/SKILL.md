@@ -33,8 +33,10 @@ still apply.
 6. Read the domain guide and propose changes against that exact `baseRevision`.
    Preserve native IDs and unrelated manual edits. On conflict, read again and
    reconsider; never force a stale candidate into the new revision.
-7. Ask the user to refresh the Editor to see the pending proposal, preview it,
-   then explicitly Apply or Reject. Never use a shell, HTTP request, automation
+7. The pending proposal appears under AIの変更案 in the open Editor without a
+   browser reload. Ask the user to save or discard their own edits first, press
+   変更案を表示, then explicitly 適用 (Apply) or 却下 (Reject). Do not tell them to
+   reload the browser; reloading with unsaved edits loses the draft. Never use a shell, HTTP request, automation
    or other tool to save a draft or accept/reject on the human's behalf. Only
    those explicit browser actions change saved manual content or accept proposals.
 8. Read again to confirm the saved outcome. Do not report a proposal as applied

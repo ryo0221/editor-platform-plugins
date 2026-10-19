@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { createAcceptanceRecord, writeAcceptanceTemplate } from '../scripts/acceptance-record.mjs';
 
-const info = { version: '0.1.3', sourceCommit: 'a'.repeat(40), sourceDirty: false,
+const info = { version: '0.1.5', sourceCommit: 'a'.repeat(40), sourceDirty: false,
   upstream: { commit: 'b'.repeat(40) }, sourceManifestSha256: 'c'.repeat(64), platform: 'win32', arch: 'x64' };
 
 test('record hashes exact archive, preserves dirty provenance, never promotes cross-packaging to host acceptance', async () => {

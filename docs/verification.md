@@ -461,3 +461,47 @@ See [the consolidated candidate record](integration-candidate.md) for all adopte
 PR heads, exact tested source commit, OS, PASS/FAIL/NOT RUN results and artifact
 SHA-256 values. This successor combines the independent records above; it does not
 retroactively certify them or constitute actual-host acceptance or a Release.
+
+## 0.1.4 — WSL acceptance C5/C7 fixes (2026-10-19)
+
+The 0.1.3 WSL actual-host run recorded two FAILs; both are fixed in source:
+
+- C5: a browser reload or tab close silently discarded an unsaved Editor draft.
+  The Editor now registers a `beforeunload` guard while the draft, a pending
+  native input or an IME composition is unsaved. The skill no longer tells users
+  to reload the browser to see a proposal; proposals appear in the open Editor.
+- C7: '保存内容を出力' downloaded only the first slide's SVG. A multi-slide deck
+  now downloads one `<deckId>-svg.zip` with every slide as `<n>-<slideId>.svg`;
+  a single-slide deck still downloads one SVG.
+
+`tests/browser/claude-code.spec.ts` checks the single SVG, the three-entry zip
+contents and that a reload with an unsaved table edit raises `beforeunload` and,
+when dismissed, keeps the draft without saving. With the guard removed this
+check fails. `npm run check`: 63 server tests and 26 browser cases PASS.
+The fixes still need a fresh actual-host re-run of C5/C7; this is not acceptance.
+
+## 0.1.5 — React preview state reset fix (2026-10-19)
+
+The 0.1.3 WSL actual-host R1 run and the 0.1.4 packaged-candidate automation
+(L1-R1, see [candidate-acceptance.md](candidate-acceptance.md)) recorded the same
+FAIL: in Interact mode a Counter returned to its initial value within a few
+seconds without any user action.
+
+Cause: `EditorSession.content` returns a fresh copy on every read. The Editor
+re-renders on each 4 s saved-state poll, so the React UI surface received new
+`content` each time and re-rendered the isolated preview, discarding runtime
+state. The Editor now keeps one draft copy per session revision, and one preview
+per proposal ID, so unrelated re-renders pass the same content.
+
+`tests/browser/react-preview.spec.ts` now waits two poll cycles after a click
+and expects the count to persist; it fails without the fix. `npm run check`:
+63 server tests and 26 browser cases PASS.
+
+Actual-host acceptance of the exact 0.1.5 linux-x64 archive (sha256
+`7a717178…a417`) on Windows 11 / WSL2 Ubuntu 22.04, Claude Code 2.1.303 and
+Edge 155: C1–C7, OS1 and R1 PASS; see the
+[release record](release-candidates/dc4b1c3-claude-code-0.1.5.md). C1/OS1 were
+manual, C2/C4/C6 also passed L2 actual-host automation, and C3/C5 rely on L1.
+The first-use MCP permission dialog was not observed (auto mode) and no demo
+video was recorded. The owner approved the Release of this archive with 2.1.303
+as the accepted minimum host version.

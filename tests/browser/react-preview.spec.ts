@@ -52,6 +52,9 @@ test('React Code browser: compose, update props, interact, export, reopen and re
     await preview.getByRole('button', { name: 'Count: 0', exact: true }).click();
     await expect(preview.getByRole('button', { name: 'Count: 1', exact: true })).toBeVisible();
     await expect(editor.getByText('Callback onChange: 1', { exact: true })).toBeVisible();
+    // Runtime state must survive the Editor's 4 s saved-state poll (two cycles).
+    await page.waitForTimeout(9000);
+    await expect(preview.getByRole('button', { name: 'Count: 1', exact: true })).toBeVisible();
     await editor.getByRole('button', { name: '保存', exact: true }).click();
     await expect(editor.locator('.save-state')).toContainText('v2');
     const saved = (await call('read_artifact', { artifactId: artifact.id })).artifact;

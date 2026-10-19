@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { unzipSync } from 'fflate';
 
 test('Code local browser: real manual edits, saved reread, reject/apply and export', async ({ page }) => {
   test.setTimeout(60000);
@@ -113,6 +114,40 @@ test('Code local browser: real manual edits, saved reread, reject/apply and expo
     await expect(frame.getByRole('status')).toContainText('会話には自動送信されません');
     const selectedDeck = (await call('read_deck', { deckId: deck.id })).deck;
     expect(selectedDeck.selection).toContain('strategy_title');
+    const singleExport = page.waitForEvent('download');
+    await frame.getByRole('button', { name: '保存内容を出力', exact: true }).click();
+    expect((await singleExport).suggestedFilename()).toBe(`${slideGuide.exampleContent.slides[0].id}.svg`);
+    const multi = structuredClone(slideGuide.exampleContent);
+    for (const n of [2, 3]) {
+      const copy = structuredClone(slideGuide.exampleContent.slides[0]); copy.id = `${copy.id}_${n}`;
+      for (const object of copy.objects) object.id = `${object.id}_${n}`;
+      multi.slides.push(copy);
+    }
+    const { deck: multiDeck } = await call('create_deck', { title: 'Code multi-slide export fixture', content: multi });
+    await frame.getByRole('button', { name: '成果物の一覧', exact: true }).click();
+    await frame.locator('.proposal').filter({ hasText: 'Code multi-slide export fixture' }).getByRole('button', { name: '開く', exact: true }).click();
+    await expect(frame.locator('.save-state')).toContainText('v1');
+    const zipExport = page.waitForEvent('download');
+    await frame.getByRole('button', { name: '保存内容を出力', exact: true }).click();
+    const zipped = await zipExport;
+    expect(zipped.suggestedFilename()).toBe(`${multiDeck.id}-svg.zip`);
+    const entries = unzipSync(await readFile(await zipped.path()));
+    expect(Object.keys(entries)).toEqual(multi.slides.map((slide: { id: string }, index: number) => `${index + 1}-${slide.id}.svg`));
+    for (const bytes of Object.values(entries)) expect(Buffer.from(bytes).toString('utf8')).toMatch(/^<svg[\s>]/);
+    // An unsaved draft must not be silently discarded by a browser reload.
+    const surface = frame.getByRole('region', { name: 'Slide Editor', exact: true });
+    await surface.locator('[data-canvas-target="priority_table"]').click();
+    const cell = frame.getByRole('textbox', { name: 'Cell 2,2', exact: true });
+    await cell.fill('60%'); await cell.press('Tab');
+    await expect(frame.locator('.save-state')).toContainText('未保存');
+    const prompt = page.waitForEvent('dialog');
+    const reload = page.reload({ timeout: 3000 }).catch(() => undefined);
+    const dialog = await prompt;
+    expect(dialog.type()).toBe('beforeunload');
+    await dialog.dismiss(); await reload;
+    await expect(frame.locator('.save-state')).toContainText('未保存');
+    await expect(cell).toHaveValue('60%');
+    expect((await call('read_deck', { deckId: multiDeck.id })).deck.revision).toBe(1);
     expect(errors).toEqual([]);
     await page.screenshot({ path: 'test-results/claude-code-browser.png', fullPage: true });
   } finally { await client.close(); await rm(directory, { recursive: true, force: true }); }
