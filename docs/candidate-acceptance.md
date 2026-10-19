@@ -55,3 +55,30 @@ prompt. Record those separately from a short manual check per candidate.
 Headless Chromium is not Edge or Chrome on the tested OS.
 
 The config is explicit and is not part of `npm run check` or CI.
+
+## Actual-host automation (L2)
+
+`tests/acceptance/host-l2.mjs` drives the **installed** plugin through real
+Claude Code (`claude -p`) with the acceptance prompts, each in a new
+conversation, and checks the tools the host chose and the saved result. It uses
+model tokens and is run by hand only.
+
+```sh
+node tests/acceptance/host-l2.mjs [output-directory]   # default work/acceptance/host-l2
+```
+
+`EDITOR_DATA_DIR` points the plugin at a temporary workspace, so the user's data
+and an open session's workspace lock are not touched. A `wslview`/`xdg-open` shim
+first on `PATH` records the Editor URL instead of opening a browser. MCP tools of
+this plugin are pre-allowed with `--allowedTools`; no permission prompt is shown.
+
+| Check | Scenario | What it verifies |
+| --- | --- | --- |
+| L2-C2 | C2 | Skill prompt reads the slide guide, creates native content (not legacy `slides`), three slides with chart/table and shapes, requests the Editor |
+| L2-C4 | C4 | A new conversation rereads the saved deck before proposing, uses its revision, and leaves the proposal pending. NOT RUN when C2 left a pending proposal of its own (the model may reasonably defer a second proposal on the same base) |
+| L2-C6 | C6 | A new conversation finds the deck with `list_artifacts`, requests the Editor and creates nothing new |
+
+Output: `<id>.jsonl` transcripts and `result.json` (host version, model, cost,
+per-check PASS/FAIL with failed assertions). Model behavior is nondeterministic;
+review the transcript of any FAIL before recording it. L2 does not cover the
+permission UI or `/mcp` status (C1) or the real OS browser (OS1).
