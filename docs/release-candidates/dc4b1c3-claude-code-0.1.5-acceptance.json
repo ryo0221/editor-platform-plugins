@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "kind": "actual-host-acceptance-template",
+  "package": {
+    "filename": "editor-platform-claude-code-0.1.5-linux-x64.tar.gz",
+    "sha256": "7a717178f31fab74e242c685b23d6bccb9af90294ad0319af0d9c2191d37a417",
+    "bytes": 52241110,
+    "version": "0.1.5",
+    "sourceCommit": "dc4b1c3ee7bba49138fc89b30371349ad9d66cda",
+    "sourceDirty": false,
+    "sourceManifestSha256": "4b32860a934c9a934db3b008f748618a5fd29a7eaf48318bd0b1edec958fc799",
+    "publicUpstreamCommit": "97ea905745101b3814d14febcc0c31b157023c71",
+    "target": "linux-x64"
+  },
+  "environment": {
+    "osVersion": "Windows 11 Home 10.0.26200 / WSL 3.0.3.0 (WSLg 1.0.79) / Ubuntu 22.04.1 LTS, kernel 6.18.54.1-microsoft-standard-WSL2, glibc 2.35",
+    "architecture": "x86_64",
+    "wslVersion": "3.0.3.0",
+    "host": "Claude Code (WSL terminal)",
+    "hostVersion": "2.1.303",
+    "browserVersion": "Microsoft Edge 155.0.4283.45 (official build, 64-bit), Windows default browser opened via explorer.exe",
+    "testedOn": "2026-10-19"
+  },
+  "scenarios": [
+    {
+      "id": "C1",
+      "description": "Fresh approved persistent install, permissions, host restart and plugin discovery",
+      "result": "PASS",
+      "evidence": "Fresh install on 0.1.5 (owner, 2026-10-19, work/acceptance/RUNBOOK-c1-fresh-0.1.5.md): prepare-c1-fresh-0.1.5.sh verified the archive sha256 7a717178…a417, uninstalled the plugin and removed the marketplace, moved the data directory and the extracted marketplace aside (not deleted), extracted the archive anew; all pre-checks reported none. In Claude Code 2.1.303: /plugin marketplace add <local extracted dir> and /plugin install editor-platform@editor-platform-local, user scope chosen, no --plugin-dir; the install panel's MCP server/permission display was as expected (owner). After /exit and restart, in a new conversation: /plugin showed editor-platform@editor-platform-local 0.1.5, user scope, enabled; /mcp showed plugin:editor-platform:editor-platform connected (owner); claude plugin list confirms 0.1.5/user/enabled. The skill prompt (/editor-platform:editor-platform, three fictional service slides with figures) ran list_editors, get_editor_guide(slide), create_deck with native content (3 slides: step diagram of shapes/arrows, bar chart + KPI cards, table + chevron roadmap; revision 1) and open_editor (launch_unconfirmed). The data directory EditorPlatform/ClaudeCode was newly created on first use and held only that deck. The owner opened the deck from Saved artifacts in the Windows Edge Editor; three slides and figures displayed. Gap: no per-tool permission prompt was shown on the first tool calls because the session ran in Claude Code auto mode; the first-use permission dialog for MCP tools was therefore not observed on 0.1.5."
+    },
+    {
+      "id": "C2",
+      "description": "Actual host creates three fictional native slides including charts/figures",
+      "result": "PASS",
+      "evidence": "L2 actual-host automation (tests/acceptance/host-l2.mjs via claude -p, Claude Code 2.1.303, claude-opus-5-5, installed 0.1.5 user-scope, isolated EDITOR_DATA_DIR, URL-capturing opener; work/acceptance/host-l2-0.1.5-run2/result.json): L2-C2 PASS - skill prompt read the slide guide, create_deck with native content (no legacy slides), one saved deck with 3 slides incl. chart/table and shapes, open_editor launch_requested. L1 packaged-candidate automation (tests/acceptance/candidate.spec.ts, 2026-10-19, same archive sha256 7a717178…a417, headless Chromium 153 on this WSL host, opener shim; see work/acceptance/automated/result-0.1.5.json): L1-C2 PASS. Earlier run (host-l2-0.1.5): also PASS, but the model additionally issued an unrequested self-correction proposal (cover launch date) after creating the deck - observation, not a defect."
+    },
+    {
+      "id": "C3",
+      "description": "Real Editor title/layout edit, Undo/Redo and explicit Save",
+      "result": "PASS",
+      "evidence": "L1 packaged-candidate automation (tests/acceptance/candidate.spec.ts, 2026-10-19, same archive sha256 7a717178…a417, headless Chromium 153 on this WSL host, opener shim; see work/acceptance/automated/result-0.1.5.json): L1-C3 PASS. Not repeated manually in Edge on 0.1.5."
+    },
+    {
+      "id": "C4",
+      "description": "Host rereads saved changes; preview/reject preserves content; explicit apply changes it",
+      "result": "PASS",
+      "evidence": "L2 actual-host automation (tests/acceptance/host-l2.mjs via claude -p, Claude Code 2.1.303, claude-opus-5-5, installed 0.1.5 user-scope, isolated EDITOR_DATA_DIR, URL-capturing opener; work/acceptance/host-l2-0.1.5-run2/result.json): L2-C4 PASS - new conversation called list_artifacts and read_deck, then propose_slide_changes with baseRevision 1 (= saved revision); saved content unchanged, 1 pending proposal. L1 packaged-candidate automation (tests/acceptance/candidate.spec.ts, 2026-10-19, same archive sha256 7a717178…a417, headless Chromium 153 on this WSL host, opener shim; see work/acceptance/automated/result-0.1.5.json): L1-C4 PASS (proposal appears without reload; Reject keeps content; Apply changes only the proposed object). First L2 run (host-l2-0.1.5) recorded L2-C4 FAIL: transcript review showed C2 had left its own pending proposal on the same base, and the model reread the deck and deliberately deferred a second proposal, asking the user to apply the first one. Classified as a harness precondition gap, not a product defect; host-l2.mjs now reports L2-C4 NOT RUN in that case (uncommitted change)."
+    },
+    {
+      "id": "C5",
+      "description": "Stale proposal and competing save refused without overwriting manual edits",
+      "result": "PASS",
+      "evidence": "L1 packaged-candidate automation (tests/acceptance/candidate.spec.ts, 2026-10-19, same archive sha256 7a717178…a417, headless Chromium 153 on this WSL host, opener shim; see work/acceptance/automated/result-0.1.5.json): L1-C5a/b/c PASS (unsaved draft kept on proposal arrival, beforeunload prompt, stale proposal CONFLICT and 失効, competing save refused). Not repeated manually in Edge on 0.1.5; the 0.1.4 manual Edge check is in the 0.1.4 record."
+    },
+    {
+      "id": "C6",
+      "description": "Exit Editor/host; discover and edit in a new conversation; retain data through update",
+      "result": "PASS",
+      "evidence": "Update retention: after work/acceptance/update-to-0.1.5.sh, claude plugin list shows editor-platform 0.1.5, user scope, enabled; the installed plugin directory is identical to the plugins/editor-platform tree in the 0.1.5 archive (diff -r); the data directory is identical to ClaudeCode-backup-0.1.4-20261019-222845 except the running session lock file (diff -r). L2 actual-host automation (tests/acceptance/host-l2.mjs via claude -p, Claude Code 2.1.303, claude-opus-5-5, installed 0.1.5 user-scope, isolated EDITOR_DATA_DIR, URL-capturing opener; work/acceptance/host-l2-0.1.5-run2/result.json): L2-C6 PASS - new conversation found the deck with list_artifacts, open_editor, nothing new created. L1 packaged-candidate automation (tests/acceptance/candidate.spec.ts, 2026-10-19, same archive sha256 7a717178…a417, headless Chromium 153 on this WSL host, opener shim; see work/acceptance/automated/result-0.1.5.json): L1-C6 PASS incl. update from 0.1.4. Manual reopen/edit/save in Edge not repeated on 0.1.5."
+    },
+    {
+      "id": "C7",
+      "description": "Export supported formats and inspect file contents; no unsupported Office claim",
+      "result": "PASS",
+      "evidence": "L1 packaged-candidate automation (tests/acceptance/candidate.spec.ts, 2026-10-19, same archive sha256 7a717178…a417, headless Chromium 153 on this WSL host, opener shim; see work/acceptance/automated/result-0.1.5.json): L1-C7 PASS (multi-slide <deckId>-svg.zip, JSON, PPTX disabled). Not repeated manually in Windows Downloads on 0.1.5."
+    }
+  ],
+  "additionalChecks": [
+    {
+      "id": "OS1",
+      "description": "Native OS browser handoff, visible Editor and default storage outside installation",
+      "result": "PASS",
+      "evidence": "On 0.1.5: open_editor returned launch_unconfirmed via explorer.exe (wslview absent); the owner used the Editor in the Windows browser (same Edge as the environment field, version not re-read), opened the saved React UI artifact from Saved artifacts and operated it (R1). Default storage remains the XDG data dir EditorPlatform/ClaudeCode outside the installation."
+    },
+    {
+      "id": "R1",
+      "description": "Actual Claude Code: assemble registered React components, preview/interact, export TSX and inspect output",
+      "result": "PASS",
+      "evidence": "L1 packaged-candidate automation (tests/acceptance/candidate.spec.ts, 2026-10-19, same archive sha256 7a717178…a417, headless Chromium 153 on this WSL host, opener shim; see work/acceptance/automated/result-0.1.5.json): L1-R1 PASS - Counter stays at its clicked value across read polling (0.1.4 FAIL fixed in dc4b1c3). Manual check on the installed 0.1.5 (owner, 2026-10-19): opened the saved React UI artifact (revision 1) from Saved artifacts in the Windows browser, clicked Counter several times in Interact mode, waited more than 10 s; the value did not reset (0.1.4 reset within about 4 s). TSX export not repeated manually on 0.1.5."
+    }
+  ],
+  "release": {
+    "decision": "APPROVED",
+    "url": null,
+    "acceptedMinimumHostVersion": "2.1.303"
+  },
+  "video": {
+    "short": null,
+    "long": null,
+    "recordedPackageSha256": null,
+    "privacyReview": "NOT RUN"
+  },
+  "instructions": "Copy this generated template before editing. Record PASS/FAIL/NOT RUN with evidence per scenario. Package target is not tested OS. Local tests, source-build reports and temporary plugin loading do not establish fresh persistent-install acceptance. A dirty source commit is not exact source provenance; retain the manifest hash. Never include tokens, private artifact contents or local paths. This file neither approves a Release nor closes an Issue.",
+  "notes": "0.1.5 record (R1 fix candidate). Same machine/browser as the 0.1.3/0.1.4 records. First installed by updating 0.1.4 in place; C1 then repeated as a fresh user-scope install of the same archive after moving the registration and data aside (pre-C1 data kept in a ClaudeCode-before-c1-<stamp> directory). L1 automation is accepted by the owner as evidence for Editor behavior; L2 covers actual-host tool choice; C1 and OS1 are manual. Release decision: APPROVED by the owner on 2026-10-19 for 0.1.5 linux-x64 (sha256 7a717178…a417) on WSL; accepted minimum host version is the tested Claude Code 2.1.303. No Release URL yet; demo video NOT RUN. Known gap: first-use MCP tool permission dialog not observed (auto mode)."
+}

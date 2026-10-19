@@ -42,11 +42,12 @@ export are not supported. Video and GIS adapters remain unimplemented.
 
 ## Set up
 
-**Claude Code first distribution: 配布準備中.** A prebuilt local-marketplace candidate
-and protected local-browser Editor route are under development. See the
-[Claude Code guide](docs/claude-code.md) for installation, storage, permissions,
-recovery and release gates. No accepted OS, public download or live-host acceptance
-is claimed. The Desktop `.mcpb` below is a separate format.
+**Claude Code: 0.1.5 released for Linux x64 on WSL2.** Download the prebuilt
+local-marketplace archive from the GitHub Release `v0.1.5` and follow the
+[Claude Code guide](docs/claude-code.md) for installation, storage, permissions
+and recovery. Accepted only on Windows 11 / WSL2 Ubuntu 22.04 with Claude Code
+2.1.303+; native Linux desktops, macOS and Windows are not accepted. The Desktop
+`.mcpb` below is a separate format.
 
 **Codex completion targets:** Windows app (native Windows agent) and WSL CLI.
 The [platform-specific installation candidate](docs/codex-windows-wsl.md) reuses

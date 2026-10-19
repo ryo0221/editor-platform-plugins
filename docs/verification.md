@@ -495,4 +495,13 @@ per proposal ID, so unrelated re-renders pass the same content.
 
 `tests/browser/react-preview.spec.ts` now waits two poll cycles after a click
 and expects the count to persist; it fails without the fix. `npm run check`:
-63 server tests and 26 browser cases PASS. Actual-host re-run still pending.
+63 server tests and 26 browser cases PASS.
+
+Actual-host acceptance of the exact 0.1.5 linux-x64 archive (sha256
+`7a717178…a417`) on Windows 11 / WSL2 Ubuntu 22.04, Claude Code 2.1.303 and
+Edge 155: C1–C7, OS1 and R1 PASS; see the
+[release record](release-candidates/dc4b1c3-claude-code-0.1.5.md). C1/OS1 were
+manual, C2/C4/C6 also passed L2 actual-host automation, and C3/C5 rely on L1.
+The first-use MCP permission dialog was not observed (auto mode) and no demo
+video was recorded. The owner approved the Release of this archive with 2.1.303
+as the accepted minimum host version.
