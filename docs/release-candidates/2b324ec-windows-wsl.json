@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-18T15:17:53.181434+00:00",
+  "sourceCommit": "2b324ecb9e9f7104fadb2521ea62b146fea565c2",
+  "environment": {
+    "os": "Debian 13 x64",
+    "node": "24.19.0",
+    "browser": "Chromium 151.0.7922.173; single-process cloud mode"
+  },
+  "artifacts": [
+    {
+      "target": "linux-x64",
+      "file": "editor-platform-claude-code-0.1.3-linux-x64.tar.gz",
+      "bytes": 52230452,
+      "sha256": "608f30add973f561561a8e21dd92185852b413d8b9a27522e222b5c723a52740",
+      "sourceCommit": "2b324ecb9e9f7104fadb2521ea62b146fea565c2",
+      "sourceDirty": false,
+      "codexSetupSha256": "131715e2c40045049102a108c988a0d4b7c93856e2d2a5dca9b4db4f4eddc941",
+      "codeEntrySha256": "0fc31e136f9093ca581b01e45f6d5b616bc41317be7af9b448d0ceea2f7c0fa3"
+    },
+    {
+      "target": "win32-x64",
+      "file": "editor-platform-claude-code-0.1.3-win32-x64.tar.gz",
+      "bytes": 42627522,
+      "sha256": "48e94a4329e604483d0eac92d5b7386228d046010e051386d48caca54335eda2",
+      "sourceCommit": "2b324ecb9e9f7104fadb2521ea62b146fea565c2",
+      "sourceDirty": false,
+      "codexSetupSha256": "131715e2c40045049102a108c988a0d4b7c93856e2d2a5dca9b4db4f4eddc941",
+      "codeEntrySha256": "0fc31e136f9093ca581b01e45f6d5b616bc41317be7af9b448d0ceea2f7c0fa3"
+    }
+  ],
+  "checks": {
+    "fullCheck": "FAIL: build/typecheck and 63 unit/protocol PASS; browser 25 PASS, 1 context-creation failure before test body. Unchanged rerun reproduced it.",
+    "isolatedBrowserFiles": "PASS: all 26 (1 + 23 + 1 + 1) with separate Playwright invocation per file, identical assertions/config/source",
+    "setupRegression": "PASS: 10, included in 63; native-path normalization, corruption/truncation, copy/rename/rollback/cleanup fault injection",
+    "packagedSetup": "PASS: 1; same final Linux archive install/actual stdio/update/restart/data-retaining uninstall; WSL environment simulated",
+    "existingCodePackage": "PASS: 2",
+    "platformInspection": "PASS: 2; Linux and Windows, including entry/setup hashes; no Windows execution",
+    "existingDesktopPackage": "PASS: 4",
+    "checksumFailure": "PASS: exact documented WSL shell block stops before mkdir/tar/runtime after failed sha256sum"
+  },
+  "notRun": [
+    "Native Windows Codex app acceptance",
+    "Real WSL2 Codex CLI registration and Windows browser connectivity",
+    "Native Windows/WSL install/update/uninstall",
+    "Cross-version schema migration",
+    "Release/tag/merge/user-machine configuration"
+  ],
+  "logs": {
+    "browser-claude-code.spec.ts.log": "bf0898b9b625342896ff411e7caa76b427f2470e37c0237295e91c20511012fd",
+    "browser-editors.spec.ts.log": "62450d5496b2bf3685e036b83a027626d28b0e264119f1ffb5235579922940fc",
+    "browser-react-preview-errors.spec.ts.log": "0936775ca93a5b890ce813ac8d11cb04eef47c235be68369bde51a9d096ad2a4",
+    "browser-react-preview.spec.ts.log": "9fefdf37c6623c01ef01d7619d3e06d0e22bc76d943f76fb031ad608b703bdd5",
+    "browser-rerun.log": "acdb5628de937d0ee9e108d40d90b36f37bae0ec8c5e749dc1c570c9304df369",
+    "check.log": "6c8e24d650ae9b379b4ee26b1abd2ced3ac48bdc9ffc6133d4f06740c4d8fc9d",
+    "checksum-failure.log": "bb429966cc44f57ff19288121d51d5540db9a02e8322e2d421d4c4083d41fe39",
+    "code-package.log": "2b9b717157f27419bcc872641b76ea8d61c50a948eb4263b45255274ced448aa",
+    "desktop-build.log": "764c3996045e642f3c27b946abf0b5a060c7d554ad26620d992a834311da936b",
+    "desktop-package.log": "c672648d7d306774eac4d244c045e92037a8a1d9567b7715e9ad024067a47e14",
+    "linux-build.log": "8b0737c6690c0ceb31ae8c4caa6056b2d830c0cc8a685370307385e421f61d29",
+    "setup-package.log": "426a10b31ae12730ca155b756ac99beb1b982b41b86064a906520ce8e6b68827",
+    "static.log": "a5877e4571a8f13f8fd493692e82ebbe7e139d37ebd88e6e7598ceba0525108a",
+    "windows-build.log": "e1473944b6b3ba1f5e5ea674b157f8331a040161b6e1938d7e5534b32a81ea6c"
+  }
+}

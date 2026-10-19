@@ -1,5 +1,10 @@
 # Codex CLI candidate installation and acceptance
 
+Windows app and WSL CLI are now the completion targets. See the
+[platform-specific setup candidate](codex-windows-wsl.md); their native acceptance
+is pending. This historical native-registration guide is not a declaration that
+those products are unsupported.
+
 For the existing-session route without native MCP registration, use
 [Codex through a shell and browser](codex-shell.md). Its limited cloud evidence
 does not certify the native CLI route below.
